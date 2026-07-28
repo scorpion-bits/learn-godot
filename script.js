@@ -142,13 +142,14 @@ document.addEventListener('DOMContentLoaded', () => {
             btn.innerHTML = '⏳ Executando...';
             
             const codeWindow = btn.closest('.code-window');
-            const lines = codeWindow.querySelectorAll('.code-line');
-            const outputBox = codeWindow.querySelector('.output-content');
+            const context = btn.closest('.code-tab-content') || codeWindow;
+            const lines = context.querySelectorAll('.code-line');
+            const outputBox = context.querySelector('.output-content');
             
             // Reset
             lines.forEach(l => l.classList.remove('active'));
             if (outputBox) outputBox.innerHTML = '';
-            const trackers = codeWindow.querySelectorAll(".tracker-val");
+            const trackers = context.querySelectorAll(".tracker-val");
             trackers.forEach(t => t.textContent = t.dataset.initial || "0");
             
             for (let step of script) {

@@ -1085,3 +1085,71 @@ body {
 body.index-page {
     overflow-y: auto;
 }
+
+/* Scorpion Bits Academy Header - Official RGB Glow */
+.site-header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+}
+.site-header::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(90deg, 
+        #8b5cf6 0%, 
+        #c084fc 25%, 
+        #d8b4fe 50%, 
+        #a855f7 75%, 
+        #8b5cf6 100%
+    );
+    background-size: 200% 100%;
+    animation: rgbHeaderFlow 4s linear infinite;
+    box-shadow: 0 1px 6px rgba(192, 132, 252, 0.3), 0 2px 12px rgba(139, 92, 246, 0.15);
+}
+@keyframes rgbHeaderFlow {
+    0% { background-position: 0% 0%; }
+    100% { background-position: 200% 0%; }
+}
+
+/* Navbar micro-pixels */
+.navbar-pixel {
+    position: absolute;
+    border-radius: 1px;
+    pointer-events: none;
+    z-index: 2;
+    will-change: opacity, transform, filter;
+    animation: pixelGlow ease-in-out infinite;
+}
+
+@keyframes pixelGlow {
+    0% {
+        opacity: 0.15;
+        transform: scale(0.8);
+        filter: hue-rotate(0deg);
+    }
+    50% {
+        opacity: 0.85;
+        transform: scale(1.2);
+    }
+    100% {
+        opacity: 0.15;
+        transform: scale(0.8);
+        filter: hue-rotate(360deg);
+    }
+}
+    50% {
+        opacity: 0.85;
+        transform: scale(1.2);
+    }
+    100% {
+        opacity: 0.15;
+        transform: scale(0.8);
+        filter: hue-rotate(360deg);
+    }
+}

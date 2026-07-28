@@ -30,3 +30,7 @@ Sempre que atuar como assistente para criar aulas, apresentações ou códigos v
 ## 7. Fluxo de Git e Deploy
 - As aulas estão hospedadas em um site estático via GitHub Pages (no domínio learn.scorpionbits.com para o estúdio Scorpion Bits).
 - Sendo assim, **sempre pergunte explicitamente por permissão** antes de executar um comando `git push`. Nunca faça o push automaticamente sem o aval do usuário.
+
+## 9. Estrutura de Links Limpos (Clean URLs)
+- O projeto é hospedado como um site estático. Para manter as URLs amigáveis (Clean URLs) na produção, todos os links entre aulas devem referenciar o diretório (ex: `href="./lessons/01/"`) e **não** o arquivo final (`index.html`). 
+- O projeto possui um script inteligente na raiz que corrige isso localmente para testes (`file:///`). Sempre respeite esse padrão de roteamento.

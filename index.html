@@ -59,14 +59,14 @@
 
         .course-card:hover {
             transform: translateY(-5px);
-            border-color: rgba(56, 189, 248, 0.5);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 20px rgba(56, 189, 248, 0.2);
+            border-color: rgba(192, 132, 252, 0.5);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 20px rgba(192, 132, 252, 0.2);
             background: rgba(30, 41, 59, 0.8);
         }
 
         .course-tag {
-            background: rgba(56, 189, 248, 0.15);
-            color: #38bdf8;
+            background: rgba(192, 132, 252, 0.15);
+            color: #c084fc;
             font-size: 0.8rem;
             font-weight: 600;
             padding: 0.4rem 0.8rem;
@@ -103,7 +103,7 @@
         }
 
         .course-card:hover .course-footer .start-btn {
-            color: #38bdf8;
+            color: #c084fc;
         }
         
         .start-btn {
@@ -114,18 +114,22 @@
 </head>
 <body class="index-page">
         <!-- Scorpion Bits Academy Header -->
-    <header style="width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 15px 5%; background: rgba(9, 10, 24, 0.85); border-bottom: 1px solid rgba(255, 255, 255, 0.05); position: sticky; top: 0; z-index: 100; backdrop-filter: blur(12px);">
+    <header class="site-header" style="width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 15px 5%; background: rgba(16, 11, 41, 0.85); border-bottom: 1px solid rgba(255, 255, 255, 0.05);">
         <a href="#" style="display: flex; align-items: center; text-decoration: none;">
-            <img src="./assets/visual_id/scorpion_bits_logo_stamp.svg" alt="Scorpion Bits" style="height: 45px; transition: transform 0.3s ease;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+            <img src="./assets/visual_id/scorpion_bits_logo.svg" alt="Scorpion Bits" style="height: 50px; transition: transform 0.3s ease;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+        
         </a>
+        <div style="position: absolute; left: 50%; transform: translateX(-50%); font-family: 'Playfair Display', serif; color: #f8fafc; font-size: 1.1rem; letter-spacing: 4px; text-transform: uppercase; font-weight: 300;">
+            LEARN
+        </div>
         <div style="display: flex; gap: 25px; align-items: center;">
-            <a href="https://scorpionbits.com" target="_blank" style="color: #cbd5e1; font-size: 1.2rem; transition: color 0.3s;" onmouseover="this.style.color='#38bdf8'" onmouseout="this.style.color='#cbd5e1'" title="Site Oficial">
+            <a href="https://scorpionbits.com" target="_blank" style="color: #cbd5e1; font-size: 1.2rem; transition: color 0.3s;" onmouseover="this.style.color='#c084fc'" onmouseout="this.style.color='#cbd5e1'" title="Site Oficial">
                 <i class="fa-solid fa-globe"></i>
             </a>
-            <a href="https://github.com/scorpion-bits" target="_blank" style="color: #cbd5e1; font-size: 1.2rem; transition: color 0.3s;" onmouseover="this.style.color='#38bdf8'" onmouseout="this.style.color='#cbd5e1'" title="GitHub">
+            <a href="https://github.com/scorpion-bits" target="_blank" style="color: #cbd5e1; font-size: 1.2rem; transition: color 0.3s;" onmouseover="this.style.color='#c084fc'" onmouseout="this.style.color='#cbd5e1'" title="GitHub">
                 <i class="fa-brands fa-github"></i>
             </a>
-            <a href="https://instagram.com/scorpionbits_" target="_blank" style="color: #cbd5e1; font-size: 1.2rem; transition: color 0.3s;" onmouseover="this.style.color='#38bdf8'" onmouseout="this.style.color='#cbd5e1'" title="Instagram">
+            <a href="https://instagram.com/scorpionbits_" target="_blank" style="color: #cbd5e1; font-size: 1.2rem; transition: color 0.3s;" onmouseover="this.style.color='#c084fc'" onmouseout="this.style.color='#cbd5e1'" title="Instagram">
                 <i class="fa-brands fa-instagram"></i>
             </a>
         </div>
@@ -142,14 +146,10 @@
     </div>
 
     <main class="courses-wrapper">
-        <div class="header-section">
-            
-            <h1>Godot Game Development</h1>
-            <p>Bem-vindo à Scorpion Bits Academy. Escolha a sua trilha de aprendizado abaixo e comece a criar jogos incríveis.</p>
-        </div>
+        
 
         
-        <h2 style="color: #f8fafc; font-family: var(--font-title); margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">Godot Programming</h2>
+        <h2 style="color: #f8fafc; font-family: var(--font-title); margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;"><img src="./assets/icons/Godot.svg" style="height: 30px; vertical-align: middle; margin-right: 10px;"> Godot Game Development</h2>
         <div class="course-grid">
             
             <!-- Aula 1 -->
@@ -202,6 +202,53 @@
             </a>
 
     </main>
+
+
+    <script>
+        // Fix for local file:// viewing vs GitHub Pages HTTP routing
+        document.addEventListener('DOMContentLoaded', () => {
+            if (window.location.protocol === 'file:') {
+                document.querySelectorAll('a[href^="./lessons/"]').forEach(a => {
+                    let href = a.getAttribute('href');
+                    if (href.endsWith('/')) {
+                        a.setAttribute('href', href + 'index.html');
+                    }
+                });
+            }
+        });
+    </script>
+
+    <script>
+        // Generate RGB Glowing Pixels
+        document.addEventListener('DOMContentLoaded', () => {
+            const header = document.querySelector('.site-header');
+            if(header) {
+                const colors = ['#c084fc', '#8b5cf6', '#d8b4fe', '#a855f7', '#e879f9'];
+                for(let i=0; i<25; i++) {
+                    const pixel = document.createElement('div');
+                    pixel.className = 'navbar-pixel';
+                    pixel.style.position = 'absolute';
+                    pixel.style.left = Math.random() * 100 + '%';
+                    pixel.style.top = Math.random() * 100 + '%';
+                    
+                    const size = Math.random() * 3 + 1; // 1 to 4px
+                    pixel.style.width = size + 'px';
+                    pixel.style.height = size + 'px';
+                    
+                    const color = colors[Math.floor(Math.random() * colors.length)];
+                    pixel.style.backgroundColor = color;
+                    pixel.style.boxShadow = `0 0 ${size*3}px ${color}`;
+                    
+                    pixel.style.animationDuration = (Math.random() * 3 + 2) + 's';
+                    pixel.style.animationDelay = '-' + (Math.random() * 5) + 's';
+                    
+                    header.appendChild(pixel);
+                }
+                header.style.position = 'relative'; // Ensure pixels stay inside header
+                header.style.overflow = 'hidden';
+            }
+        });
+    </script>
 
 </body>
 </html>

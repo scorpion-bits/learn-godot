@@ -550,7 +550,7 @@
 
             <div class="slide-body grid-2col">
                 <div class="col-left space-y-4">
-                    <p class="section-desc">No exemplo, temos uma função que recebe a tecla que o jogador apertou. Ela usa uma cascata de <code>elif</code> para encontrar qual é a direção correta e chamar a função correspondente!</p>
+                    <p class="section-desc">No exemplo, temos a função que checa o teclado. É crucial usar vários <code>if</code> soltos em vez de <code>elif</code>! Assim o Godot testa todas as direções, permitindo que o jogador aperte duas teclas ao mesmo tempo (como W e D para andar na diagonal).</p>
                     
                     <div style="display: flex; align-items: center; justify-content: center; margin-top: 2rem;">
                         <div class="keyboard-layout" style="gap: 8px;">
@@ -566,15 +566,15 @@
                     <div class="code-window">
                         <div class="code-header"><span class="file-name">InputControl.gd</span><div class="window-dots"><span class="dot dot-blue">●</span><span class="dot dot-yellow">●</span><span class="dot dot-red">●</span></div></div>
                         <div class="code-content" style="padding: 1.5rem;">
-<pre style="margin:0;"><code id="input-code"><span class="k-keyword">func</span> <span class="k-func">handle_movement</span>(key_pressed: <span class="k-type">String</span>):
+<pre style="margin:0;"><code id="input-code"><span class="k-keyword">func</span> <span class="k-func">_process</span>(delta):
     
-<div id="line-W" style="transition: background 0.2s; padding: 2px 5px; border-radius: 4px; border: 1px solid transparent;">    <span class="k-keyword">if</span> key_pressed == <span class="k-string">"W"</span>:
+<div id="line-W" style="transition: background 0.2s; padding: 2px 5px; border-radius: 4px; border: 1px solid transparent;">    <span class="k-keyword">if</span> Input.is_action_pressed(<span class="k-string">"move_up"</span>):
         move_up()</div>
-<div id="line-S" style="transition: background 0.2s; padding: 2px 5px; border-radius: 4px; border: 1px solid transparent;">    <span class="k-keyword">elif</span> key_pressed == <span class="k-string">"S"</span>:
+<div id="line-S" style="transition: background 0.2s; padding: 2px 5px; border-radius: 4px; border: 1px solid transparent;">    <span class="k-keyword">if</span> Input.is_action_pressed(<span class="k-string">"move_down"</span>):
         move_down()</div>
-<div id="line-A" style="transition: background 0.2s; padding: 2px 5px; border-radius: 4px; border: 1px solid transparent;">    <span class="k-keyword">elif</span> key_pressed == <span class="k-string">"A"</span>:
+<div id="line-A" style="transition: background 0.2s; padding: 2px 5px; border-radius: 4px; border: 1px solid transparent;">    <span class="k-keyword">if</span> Input.is_action_pressed(<span class="k-string">"move_left"</span>):
         move_left()</div>
-<div id="line-D" style="transition: background 0.2s; padding: 2px 5px; border-radius: 4px; border: 1px solid transparent;">    <span class="k-keyword">elif</span> key_pressed == <span class="k-string">"D"</span>:
+<div id="line-D" style="transition: background 0.2s; padding: 2px 5px; border-radius: 4px; border: 1px solid transparent;">    <span class="k-keyword">if</span> Input.is_action_pressed(<span class="k-string">"move_right"</span>):
         move_right()</div></code></pre>
                         </div>
                     </div>

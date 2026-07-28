@@ -103,14 +103,16 @@ document.addEventListener('DOMContentLoaded', () => {
         'btn-play-sem': [
             { line: 2, delay: 400 },
             { line: 4, delay: 600 },
-            { line: 5, delay: 600, output: "Nota B" },
             { line: 7, delay: 600 },
-            { line: 8, delay: 600, output: "Nota C" }
+            { line: 8, delay: 600, output: "Nota B" },
+            { line: 10, delay: 600 },
+            { line: 11, delay: 600, output: "Nota C" }
         ],
         'btn-play-com': [
             { line: 2, delay: 400 },
             { line: 4, delay: 600 },
-            { line: 5, delay: 600, output: "Nota B" }
+            { line: 7, delay: 600 },
+            { line: 8, delay: 600, output: "Nota B" }
         ],
         'slide-15': [
             { line: 2, delay: 600 }, { line: 3, delay: 600, output: "0" },

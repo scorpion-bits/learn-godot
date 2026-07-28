@@ -8,7 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700;1,900&family=Fira+Code:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="../../style.css">
 </head>
 <body>
 
@@ -54,19 +54,19 @@
                     
                     <div style="display: flex; gap: 15px; justify-content: center;">
                         <div class="feature-card good" style="flex: 1; display: flex; flex-direction: column; align-items: center; text-align: center; padding: 1rem; border-left: none; border-top: 4px solid #c084fc;">
-                            <img src="/assets/icons/Camera2D.svg" alt="Camera" style="width: 48px; height: 48px; margin-bottom: 10px;">
+                            <img src="../../assets/icons/Camera2D.svg" alt="Camera" style="width: 48px; height: 48px; margin-bottom: 10px;">
                             <h4 style="color: #c084fc; font-size: 1rem;">Camera2D</h4>
                             <p style="font-size: 0.85rem; color: #cbd5e1;">Filma o cenário</p>
                         </div>
 
                         <div class="feature-card good" style="flex: 1; display: flex; flex-direction: column; align-items: center; text-align: center; padding: 1rem; border-left: none; border-top: 4px solid #4ade80;">
-                            <img src="/assets/icons/AudioStreamPlayer.svg" alt="Audio" style="width: 48px; height: 48px; margin-bottom: 10px;">
+                            <img src="../../assets/icons/AudioStreamPlayer.svg" alt="Audio" style="width: 48px; height: 48px; margin-bottom: 10px;">
                             <h4 style="color: #4ade80; font-size: 1rem;">AudioPlayer</h4>
                             <p style="font-size: 0.85rem; color: #cbd5e1;">Toca sons e músicas</p>
                         </div>
 
                         <div class="feature-card good" style="flex: 1; display: flex; flex-direction: column; align-items: center; text-align: center; padding: 1rem; border-left: none; border-top: 4px solid #facc15;">
-                            <img src="/assets/icons/PointLight2D.svg" alt="Light" style="width: 48px; height: 48px; margin-bottom: 10px;">
+                            <img src="../../assets/icons/PointLight2D.svg" alt="Light" style="width: 48px; height: 48px; margin-bottom: 10px;">
                             <h4 style="color: #facc15; font-size: 1rem;">PointLight2D</h4>
                             <p style="font-size: 0.85rem; color: #cbd5e1;">Ilumina o jogo</p>
                         </div>
@@ -98,14 +98,14 @@
                         
                         <div class="pill-list" style="display: flex; flex-direction: column; gap: 10px;">
                             <div class="pill-item" style="background: rgba(255,255,255,0.05); padding: 8px; border-radius: 8px; justify-content: center;">
-                                <img src="/assets/icons/CharacterBody2D.svg" class="godot-icon">
+                                <img src="../../assets/icons/CharacterBody2D.svg" class="godot-icon">
                                 <strong>Corpo Físico (Pai)</strong>
                             </div>
                             
                             <div style="display: flex; gap: 10px; margin-left: 20px;">
-                                <div class="pill-item" style="flex: 1; justify-content: center; background: rgba(56,189,248,0.1);"><img src="/assets/icons/CollisionShape2D.svg" class="godot-icon" style="width:16px"><span style="font-size: 0.8rem">Colisão</span></div>
-                                <div class="pill-item" style="flex: 1; justify-content: center; background: rgba(74,222,128,0.1);"><img src="/assets/icons/Sprite2D.svg" class="godot-icon" style="width:16px"><span style="font-size: 0.8rem">Visual</span></div>
-                                <div class="pill-item" style="flex: 1; justify-content: center; background: rgba(192,132,252,0.1);"><img src="/assets/icons/Node.svg" class="godot-icon" style="width:16px"><span style="font-size: 0.8rem">Lógica</span></div>
+                                <div class="pill-item" style="flex: 1; justify-content: center; background: rgba(56,189,248,0.1);"><img src="../../assets/icons/CollisionShape2D.svg" class="godot-icon" style="width:16px"><span style="font-size: 0.8rem">Colisão</span></div>
+                                <div class="pill-item" style="flex: 1; justify-content: center; background: rgba(74,222,128,0.1);"><img src="../../assets/icons/Sprite2D.svg" class="godot-icon" style="width:16px"><span style="font-size: 0.8rem">Visual</span></div>
+                                <div class="pill-item" style="flex: 1; justify-content: center; background: rgba(192,132,252,0.1);"><img src="../../assets/icons/Node.svg" class="godot-icon" style="width:16px"><span style="font-size: 0.8rem">Lógica</span></div>
                             </div>
                         </div>
                     </div>
@@ -125,7 +125,7 @@
                     <p class="section-desc">Para iniciar nossa Scene do Player, precisamos escolher o Node raiz (O Pai). Ele ditará qual é a característica primária deste objeto.</p>
                     
                     <div class="feature-card good" style="display: flex; align-items: flex-start; gap: 15px;">
-                        <img src="/assets/icons/CharacterBody2D.svg" alt="CharacterBody2D" style="width: 48px; height: 48px;">
+                        <img src="../../assets/icons/CharacterBody2D.svg" alt="CharacterBody2D" style="width: 48px; height: 48px;">
                         <div>
                             <h4 style="color: #4ade80;">CharacterBody2D</h4>
                             <p style="font-size: 1rem; color: #cbd5e1; margin-top: 5px;">Este Node foi feito especificamente para objetos móveis controlados por nós! Ele já vem com uma variável mágica de física chamada <code>velocity</code> e sabe deslizar em paredes.</p>
@@ -141,7 +141,7 @@
                             </div>
                             <div class="godot-tree">
                                 <div class="godot-node selected">
-                                    <img src="/assets/icons/CharacterBody2D.svg" class="godot-icon">
+                                    <img src="../../assets/icons/CharacterBody2D.svg" class="godot-icon">
                                     <span>Player</span>
                                 </div>
                             </div>
@@ -164,7 +164,7 @@
                     
                     <div class="feature-card bad" style="border-left-color: #facc15;">
                         <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
-                            <img src="/assets/icons/NodeWarning.svg" style="width: 24px; filter: drop-shadow(0 0 5px rgba(250, 204, 21, 0.5));">
+                            <img src="../../assets/icons/NodeWarning.svg" style="width: 24px; filter: drop-shadow(0 0 5px rgba(250, 204, 21, 0.5));">
                             <h4 style="color: #facc15; margin: 0;">Por que o erro aparece?</h4>
                         </div>
                         <p>O CharacterBody entende física, mas ele não tem formato! Ele não sabe se o personagem é grande, pequeno, quadrado ou redondo.</p>
@@ -179,9 +179,9 @@
                             </div>
                             <div class="godot-tree">
                                 <div class="godot-node selected">
-                                    <img src="/assets/icons/CharacterBody2D.svg" class="godot-icon">
+                                    <img src="../../assets/icons/CharacterBody2D.svg" class="godot-icon">
                                     <span>Player</span>
-                                    <img src="/assets/icons/NodeWarning.svg" style="width: 16px; margin-left: 5px;">
+                                    <img src="../../assets/icons/NodeWarning.svg" style="width: 16px; margin-left: 5px;">
                                 </div>
                             </div>
                         </div>
@@ -200,7 +200,7 @@
             <div class="slide-body grid-2col">
                 <div class="col-left space-y-4">
                     <div class="feature-card highlight" style="display: flex; align-items: flex-start; gap: 15px;">
-                        <img src="/assets/icons/CollisionShape2D.svg" style="width: 48px; margin-top: 5px;">
+                        <img src="../../assets/icons/CollisionShape2D.svg" style="width: 48px; margin-top: 5px;">
                         <div>
                             <h4>CollisionShape2D</h4>
                             <p style="font-size: 0.95rem;">Ao adicionar este Node como filho e escolher seu <strong>Shape</strong> (como RectangleShape2D) no Inspector, o erro some. Ele resolve a física em 2 níveis:</p>
@@ -224,9 +224,9 @@
                         <div class="godot-panel">
                             <div class="godot-panel-header"><span>Scene</span></div>
                             <div class="godot-tree">
-                                <div class="godot-node"><img src="/assets/icons/CharacterBody2D.svg" class="godot-icon"><span>Player</span></div>
+                                <div class="godot-node"><img src="../../assets/icons/CharacterBody2D.svg" class="godot-icon"><span>Player</span></div>
                                 <div class="godot-tree-children">
-                                    <div class="godot-node child selected"><img src="/assets/icons/CollisionShape2D.svg" class="godot-icon"><span>CollisionShape2D</span></div>
+                                    <div class="godot-node child selected"><img src="../../assets/icons/CollisionShape2D.svg" class="godot-icon"><span>CollisionShape2D</span></div>
                                 </div>
                             </div>
                         </div>
@@ -304,7 +304,7 @@
                 <p class="section-desc" style="text-align: center; margin-bottom: 1rem;">Nosso Player tem corpo e esbarra nas paredes, mas é invisível! Precisamos adicionar Nodes focados no aspecto visual.</p>
                 
                 <div class="feature-card good" style="display: flex; align-items: flex-start; gap: 15px; border-left-color: #38bdf8; text-align: left;">
-                    <img src="/assets/icons/Sprite2D.svg" alt="Sprite2D" style="width: 48px; height: 48px;">
+                    <img src="../../assets/icons/Sprite2D.svg" alt="Sprite2D" style="width: 48px; height: 48px;">
                     <div>
                         <h4 style="color: #38bdf8;">Sprite2D</h4>
                         <p style="font-size: 1rem; color: #cbd5e1; margin-top: 5px;">É a imagem na tela! Ele segura o arquivo PNG (Spritesheet) que contém os desenhos cortados do personagem.</p>
@@ -312,7 +312,7 @@
                 </div>
 
                 <div class="feature-card good" style="display: flex; align-items: flex-start; gap: 15px; border-left-color: #c084fc; text-align: left;">
-                    <img src="/assets/icons/AnimationPlayer.svg" alt="AnimationPlayer" style="width: 48px; height: 48px;">
+                    <img src="../../assets/icons/AnimationPlayer.svg" alt="AnimationPlayer" style="width: 48px; height: 48px;">
                     <div>
                         <h4 style="color: #c084fc;">AnimationPlayer</h4>
                         <p style="font-size: 1rem; color: #cbd5e1; margin-top: 5px;">É o <strong>Diretor de Cinema</strong>. Nós criamos trilhas para animar as propriedades do Sprite2D ao longo do tempo.</p>
@@ -402,11 +402,11 @@
                 <div class="col-right" style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 20px;">
                     <div style="display: flex; justify-content: space-around; width: 100%; gap: 20px;">
                         <div style="background: rgba(255,255,255,0.05); padding: 15px; border-radius: 8px; border: 1px solid #3c414c; text-align: center; flex: 1;">
-                            <img src="/assets/icons/ArrowRight.svg" style="width: 48px; filter: invert(0.8);">
+                            <img src="../../assets/icons/ArrowRight.svg" style="width: 48px; filter: invert(0.8);">
                             <p style="margin-top: 10px; font-size: 0.8rem; color: #94a3b8;">Flip H: OFF</p>
                         </div>
                         <div style="background: rgba(255,255,255,0.05); padding: 15px; border-radius: 8px; border: 1px solid #3c414c; text-align: center; flex: 1;">
-                            <img src="/assets/icons/ArrowRight.svg" style="width: 48px; filter: invert(0.8); transform: scaleX(-1);">
+                            <img src="../../assets/icons/ArrowRight.svg" style="width: 48px; filter: invert(0.8); transform: scaleX(-1);">
                             <p style="margin-top: 10px; font-size: 0.8rem; color: #4ade80;">Flip H: ON</p>
                         </div>
                     </div>
@@ -509,17 +509,17 @@
                 <div class="col-right">
                     <div class="pill-list" style="margin-top: 1rem;">
                         <div class="pill-item">
-                            <img src="/assets/icons/Node.svg" class="godot-icon" style="width:24px">
+                            <img src="../../assets/icons/Node.svg" class="godot-icon" style="width:24px">
                             <span class="pill-code red">InputComponent</span>
                             <span class="pill-text">Lógica de ouvir o teclado.</span>
                         </div>
                         <div class="pill-item">
-                            <img src="/assets/icons/Node.svg" class="godot-icon" style="width:24px">
+                            <img src="../../assets/icons/Node.svg" class="godot-icon" style="width:24px">
                             <span class="pill-code blue">MovementComponent</span>
                             <span class="pill-text">Lógica de andar na física.</span>
                         </div>
                         <div class="pill-item">
-                            <img src="/assets/icons/Node.svg" class="godot-icon" style="width:24px">
+                            <img src="../../assets/icons/Node.svg" class="godot-icon" style="width:24px">
                             <span class="pill-code pink">VisualComponent</span>
                             <span class="pill-text">Lógica de tocar a animação certa.</span>
                         </div>
@@ -620,7 +620,7 @@
             <div class="slide-body grid-2col">
                 <div class="col-left space-y-4">
                     <div class="feature-card highlight" style="display: flex; align-items: flex-start; gap: 15px; border-left-color: #38bdf8;">
-                        <img src="/assets/icons/Node.svg" style="width: 48px; height: 48px;">
+                        <img src="../../assets/icons/Node.svg" style="width: 48px; height: 48px;">
                         <div>
                             <h4 style="color: #38bdf8;">O Node Básico</h4>
                             <p style="font-size: 0.95rem; line-height: 1.4;">Usamos este Node (que é invisível e não tem física) apenas para guardar a lógica. Renomeamos para <code>InputComponent</code> e adicionamos um Script. Ele será o ouvido do jogo!</p>
@@ -932,14 +932,14 @@
                         <div class="godot-panel">
                             <div class="godot-panel-header"><span>Scene</span></div>
                             <div class="godot-tree">
-                                <div class="godot-node"><img src="/assets/icons/CharacterBody2D.svg" class="godot-icon"><span>Player</span><img src="/assets/icons/Script.svg" class="godot-script-icon"></div>
+                                <div class="godot-node"><img src="../../assets/icons/CharacterBody2D.svg" class="godot-icon"><span>Player</span><img src="../../assets/icons/Script.svg" class="godot-script-icon"></div>
                                 <div class="godot-tree-children">
-                                    <div class="godot-node child"><img src="/assets/icons/CollisionShape2D.svg" class="godot-icon"><span>CollisionShape2D</span></div>
-                                    <div class="godot-node child"><img src="/assets/icons/Sprite2D.svg" class="godot-icon"><span>Sprite2D</span></div>
-                                    <div class="godot-node child"><img src="/assets/icons/AnimationPlayer.svg" class="godot-icon"><span>AnimationPlayer</span></div>
-                                    <div class="godot-node child"><img src="/assets/icons/Node.svg" class="godot-icon"><span>InputComponent</span><img src="/assets/icons/Script.svg" class="godot-script-icon"></div>
-                                    <div class="godot-node child"><img src="/assets/icons/Node.svg" class="godot-icon"><span>MovementComponent</span><img src="/assets/icons/Script.svg" class="godot-script-icon"></div>
-                                    <div class="godot-node child selected"><img src="/assets/icons/Node.svg" class="godot-icon"><span>VisualComponent</span><img src="/assets/icons/Script.svg" class="godot-script-icon"></div>
+                                    <div class="godot-node child"><img src="../../assets/icons/CollisionShape2D.svg" class="godot-icon"><span>CollisionShape2D</span></div>
+                                    <div class="godot-node child"><img src="../../assets/icons/Sprite2D.svg" class="godot-icon"><span>Sprite2D</span></div>
+                                    <div class="godot-node child"><img src="../../assets/icons/AnimationPlayer.svg" class="godot-icon"><span>AnimationPlayer</span></div>
+                                    <div class="godot-node child"><img src="../../assets/icons/Node.svg" class="godot-icon"><span>InputComponent</span><img src="../../assets/icons/Script.svg" class="godot-script-icon"></div>
+                                    <div class="godot-node child"><img src="../../assets/icons/Node.svg" class="godot-icon"><span>MovementComponent</span><img src="../../assets/icons/Script.svg" class="godot-script-icon"></div>
+                                    <div class="godot-node child selected"><img src="../../assets/icons/Node.svg" class="godot-icon"><span>VisualComponent</span><img src="../../assets/icons/Script.svg" class="godot-script-icon"></div>
                                 </div>
                             </div>
                         </div>
@@ -960,6 +960,6 @@
         <button id="fullscreen-btn" class="nav-btn secondary">Fullscreen ⛶</button>
     </footer>
 
-    <script src="/script.js"></script>
+    <script src="../../script.js"></script>
 </body>
 </html>

@@ -100,9 +100,17 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     const simScripts = {
-        'slide-12': [
-            { line: 4, delay: 800 },
-            { line: 5, delay: 800, output: "Player moving to the right" }
+        'btn-play-sem': [
+            { line: 2, delay: 400 },
+            { line: 4, delay: 600 },
+            { line: 5, delay: 600, output: "Nota B" },
+            { line: 7, delay: 600 },
+            { line: 8, delay: 600, output: "Nota C" }
+        ],
+        'btn-play-com': [
+            { line: 2, delay: 400 },
+            { line: 4, delay: 600 },
+            { line: 5, delay: 600, output: "Nota B" }
         ],
         'slide-15': [
             { line: 2, delay: 600 }, { line: 3, delay: 600, output: "0" },
@@ -124,8 +132,8 @@ document.addEventListener('DOMContentLoaded', () => {
         btn.addEventListener('click', async (e) => {
             if (btn.classList.contains('running')) return;
             
-            const slideId = btn.closest('.slide').id;
-            const script = simScripts[slideId];
+            const scriptId = btn.id || btn.closest('.slide').id;
+            const script = simScripts[scriptId];
             if (!script) return;
             
             btn.classList.add('running');

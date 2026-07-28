@@ -670,22 +670,7 @@
     <script>
         // Custom logic for Slide 12 & 13 interactions
         document.addEventListener('DOMContentLoaded', () => {
-            // Slide 12 - Sem Elif / Com Elif Play Buttons
-            const btnSem = document.getElementById('btn-play-sem');
-            const outSem = document.getElementById('out-sem-elif');
-            if(btnSem && outSem) {
-                btnSem.addEventListener('click', () => {
-                    outSem.innerHTML = '<span style="color:#c3e88d;">Nota B</span><br><span style="color:#c3e88d;">Nota C</span>';
-                });
-            }
 
-            const btnCom = document.getElementById('btn-play-com');
-            const outCom = document.getElementById('out-com-elif');
-            if(btnCom && outCom) {
-                btnCom.addEventListener('click', () => {
-                    outCom.innerHTML = '<span style="color:#c3e88d;">Nota B</span>';
-                });
-            }
 
             // Slide 13 - Interactive Keyboard
             const keys = document.querySelectorAll('.interact-key');

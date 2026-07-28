@@ -100,6 +100,12 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     const simScripts = {
+        'btn-play-else': [
+            { line: 2, delay: 400 },
+            { line: 4, delay: 600 },
+            { line: 7, delay: 600 },
+            { line: 8, delay: 600, output: "Reprovado" }
+        ],
         'btn-play-sem': [
             { line: 2, delay: 400 },
             { line: 4, delay: 600 },

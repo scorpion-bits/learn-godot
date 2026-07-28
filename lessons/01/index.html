@@ -466,6 +466,7 @@
                     <div class="code-window">
                         <div class="code-header" style="padding: 0; align-items: stretch;">
                             <div class="code-tabs">
+                                <div class="code-tab" data-target="code-com-else">If / Else</div>
                                 <div class="code-tab active" data-target="code-sem-elif">Sem elif</div>
                                 <div class="code-tab" data-target="code-com-elif">Com elif</div>
                             </div>
@@ -476,6 +477,22 @@
                             </div>
                         </div>
                         
+
+                        <!-- Com Else -->
+                        <div id="code-com-else" class="code-content code-tab-content" style="padding: 0; display: none;">
+                            <div style="padding: 1.5rem; position: relative;">
+                                <button class="play-sim-btn" id="btn-play-else" style="position: absolute; right: 15px; top: 15px;">▶ Executar</button>
+                                <pre style="margin:0;"><code><span class="k-keyword">func</span> <span class="k-func">check_score</span>():
+    <span class="k-keyword">var</span> <span class="k-var">score</span> = <span class="k-number">50</span>
+    
+    <span class="k-keyword">if</span> score >= <span class="k-number">70</span>:
+        <span class="k-func">print</span>(<span class="k-string">"Aprovado"</span>)
+        
+    <span class="k-keyword">else</span>:
+        <span class="k-func">print</span>(<span class="k-string">"Reprovado"</span>)</code></pre>
+                            </div>
+                            <div style="background: #111; border-top: 1px solid #333; padding: 10px 15px; font-family: monospace; font-size: 0.85rem;"><div style="color: #fff; font-weight: bold; margin-bottom: 5px;">Output</div><div class="output-content" id="out-com-else"></div></div>
+                        </div>
                         <!-- Sem Elif -->
                         <div id="code-sem-elif" class="code-content code-tab-content active-tab" style="padding: 0;">
                             <div style="padding: 1.5rem; position: relative;">

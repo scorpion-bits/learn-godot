@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Godot 4 - Introdução à Programação</title>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700;1,900&family=Fira+Code:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+
+    <!-- Background Orbs & Wave Overlay -->
+    <div class="bg-gradient-container">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+        <div class="wave-bg"></div>
+    </div>
+
+    <!-- Presentation Container -->
+    <main class="presentation-wrapper">
+        
+        <!-- Slide 1: Capa Pura -->
+        <section class="slide active" id="slide-1">
+            <div class="center-content-flex" style="padding: 0 4rem; text-align: center; justify-content: center;">
+                <h1 class="title" style="font-size: 4.5rem; margin-bottom: 2rem;">INTRODUÇÃO À<br>PROGRAMAÇÃO</h1>
+                <p class="subtitle" style="font-size: 1.5rem; color: #c084fc;">Transformando ideias em realidades interativas</p>
+            </div>
+        </section>
+
+        <!-- Slide 2: O que é um Programa -->
+        <section class="slide" id="slide-2">
+            <header class="slide-header">
+                <h1 class="title">O QUE É UM PROGRAMA?</h1>
+                <p class="subtitle">Instruções simples → tarefas complexas</p>
+            </header>
+
+            <div class="slide-body grid-2col">
+                <div class="col-left space-y-6" style="display: flex; justify-content: center; align-items: center;">
+                    <div style="font-size: 8rem; text-align: center;">💻</div>
+                </div>
+
+                <div class="col-right space-y-4">
+                    <p class="section-desc">O computador executa instruções simples: somar números, comparar valores, guardar dados na memória.</p>
+                    
+                    <div class="feature-card highlight">
+                        <p>Um programa é uma sequência dessas instruções simples, organizadas para que o computador realize uma tarefa complexa — como rodar um jogo.</p>
+                    </div>
+
+                    <p style="color: #4ade80; font-size: 1.2rem; font-weight: bold; text-align: center; margin-top: 2rem;">
+                        Você escreve as instruções.<br>O computador obedece.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 3: A Linguagem de Programação -->
+        <section class="slide" id="slide-3">
+            <header class="slide-header">
+                <h1 class="title">A LINGUAGEM DE PROGRAMAÇÃO</h1>
+                <p class="subtitle">Como conversar com o computador</p>
+            </header>
+
+            <div class="slide-body grid-2col">
+                <div class="col-left space-y-6">
+                    <div class="pill-list compact">
+                        <div class="pill-item">
+                            <span class="pill-text"><strong>Computadores são literais:</strong> Eles não entendem ambiguidades ou entrelinhas.</span>
+                        </div>
+                        <div class="pill-item">
+                            <span class="pill-text"><strong>Linguagem humana é confusa:</strong> Tem muitas gírias e duplos sentidos.</span>
+                        </div>
+                        <div class="pill-item" style="background: rgba(192, 132, 252, 0.1); border-color: #c084fc;">
+                            <span class="pill-text"><strong>A Solução:</strong> Linguagens de programação são conjuntos de comandos claros e exatos. É o "idioma" que usamos para dar vida ao jogo.</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-right" style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                    <div class="info-card highlight-card" style="text-align: center; border-color: #38bdf8;">
+                        <img src="/assets/icons/Script.svg" alt="Script" style="width: 64px; margin-bottom: 15px;">
+                        <h3 style="color: #38bdf8; margin-bottom: 10px;">GDScript</h3>
+                        <p>GDScript é a linguagem oficial do Godot! Foi criada exclusivamente para desenvolvimento de jogos.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 4: Funções e Nodes (Integração Godot) -->
+        <section class="slide" id="slide-4">
+            <header class="slide-header">
+                <h1 class="title">FUNÇÕES & A ENGINE</h1>
+                <p class="subtitle">Dividindo código em blocos organizados</p>
+            </header>
+
+            <div class="slide-body grid-2col">
+                <div class="col-left space-y-4">
+                    <p class="section-desc">O computador lê o código linha por linha, dentro de blocos chamados <strong>funções</strong>.</p>
+                    
+                    <div class="feature-card good" style="border-left-color: #facc15;">
+                        <h4 style="color: #facc15;">Funções Nativas (O underline "_")</h4>
+                        <p>Sempre que ver uma função começando com <code>_</code> (ex: <code>_ready</code> ou <code>_process</code>), significa que é uma <strong>função nativa da Engine Godot</strong> (um callback). Ela roda automaticamente em momentos específicos do jogo!</p>
+                    </div>
+                    
+                    <p style="font-family: monospace; font-size: 0.9rem; color: #cbd5e1; background: rgba(0,0,0,0.3); padding: 10px; border-radius: 8px;">
+                        <span style="color: #f07178;">func</span> <span style="color: #82aaff;">name</span>(<span style="color: #ffcb6b;">args...</span>) -> <span style="color: #c792ea;">return_type</span>:
+                    </p>
+                </div>
+
+                <div class="col-right">
+                    <div class="godot-editor-layout">
+                        <!-- Scene Tree para dar Contexto de onde o Script vai -->
+                        <div class="godot-panel" style="flex: 0.8;">
+                            <div class="godot-panel-header"><span>Scene</span></div>
+                            <div class="godot-tree">
+                                <div class="godot-node selected">
+                                    <img src="/assets/icons/Node.svg" class="godot-icon">
+                                    <span>GameManager</span>
+                                    <img src="/assets/icons/Script.svg" style="width: 14px; margin-left: 5px;">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Editor de Codigo simulado -->
+                        <div class="godot-inspector" style="flex: 1.5; border-left: 1px solid #3c414c;">
+                            <div class="godot-inspector-header"><span>Script (GameManager.gd)</span></div>
+                            <div style="padding: 15px; font-family: 'Fira Code', monospace; font-size: 0.85rem; line-height: 1.5; color: #a6accd;">
+                                <span style="color: #c792ea;">extends</span> <span style="color: #ffcb6b;">Node</span><br><br>
+                                <span style="color: #89ddff;"># Roda 1 vez quando o Node entra na cena</span><br>
+                                <span style="color: #c792ea;">func</span> <span style="color: #82aaff;">_ready</span>() -> <span style="color: #ffcb6b;">void</span>:<br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;setup_level()<br><br>
+                                <span style="color: #c792ea;">func</span> <span style="color: #82aaff;">move</span>() -> <span style="color: #ffcb6b;">void</span>:<br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #89ddff;"># instruções...</span><br>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 5: Exemplo de Funções -->
+        <section class="slide" id="slide-5">
+            <header class="slide-header">
+                <h1 class="title">EXEMPLO PRÁTICO</h1>
+                <p class="subtitle">Agrupando comandos lógicos</p>
+            </header>
+
+            <div class="slide-body grid-2col">
+                <div class="col-left space-y-4">
+                    <div class="info-card highlight-card">
+                        <div class="icon-header">
+                            <h3>Por que usar Funções?</h3>
+                        </div>
+                        <ul style="margin-left: 20px; color: #cbd5e1; line-height: 1.6;">
+                            <li><strong>Agrupam comandos:</strong> Juntam instruções simples para uma tarefa complexa.</li>
+                            <li><strong>Evitam repetição:</strong> Permitem usar o mesmo bloco de código várias vezes.</li>
+                            <li><strong>Organizam:</strong> Deixam o projeto muito mais fácil de ler.</li>
+                        </ul>
+                    </div>
+
+                    <p>O nome da função não pode ter espaços, acentos, ou palavras reservadas.</p>
+                </div>
+
+                <div class="col-right">
+                    <div class="code-window">
+                        <div class="code-header"><span class="file-name">Exemplo.gd</span><div class="window-dots"><span class="dot dot-blue">●</span><span class="dot dot-yellow">●</span><span class="dot dot-red">●</span></div></div>
+                        <pre class="code-content"><code><span class="k-keyword">func</span> <span class="k-func">fazer_cafe</span>() -> <span class="k-type">void</span>:
+    <span class="k-comment"># O computador não sabe fazer café sozinho.</span>
+    <span class="k-comment"># Nós agrupamos o passo a passo:</span>
+    ferver_agua()
+    colocar_po_de_cafe(<span class="k-number">2</span>)
+    passar_agua_no_filtro()</code></pre>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 6: Print() -->
+        <section class="slide" id="slide-6">
+            <header class="slide-header">
+                <h1 class="title">A FUNÇÃO PRINT()</h1>
+                <p class="subtitle">Exibindo mensagens no console</p>
+            </header>
+
+            <div class="slide-body grid-2col">
+                <div class="col-left space-y-6">
+                    <p class="section-desc">O GDScript oferece algumas funções utilitárias já prontas. Uma das mais usadas é o <code>print()</code>.</p>
+                    
+                    <div class="feature-card highlight">
+                        <p>Esta função recebe um texto ou valor como argumento e o exibe no painel <strong>Output (Saída)</strong> do Godot. É essencial para debugar (testar) nosso jogo!</p>
+                    </div>
+                </div>
+
+                <div class="col-right">
+                    <div class="code-window">
+                        <div class="code-header"><span class="file-name">Script.gd</span><div class="window-dots"><span class="dot dot-blue">●</span><span class="dot dot-yellow">●</span><span class="dot dot-red">●</span></div></div>
+                        <pre class="code-content"><code><span class="k-keyword">func</span> <span class="k-func">_ready</span>() -> <span class="k-type">void</span>:
+    <span class="k-func">print</span>(<span class="k-string">"Hello, Godot!"</span>)
+    <span class="k-func">print</span>(<span class="k-string">"Meu primeiro script!"</span>)</code></pre>
+                        
+                        <div style="background: #111; border-top: 1px solid #333; padding: 10px; font-family: monospace; color: #a6accd; font-size: 0.85rem;">
+                            <div style="color: #fff; font-weight: bold; margin-bottom: 5px;">Output</div>
+                            <span style="color: #c3e88d;">Hello, Godot!</span><br>
+                            <span style="color: #c3e88d;">Meu primeiro script!</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 7: Variáveis -->
+        <section class="slide" id="slide-7">
+            <header class="slide-header">
+                <h1 class="title">VARIÁVEIS & TIPOS</h1>
+                <p class="subtitle">Caixinhas para guardar nossos valores</p>
+            </header>
+
+            <div class="slide-body grid-2col">
+                <div class="col-left space-y-4">
+                    <p class="section-desc">Pensem em variáveis como "caixinhas" na memória. Damos um nome e um tipo para guardar um valor específico.</p>
+                    
+                    <div class="pill-list">
+                        <div class="pill-item">
+                            <span class="pill-code blue">int</span>
+                            <span class="pill-text">Números Inteiros (ex: -1, 0, 10).</span>
+                        </div>
+                        <div class="pill-item">
+                            <span class="pill-code green">float</span>
+                            <span class="pill-text">Números Decimais (ex: 2.5, 9.1).</span>
+                        </div>
+                        <div class="pill-item">
+                            <span class="pill-code red">bool</span>
+                            <span class="pill-text">Valores Lógicos/Booleanos (true, false).</span>
+                        </div>
+                        <div class="pill-item">
+                            <span class="pill-code pink">String</span>
+                            <span class="pill-text">Textos (ex: "player").</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-right">
+                    <div class="code-window">
+                        <div class="code-header"><span class="file-name">Variaveis.gd</span><div class="window-dots"><span class="dot dot-blue">●</span><span class="dot dot-yellow">●</span><span class="dot dot-red">●</span></div></div>
+                        <pre class="code-content"><code><span class="k-keyword">func</span> <span class="k-func">_ready</span>() -> <span class="k-type">void</span>:
+    <span class="k-comment"># 1. Com tipo e valor (Recomendado)</span>
+    <span class="k-keyword">var</span> <span class="k-var">level</span> : <span class="k-type">int</span> = <span class="k-number">3</span>
+    
+    <span class="k-comment"># 2. Apenas o tipo (valor padrao atribuido)</span>
+    <span class="k-keyword">var</span> <span class="k-var">speed</span> : <span class="k-type">float</span>
+    
+    <span class="k-comment"># 3. Inferência (Engine adivinha o tipo)</span>
+    <span class="k-keyword">var</span> <span class="k-var">player_name</span> = <span class="k-string">"Hero"</span>
+    
+    <span class="k-keyword">var</span> <span class="k-var">is_jumping</span> : <span class="k-type">bool</span> = <span class="k-keyword">false</span></code></pre>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 8: Argumentos -->
+        <section class="slide" id="slide-8">
+            <header class="slide-header">
+                <h1 class="title">ARGUMENTOS</h1>
+                <p class="subtitle">Enviando valores para funções</p>
+            </header>
+
+            <div class="slide-body grid-2col">
+                <div class="col-left space-y-4">
+                    <p class="section-desc">Quando uma variável é declarada dentro de uma função, ela só existe <strong>dentro daquele bloco</strong>.</p>
+                    
+                    <div class="feature-card highlight">
+                        <p>Para que outras funções saibam os valores da variável, precisamos enviar o valor (Argumento) da função que chama para a que recebe.</p>
+                    </div>
+                    
+                    <p style="color: #94a3b8; font-size: 0.95rem;">A função receptora precisa especificar o nome e o tipo de dado que espera receber, igual a uma variável!</p>
+                </div>
+
+                <div class="col-right">
+                    <div class="code-window">
+                        <div class="code-header"><span class="file-name">Argumentos.gd</span><div class="window-dots"><span class="dot dot-blue">●</span><span class="dot dot-yellow">●</span><span class="dot dot-red">●</span></div></div>
+                        <pre class="code-content"><code><span class="k-keyword">func</span> <span class="k-func">_ready</span>() -> <span class="k-type">void</span>:
+    <span class="k-keyword">var</span> <span class="k-var">num</span> = <span class="k-number">4</span>
+    print_number(num) <span class="k-comment"># Chamando e enviando</span>
+
+
+<span class="k-comment"># Função que recebe um (num) do tipo inteiro</span>
+<span class="k-keyword">func</span> <span class="k-func">print_number</span>(num: <span class="k-type">int</span>) -> <span class="k-type">void</span>:
+    <span class="k-func">print</span>(num)</code></pre>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 9: Aritmética -->
+        <section class="slide" id="slide-9">
+            <header class="slide-header">
+                <h1 class="title">OPERAÇÕES ARITMÉTICAS</h1>
+                <p class="subtitle">Matemática simples no código</p>
+            </header>
+
+            <div class="slide-body grid-2col">
+                <div class="col-left space-y-4">
+                    <div class="pill-list compact">
+                        <div class="pill-item">
+                            <span class="pill-code blue" style="min-width: 40px; text-align: center;">=</span>
+                            <span class="pill-text">Atribuição de valor</span>
+                        </div>
+                        <div class="pill-item">
+                            <span class="pill-code green" style="min-width: 40px; text-align: center;">+</span>
+                            <span class="pill-text">Soma</span>
+                        </div>
+                        <div class="pill-item">
+                            <span class="pill-code red" style="min-width: 40px; text-align: center;">-</span>
+                            <span class="pill-text">Subtração</span>
+                        </div>
+                        <div class="pill-item">
+                            <span class="pill-code pink" style="min-width: 40px; text-align: center;">*</span>
+                            <span class="pill-text">Multiplicação</span>
+                        </div>
+                        <div class="pill-item">
+                            <span class="pill-code yellow" style="min-width: 40px; text-align: center;">/</span>
+                            <span class="pill-text">Divisão</span>
+                        </div>
+                    </div>
+
+                    <div class="feature-card good" style="border-left-color: #4ade80;">
+                        <h4 style="color: #4ade80;">Atalhos Matemáticos</h4>
+                        <p>Podemos usar atalhos como <code>+=</code>, <code>-=</code>, <code>*=</code> para atualizar uma variável com ela mesma!</p>
+                        <ul style="margin-left: 20px; margin-top: 10px; font-size: 0.9rem; color: #cbd5e1;">
+                            <li><span style="color: #f87171;">❌ Longo:</span> <code>health = health + 10</code></li>
+                            <li><span style="color: #4ade80;">✅ Curto:</span> <code>health += 10</code></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="col-right">
+                    <div class="code-window">
+                        <div class="code-header"><span class="file-name">Math.gd</span><div class="window-dots"><span class="dot dot-blue">●</span><span class="dot dot-yellow">●</span><span class="dot dot-red">●</span></div></div>
+                        <pre class="code-content"><code><span class="k-keyword">func</span> <span class="k-func">_ready</span>() -> <span class="k-type">void</span>:
+    <span class="k-keyword">var</span> <span class="k-var">x</span> = <span class="k-number">3</span>
+    x = x + <span class="k-number">3</span>
+    
+    <span class="k-keyword">var</span> <span class="k-var">y</span> = <span class="k-number">5</span>
+    y *= <span class="k-number">5</span>
+    
+    <span class="k-func">print</span>(x) <span class="k-comment"># Saida: 6</span>
+    <span class="k-func">print</span>(y) <span class="k-comment"># Saida: 25</span></code></pre>
+                        <div style="background: #111; border-top: 1px solid #333; padding: 10px; font-family: monospace; font-size: 0.85rem;"><div style="color: #fff; font-weight: bold; margin-bottom: 5px;">Output</div><div class="output-content"><span style="color:#c3e88d;">6</span><br><span style="color:#c3e88d;">25</span></div></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 10: Lógica -->
+        <section class="slide" id="slide-10">
+            <header class="slide-header">
+                <h1 class="title">OPERAÇÕES LÓGICAS</h1>
+                <p class="subtitle">Perguntas que retornam Verdadeiro (True) ou Falso (False)</p>
+            </header>
+
+            <div class="slide-body grid-2col">
+                <div class="col-left space-y-2">
+                    <div class="pill-list compact" style="font-size: 0.85rem;">
+                        <div class="pill-item"><span class="pill-code blue" style="min-width: 40px; text-align: center;">==</span><span class="pill-text">Igualdade</span></div>
+                        <div class="pill-item"><span class="pill-code green" style="min-width: 40px; text-align: center;">and</span><span class="pill-text">Verdadeiro se os dois forem</span></div>
+                        <div class="pill-item"><span class="pill-code red" style="min-width: 40px; text-align: center;">or</span><span class="pill-text">Verdadeiro se pelo menos um for</span></div>
+                        <div class="pill-item"><span class="pill-code pink" style="min-width: 40px; text-align: center;">not</span><span class="pill-text">Negação de um valor (Oposto)</span></div>
+                        <div class="pill-item"><span class="pill-code yellow" style="min-width: 40px; text-align: center;">></span><span class="pill-text">Maior que</span></div>
+                        <div class="pill-item"><span class="pill-code yellow" style="min-width: 40px; text-align: center;"><=</span><span class="pill-text">Menor ou igual a</span></div>
+                    </div>
+                </div>
+
+                <div class="col-right">
+                    <div class="code-window">
+                        <div class="code-header"><span class="file-name">Logic.gd</span><div class="window-dots"><span class="dot dot-blue">●</span><span class="dot dot-yellow">●</span><span class="dot dot-red">●</span></div></div>
+                        <pre class="code-content"><code><span class="k-keyword">func</span> <span class="k-func">_ready</span>() -> <span class="k-type">void</span>:
+    <span class="k-keyword">var</span> <span class="k-var">x</span> = <span class="k-keyword">true</span>
+    <span class="k-keyword">var</span> <span class="k-var">y</span> = <span class="k-keyword">false</span>
+    <span class="k-keyword">var</span> <span class="k-var">z</span> = <span class="k-number">83</span>
+    
+    <span class="k-keyword">var</span> <span class="k-var">a</span> = x <span class="k-keyword">and</span> y
+    <span class="k-comment"># a = false (pois y é false)</span>
+    
+    <span class="k-keyword">var</span> <span class="k-var">b</span> = x <span class="k-keyword">or</span> y
+    <span class="k-comment"># b = true (pois x é true)</span>
+    
+    <span class="k-keyword">var</span> <span class="k-var">c</span> = <span class="k-keyword">not</span> x
+    <span class="k-comment"># c = false (oposto de true)</span>
+    
+    <span class="k-keyword">var</span> <span class="k-var">d</span> = z == <span class="k-number">30</span> + <span class="k-number">53</span>
+    <span class="k-comment"># d = true (83 é igual a 83)</span>
+    
+    <span class="k-keyword">var</span> <span class="k-var">e</span> = z > <span class="k-number">100</span>
+    <span class="k-comment"># e = false (83 não é maior que 100)</span></code></pre>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 11: Retorno -->
+        <section class="slide" id="slide-11">
+            <header class="slide-header">
+                <h1 class="title">RETORNO DE VALORES</h1>
+                <p class="subtitle">Funções que processam e devolvem um resultado</p>
+            </header>
+
+            <div class="slide-body grid-2col">
+                <div class="col-left space-y-4">
+                    <p class="section-desc">Agora que sabemos como processar variáveis, podemos criar uma função que processa um valor e <strong>retorna</strong> um resultado para quem a chamou.</p>
+                    
+                    <div class="feature-card highlight">
+                        <p>Na declaração da função, precisamos especificar o tipo do valor retornado usando a seta <code>-> tipo:</code>.</p>
+                        <p style="margin-top: 10px;">Lembre-se: quando uma função encontra a palavra <code>return</code>, ela termina seu processo e se torna o próprio valor!</p>
+                    </div>
+                </div>
+
+                <div class="col-right">
+                    <div class="code-window">
+                        <div class="code-header"><span class="file-name">Return.gd</span><div class="window-dots"><span class="dot dot-blue">●</span><span class="dot dot-yellow">●</span><span class="dot dot-red">●</span></div></div>
+                        <pre class="code-content"><code><span class="k-keyword">func</span> <span class="k-func">_ready</span>() -> <span class="k-type">void</span>:
+    <span class="k-keyword">var</span> <span class="k-var">result</span> = add(<span class="k-number">8</span>, <span class="k-number">7</span>)
+    <span class="k-func">print</span>(result) <span class="k-comment"># Saida: 15</span>
+
+
+<span class="k-comment"># Funcao que recebe inteiros e retorna um inteiro</span>
+<span class="k-keyword">func</span> <span class="k-func">add</span>(a: <span class="k-type">int</span>, b: <span class="k-type">int</span>) -> <span class="k-type">int</span>:
+    <span class="k-keyword">return</span> a + b</code></pre>
+                        <div style="background: #111; border-top: 1px solid #333; padding: 10px; font-family: monospace; font-size: 0.85rem;"><div style="color: #fff; font-weight: bold; margin-bottom: 5px;">Output</div><div class="output-content"><span style="color:#c3e88d;">15</span></div></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 12: Estruturas Condicionais -->
+        <section class="slide" id="slide-12">
+            <header class="slide-header">
+                <h1 class="title">ESTRUTURAS CONDICIONAIS</h1>
+                <p class="subtitle">O poder de decisão do seu código (if, else e elif)</p>
+            </header>
+
+            <div class="slide-body grid-2col">
+                <div class="col-left space-y-4">
+                    <p class="section-desc">Para criarmos uma estrutura condicional, usamos a palavra <code>if</code> (se) seguida de uma condição booleana. O código só entra naquele bloco se a condição for verdadeira.</p>
+                    
+                    <div class="pill-list compact">
+                        <div class="pill-item">
+                            <span class="pill-code blue">if</span>
+                            <span class="pill-text">Se a condição for True, executa.</span>
+                        </div>
+                        <div class="pill-item">
+                            <span class="pill-code red">else</span>
+                            <span class="pill-text">Senão (Se o IF anterior falhar), executa.</span>
+                        </div>
+                        <div class="pill-item">
+                            <span class="pill-code green">elif</span>
+                            <span class="pill-text">Senão se (Tenta outra condição se a primeira falhar).</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-right">
+                    <div class="code-window">
+                        <div class="code-header"><span class="file-name">Conditions.gd</span><button class="play-sim-btn">▶ Executar</button><div class="window-dots"><span class="dot dot-blue">●</span><span class="dot dot-yellow">●</span><span class="dot dot-red">●</span></div></div>
+                        <pre class="code-content"><code><span class="k-keyword">func</span> <span class="k-func">check_direction</span>() -> <span class="k-type">void</span>:
+    <span class="k-keyword">var</span> <span class="k-var">speed_x</span> = <span class="k-number">10</span>
+    
+    <span class="k-keyword">if</span> (speed_x > <span class="k-number">0</span>):
+        <span class="k-func">print</span>(<span class="k-string">"Player moving to the right"</span>)
+    <span class="k-keyword">else</span>:
+        <span class="k-func">print</span>(<span class="k-string">"Player moving to the left"</span>)</code></pre>
+                        <div style="background: #111; border-top: 1px solid #333; padding: 10px; font-family: monospace; font-size: 0.85rem;"><div style="color: #fff; font-weight: bold; margin-bottom: 5px;">Output</div><div class="output-content"></div></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 13: Estruturas Condicionais Exemplo -->
+        <section class="slide" id="slide-13">
+            <header class="slide-header">
+                <h1 class="title">CONDICIONAIS NA PRÁTICA</h1>
+                <p class="subtitle">Lendo botões e chamando ações</p>
+            </header>
+
+            <div class="slide-body grid-2col">
+                <div class="col-left space-y-4">
+                    <p class="section-desc">No exemplo, temos uma função que recebe a tecla que o jogador apertou. Ela usa uma cascata de <code>elif</code> para encontrar qual é a direção correta e chamar a função correspondente!</p>
+                    
+                    <div style="display: flex; align-items: center; justify-content: center; margin-top: 2rem;">
+                        <div class="keyboard-layout">
+                            <div class="key key-w" style="border-color: #38bdf8; box-shadow: 0 0 15px rgba(56,189,248,0.5);">W</div>
+                            <div class="key key-a">A</div><div class="key key-s">S</div><div class="key key-d">D</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-right">
+                    <div class="code-window">
+                        <div class="code-header"><span class="file-name">InputControl.gd</span><div class="window-dots"><span class="dot dot-blue">●</span><span class="dot dot-yellow">●</span><span class="dot dot-red">●</span></div></div>
+                        <pre class="code-content"><code><span class="k-keyword">func</span> <span class="k-func">handle_movement</span>(key_pressed: <span class="k-type">String</span>):
+    
+    <span class="k-keyword">if</span> key_pressed == <span class="k-string">"W"</span>:
+        move_up()
+        
+    <span class="k-keyword">elif</span> key_pressed == <span class="k-string">"S"</span>:
+        move_down()
+        
+    <span class="k-keyword">elif</span> key_pressed == <span class="k-string">"A"</span>:
+        move_left()
+        
+    <span class="k-keyword">elif</span> key_pressed == <span class="k-string">"D"</span>:
+        move_right()</code></pre>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 14: Estruturas de Repetição for -->
+        <section class="slide" id="slide-15">
+            <header class="slide-header">
+                <h1 class="title">REPETIÇÃO: FOR</h1>
+                <p class="subtitle">Repetindo uma ação um número exato de vezes</p>
+            </header>
+
+            <div class="slide-body grid-2col">
+                <div class="col-left space-y-4">
+                    <p class="section-desc">A forma mais comum de usar o <code>for</code> no Godot é para repetir uma ação um número exato. Usamos a função <code>range()</code>.</p>
+                    
+                    <div class="info-card highlight-card">
+                        <ul style="margin-left: 15px; color: #cbd5e1; font-size: 0.95rem; line-height: 1.6;">
+                            <li><strong>for:</strong> Avisa o Godot "Comece a repetição!".</li>
+                            <li><strong>i:</strong> É o nosso "índice" contando. Variável automática para saber em qual repetição estamos.</li>
+                            <li><strong>in range(3):</strong> É o limite de vezes (0, 1, 2).</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="col-right">
+                    <div class="code-window">
+                        <div class="code-header"><span class="file-name">ForLoop.gd</span><button class="play-sim-btn">▶ Executar</button><div class="window-dots"><span class="dot dot-blue">●</span><span class="dot dot-yellow">●</span><span class="dot dot-red">●</span></div></div>
+                        <pre class="code-content"><code><span class="k-keyword">func</span> <span class="k-func">_ready</span>() -> <span class="k-type">void</span>:
+    <span class="k-keyword">for</span> i <span class="k-keyword">in</span> <span class="k-func">range</span>(<span class="k-number">5</span>):
+        <span class="k-func">print</span>(i)</code></pre>
+                        <div style="background: #111; border-top: 1px solid #333; padding: 10px; font-family: monospace; font-size: 0.85rem;"><div style="color: #fff; font-weight: bold; margin-bottom: 5px;">Output</div><div class="output-content"></div></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 15: Estruturas de Repetição while -->
+        <section class="slide" id="slide-16">
+            <header class="slide-header">
+                <h1 class="title">REPETIÇÃO: WHILE</h1>
+                <p class="subtitle">O loop condicional (Enquanto...)</p>
+            </header>
+
+            <div class="slide-body grid-2col">
+                <div class="col-left space-y-4">
+                    <p class="section-desc">Repete um bloco de código <strong>enquanto</strong> uma condição for verdadeira. Imagine o while como um if que se repete sem parar até a condição falhar!</p>
+                    
+                    <div class="feature-card bad" style="border-left-color: #ef4444;">
+                        <h4 style="color: #ef4444;">Cuidado com Loops Infinitos!</h4>
+                        <p>A condição dentro do while deve eventualmente se tornar <code>false</code>! Caso contrário, o jogo vai travar para sempre executando aquele bloco.</p>
+                    </div>
+                </div>
+
+                <div class="col-right">
+                    <div class="code-window" style="position: relative;">
+                        <!-- Rastreador de Variavel -->
+                        <div class="variable-tracker">
+                            <span class="tracker-icon">💖</span>
+                            <span class="tracker-var">health:</span>
+                            <span class="tracker-val" id="health-val" data-initial="3">3</span>
+                        </div>
+                        <div class="code-header"><span class="file-name">WhileLoop.gd</span><button class="play-sim-btn">▶ Executar</button><div class="window-dots"><span class="dot dot-blue">●</span><span class="dot dot-yellow">●</span><span class="dot dot-red">●</span></div></div>
+                        <pre class="code-content"><code><span class="k-keyword">func</span> <span class="k-func">_ready</span>() -> <span class="k-type">void</span>:
+    <span class="k-keyword">var</span> <span class="k-var">health</span> = <span class="k-number">3</span>
+    
+    <span class="k-keyword">while</span> health > <span class="k-number">0</span>:
+        <span class="k-func">print</span>(<span class="k-string">"Ainda estou vivo!"</span>)
+        health -= <span class="k-number">1</span></code></pre>
+                        <div style="background: #111; border-top: 1px solid #333; padding: 10px; font-family: monospace; font-size: 0.85rem;"><div style="color: #fff; font-weight: bold; margin-bottom: 5px;">Output</div><div class="output-content"></div></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 16: Desafio -->
+        <section class="slide" id="slide-17">
+            <header class="slide-header">
+                <h1 class="title">DESAFIO!</h1>
+                <p class="subtitle">Juntando todo o conhecimento</p>
+            </header>
+
+            <div class="slide-body grid-2col">
+                <div class="col-left space-y-4">
+                    <p class="section-desc">Crie uma função chamada <code>battle()</code> que simule uma luta contra um monstro!</p>
+                    
+                    <ul style="color: #cbd5e1; font-size: 1rem; line-height: 1.6; margin-left: 20px;" class="space-y-4">
+                        <li>Crie variáveis para a vida do monstro (ex: 30) e seu dano de ataque (ex: 10).</li>
+                        <li>Use um <strong>while</strong> que continue a luta enquanto a vida do monstro for maior que zero.</li>
+                        <li>Dentro do laço, subtraia o seu dano da vida do monstro (use <code>-=</code>).</li>
+                        <li>Ainda no laço, use um <strong>if/else</strong>: se a vida chegar a 0 imprima "Monstro Derrotado", senão imprima a vida restante.</li>
+                    </ul>
+                </div>
+
+                <div class="col-right" style="display: flex; justify-content: center; align-items: center;">
+                    <div style="background: rgba(56, 189, 248, 0.1); border: 2px dashed #38bdf8; border-radius: 12px; padding: 40px; text-align: center; width: 100%;">
+                        <span style="font-size: 3rem; display: block; margin-bottom: 10px;">👾 ⚔️ 🧙‍♂️</span>
+                        <h3 style="color: #38bdf8;">Hora de Codar!</h3>
+                        <p style="color: #94a3b8; font-size: 0.9rem;">Abra o Godot e tente fazer o script rodar no `_ready()`.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Navigation & Controls Footer -->
+    <footer class="presentation-controls">
+        <button id="prev-btn" class="nav-btn">❮ Anterior</button>
+        <div class="slide-indicator">
+            Slide <span id="current-slide-num">1</span> / <span id="total-slides-num">17</span>
+        </div>
+        <button id="next-btn" class="nav-btn">Próximo ❯</button>
+        <button id="fullscreen-btn" class="nav-btn secondary">Fullscreen ⛶</button>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="/script.js"></script>
+</body>
+</html>

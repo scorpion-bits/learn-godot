@@ -1,0 +1,1081 @@
+/* ==========================================================================
+   Godot 4 Presentation Slides - Custom Dark Glassmorphism Theme
+   ========================================================================== */
+
+:root {
+    --bg-dark: #090a18;
+    --bg-gradient: linear-gradient(135deg, #090a1a 0%, #100b29 50%, #0d081e 100%);
+    --card-bg: rgba(24, 20, 48, 0.75);
+    --card-border: rgba(255, 255, 255, 0.12);
+    --card-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+    
+    /* Text Colors */
+    --text-main: #f8fafc;
+    --text-muted: #cbd5e1;
+    --text-accent: #d8b4fe;
+    
+    /* Syntax Highlighting (GDScript) */
+    --syn-keyword: #ff477e;
+    --syn-type: #38bdf8;
+    --syn-func: #4ade80;
+    --syn-var: #f8fafc;
+    --syn-annotation: #c084fc;
+    --syn-comment: #94a3b8;
+    --syn-string: #facc15;
+    
+    /* Fonts */
+    --font-title: 'Playfair Display', serif;
+    --font-body: 'Inter', system-ui, -apple-system, sans-serif;
+    --font-code: 'Fira Code', monospace;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: var(--font-body);
+    background: var(--bg-dark);
+    color: var(--text-main);
+    min-height: 100vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: relative;
+}
+
+/* ==========================================================================
+   Background & Ambient Lighting (Orbs + Waves)
+   ========================================================================== */
+.bg-gradient-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: var(--bg-gradient);
+    z-index: -1;
+    overflow: hidden;
+}
+
+.orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    pointer-events: none;
+    opacity: 0.6;
+    animation: pulse 8s ease-in-out infinite alternate;
+}
+
+.orb-1 {
+    top: -10%;
+    right: 5%;
+    width: 450px;
+    height: 450px;
+    background: radial-gradient(circle, rgba(192, 132, 252, 0.45) 0%, rgba(139, 92, 246, 0) 70%);
+}
+
+.orb-2 {
+    bottom: -15%;
+    left: -5%;
+    width: 550px;
+    height: 550px;
+    background: radial-gradient(circle, rgba(236, 72, 153, 0.4) 0%, rgba(219, 39, 119, 0) 70%);
+}
+
+.orb-3 {
+    top: 40%;
+    right: 35%;
+    width: 350px;
+    height: 350px;
+    background: radial-gradient(circle, rgba(56, 189, 248, 0.25) 0%, rgba(14, 165, 233, 0) 70%);
+}
+
+.wave-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: radial-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+    background-size: 32px 32px;
+    opacity: 0.7;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1) translateY(0); opacity: 0.5; }
+    100% { transform: scale(1.15) translateY(-20px); opacity: 0.75; }
+}
+
+/* ==========================================================================
+   Presentation Wrapper & Slides
+   ========================================================================== */
+.presentation-wrapper {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 4rem;
+    position: relative;
+    max-width: 1400px;
+    margin: 0 auto;
+    width: 100%;
+    height: calc(100vh - 80px);
+}
+
+.slide {
+    display: none;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transform: translateY(15px);
+    transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+.slide.active {
+    display: flex;
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* ==========================================================================
+   Slide Header
+   ========================================================================== */
+.slide-header {
+    text-align: center;
+    margin-bottom: 2rem;
+    flex-shrink: 0;
+}
+
+.slide-header .title {
+    font-family: var(--font-title);
+    font-size: 3.2rem;
+    font-weight: 700;
+    letter-spacing: 3px;
+    color: #ffffff;
+    text-shadow: 0 4px 20px rgba(255, 255, 255, 0.2);
+    text-transform: uppercase;
+}
+
+.slide-header .subtitle {
+    font-size: 1.15rem;
+    color: var(--text-accent);
+    margin-top: 0.5rem;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+}
+
+/* ==========================================================================
+   Slide Body Layouts
+   ========================================================================== */
+.slide-body {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 3rem;
+    overflow: visible;
+}
+
+.grid-2col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    width: 100%;
+    height: 100%;
+    align-items: center;
+}
+
+.col-left, .col-right {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.space-y-4 > * + * { margin-top: 1rem; }
+.space-y-6 > * + * { margin-top: 1.5rem; }
+
+.section-desc {
+    font-size: 1.15rem;
+    line-height: 1.6;
+    color: var(--text-muted);
+}
+
+/* ==========================================================================
+   Pills & Bullet Lists
+   ========================================================================== */
+.pill-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.pill-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    background: rgba(30, 25, 60, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(10px);
+    padding: 0.85rem 1.25rem;
+    border-radius: 50px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.pill-item:hover {
+    transform: translateX(6px);
+    border-color: rgba(216, 180, 254, 0.3);
+}
+
+.pill-code {
+    font-family: var(--font-code);
+    font-weight: 600;
+    font-size: 0.95rem;
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    background: rgba(0, 0, 0, 0.4);
+    white-space: nowrap;
+}
+
+.pill-code.red { color: var(--syn-keyword); border: 1px solid rgba(255, 71, 126, 0.3); }
+.pill-code.blue { color: var(--syn-type); border: 1px solid rgba(56, 189, 248, 0.3); }
+.pill-code.green { color: var(--syn-func); border: 1px solid rgba(74, 222, 128, 0.3); }
+
+.arrow {
+    color: var(--text-accent);
+    font-weight: bold;
+    font-size: 1.1rem;
+}
+
+.pill-text {
+    font-size: 0.95rem;
+    color: var(--text-main);
+    font-weight: 500;
+}
+
+/* ==========================================================================
+   Code Window Container (Mockup Window)
+   ========================================================================== */
+.code-window {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    backdrop-filter: blur(16px);
+    border-radius: 20px;
+    box-shadow: var(--card-shadow);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.code-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(15, 12, 35, 0.8);
+    padding: 0.75rem 1.25rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.file-name {
+    font-family: var(--font-code);
+    font-size: 0.85rem;
+    color: var(--text-accent);
+    font-weight: 500;
+}
+
+.window-dots {
+    display: flex;
+    gap: 6px;
+}
+
+.dot {
+    font-size: 0.75rem;
+}
+.dot-blue { color: #38bdf8; }
+.dot-yellow { color: #facc15; }
+.dot-red { color: #ff477e; }
+
+.code-content {
+    font-family: var(--font-code);
+    font-size: 0.95rem;
+    line-height: 1.65;
+    padding: 1.5rem;
+    overflow-x: auto;
+    color: var(--text-main);
+}
+
+/* Syntax Color Tokens */
+.k-keyword { color: var(--syn-keyword); font-weight: 600; }
+.k-type { color: var(--syn-type); font-weight: 600; }
+.k-func { color: var(--syn-func); }
+.k-var { color: var(--syn-var); }
+.k-annotation { color: var(--syn-annotation); font-weight: 600; }
+.k-comment { color: var(--syn-comment); font-style: italic; }
+.k-string { color: var(--syn-string); }
+
+/* ==========================================================================
+   Cards & Diagrams
+   ========================================================================== */
+.info-card, .feature-card, .diagram-card, .summary-box {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    backdrop-filter: blur(14px);
+    border-radius: 18px;
+    padding: 1.5rem;
+    box-shadow: var(--card-shadow);
+}
+
+.info-card.highlight-card {
+    border-color: rgba(192, 132, 252, 0.3);
+    background: linear-gradient(135deg, rgba(35, 28, 70, 0.7) 0%, rgba(20, 16, 45, 0.7) 100%);
+}
+
+.icon-header {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    margin-bottom: 0.75rem;
+}
+
+.badge {
+    background: rgba(192, 132, 252, 0.2);
+    border: 1px solid rgba(192, 132, 252, 0.4);
+    color: var(--text-accent);
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 0.2rem 0.6rem;
+    border-radius: 12px;
+    letter-spacing: 1px;
+}
+
+.feature-card.bad { border-left: 4px solid #ef4444; }
+.feature-card.good { border-left: 4px solid #10b981; }
+.feature-card.highlight { border-left: 4px solid #c084fc; }
+
+.feature-card h4 {
+    font-size: 1.1rem;
+    margin-bottom: 0.4rem;
+    color: #ffffff;
+}
+
+.feature-card p, .feature-card ul {
+    font-size: 0.95rem;
+    color: var(--text-muted);
+    line-height: 1.5;
+}
+
+.feature-card ul {
+    margin-top: 0.5rem;
+    padding-left: 1.2rem;
+}
+
+/* Tree Diagram Visual */
+.diagram-title {
+    font-size: 1.1rem;
+    color: var(--text-accent);
+    margin-bottom: 1rem;
+    text-align: center;
+    font-family: var(--font-code);
+}
+
+.tree-visual {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.tree-node {
+    padding: 0.6rem 1rem;
+    border-radius: 10px;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.tree-node.parent {
+    border-color: rgba(56, 189, 248, 0.4);
+    background: rgba(56, 189, 248, 0.1);
+}
+
+.tree-children {
+    margin-left: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    border-left: 2px dashed rgba(255, 255, 255, 0.15);
+    padding-left: 0.8rem;
+}
+
+.tree-node.highlight-node {
+    border-color: rgba(74, 222, 128, 0.5);
+    background: rgba(74, 222, 128, 0.15);
+    color: #4ade80;
+}
+
+.node-type {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+
+.divider-line {
+    height: 1px;
+    background: rgba(255, 255, 255, 0.1);
+    margin: 1.2rem 0;
+}
+
+/* Type Table Rows */
+.type-explanation-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.type-row {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+}
+
+.type-tag {
+    font-family: var(--font-code);
+    font-size: 0.85rem;
+    padding: 0.4rem 0.8rem;
+    border-radius: 8px;
+    font-weight: 600;
+    min-width: 170px;
+    text-align: center;
+}
+
+.type-tag.blue { background: rgba(56, 189, 248, 0.15); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.3); }
+.type-tag.pink { background: rgba(255, 71, 126, 0.15); color: #ff477e; border: 1px solid rgba(255, 71, 126, 0.3); }
+.type-tag.green { background: rgba(74, 222, 128, 0.15); color: #4ade80; border: 1px solid rgba(74, 222, 128, 0.3); }
+
+.type-arrow { color: var(--text-accent); font-weight: bold; }
+.type-desc { font-size: 0.9rem; color: var(--text-muted); }
+
+/* Godot Scene Mockup */
+.godot-scene-mockup {
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    font-family: var(--font-code);
+    font-size: 0.9rem;
+}
+
+.godot-node {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.5rem 0.8rem;
+    border-radius: 6px;
+    background: rgba(0, 0, 0, 0.25);
+}
+
+.godot-node.sub {
+    margin-left: 1.5rem;
+    border-left: 2px solid rgba(192, 132, 252, 0.4);
+}
+
+.node-script {
+    color: var(--text-accent);
+    font-size: 0.8rem;
+    margin-left: auto;
+}
+
+/* Summary Box */
+.summary-box h3 {
+    font-family: var(--font-title);
+    color: #ffffff;
+    font-size: 1.4rem;
+    margin-bottom: 1.2rem;
+    text-align: center;
+    letter-spacing: 2px;
+}
+
+.summary-steps {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+}
+
+.step-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+}
+
+.step-num {
+    background: linear-gradient(135deg, #c084fc, #9333ea);
+    color: #ffffff;
+    font-weight: 700;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    box-shadow: 0 4px 10px rgba(147, 51, 234, 0.4);
+}
+
+.step-text strong {
+    color: var(--text-main);
+    display: block;
+    margin-bottom: 0.2rem;
+    font-size: 1rem;
+}
+
+.step-text p {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+}
+
+.info-box-sm {
+    background: rgba(192, 132, 252, 0.1);
+    border: 1px dashed rgba(192, 132, 252, 0.3);
+    padding: 0.8rem 1.2rem;
+    border-radius: 12px;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+}
+
+/* ==========================================================================
+   Presentation Navigation Controls Footer
+   ========================================================================== */
+.presentation-controls {
+    height: 70px;
+    background: rgba(12, 9, 30, 0.85);
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(16px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+    padding: 0 2rem;
+    z-index: 100;
+}
+
+.nav-btn {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: var(--text-main);
+    padding: 0.6rem 1.4rem;
+    border-radius: 30px;
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.nav-btn:hover {
+    background: rgba(192, 132, 252, 0.25);
+    border-color: rgba(192, 132, 252, 0.5);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(192, 132, 252, 0.3);
+}
+
+.nav-btn.secondary {
+    background: transparent;
+    border-color: rgba(255, 255, 255, 0.1);
+    color: var(--text-muted);
+}
+
+.slide-indicator {
+    font-family: var(--font-code);
+    font-size: 0.95rem;
+    color: var(--text-accent);
+    background: rgba(0, 0, 0, 0.3);
+    padding: 0.4rem 1.2rem;
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* Responsive adjustments */
+@media (max-width: 1024px) {
+    .grid-2col {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+        overflow-y: auto;
+    }
+    .slide-header .title {
+        font-size: 2.2rem;
+    }
+    .presentation-wrapper {
+        padding: 1rem;
+    }
+}
+
+/* ==========================================================================
+   Slide 1 (Cover) Custom Styles
+   ========================================================================== */
+.center-content-flex {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+}
+
+.icon-cover-container {
+    margin-bottom: 1rem;
+}
+
+.terminal-icon-mockup {
+    background: linear-gradient(180deg, rgba(30, 30, 45, 0.9) 0%, rgba(15, 15, 25, 0.9) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    width: 160px;
+    height: 120px;
+    padding: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+}
+
+.terminal-icon-mockup .dots {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 15px;
+    justify-content: flex-end;
+}
+
+.terminal-icon-mockup .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+}
+
+.terminal-icon-mockup .dot.yellow { background: #facc15; }
+.terminal-icon-mockup .dot.blue { background: #38bdf8; }
+.terminal-icon-mockup .dot.red { background: #ff477e; }
+
+.terminal-icon-mockup .lines {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.terminal-icon-mockup .line {
+    height: 4px;
+    border-radius: 2px;
+}
+
+.red-line { background: #ff477e; width: 80%; }
+.purple-line { background: #c084fc; width: 100%; }
+.pink-line { background: #f472b6; width: 90%; }
+.blue-line { background: #38bdf8; width: 70%; }
+.green-line { background: #4ade80; width: 85%; }
+
+/* ==========================================================================
+   Speech Bubbles
+   ========================================================================== */
+.relative-container {
+    position: relative;
+}
+
+.speech-bubble {
+    position: absolute;
+    background: #507aff;
+    color: #ffffff;
+    padding: 14px 20px;
+    border-radius: 30px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    line-height: 1.4;
+    box-shadow: 0 10px 25px rgba(80, 122, 255, 0.4);
+    z-index: 10;
+    font-family: var(--font-body);
+}
+
+.speech-bubble::after {
+    content: '';
+    position: absolute;
+    top: -15px;
+    left: 30px;
+    border-width: 0 20px 25px 0;
+    border-style: solid;
+    border-color: transparent transparent #507aff transparent;
+    display: block;
+    width: 0;
+}
+
+/* ==========================================================================
+   Godot UI Mockup
+   ========================================================================== */
+.godot-panel {
+    background: #202531;
+    border: 1px solid #3c414c;
+    border-radius: 8px;
+    font-family: 'Inter', sans-serif;
+    color: #cbd5e1;
+    overflow: hidden;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+}
+
+.godot-panel-header {
+    background: #181b24;
+    padding: 8px 15px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    border-bottom: 1px solid #3c414c;
+    display: flex;
+    justify-content: space-between;
+}
+
+.godot-tree {
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.godot-node {
+    display: flex;
+    align-items: center;
+    padding: 4px 8px;
+    border-radius: 4px;
+    cursor: pointer;
+    position: relative;
+    border: 1px solid transparent;
+}
+
+.godot-node:hover {
+    background: #33394a;
+}
+
+.godot-node.selected {
+    background: #478cbf33;
+    border: 1px solid #478cbf;
+}
+
+.godot-tree-children {
+    margin-left: 17px;
+    padding-left: 12px;
+    border-left: 1px solid #545b6b;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.godot-node.child::before {
+    content: '';
+    position: absolute;
+    left: -12px;
+    top: 50%;
+    width: 12px;
+    height: 1px;
+    background: #545b6b;
+}
+
+.godot-icon {
+    width: 18px;
+    height: 18px;
+    margin-right: 8px;
+}
+
+.godot-script-icon {
+    width: 16px;
+    height: 16px;
+    margin-left: auto;
+    opacity: 0.8;
+}
+
+/* ==========================================================================
+   Vector2 Graph
+   ========================================================================== */
+.vector-graph-godot {
+    position: relative;
+    width: 320px;
+    height: 320px;
+    margin: 20px auto;
+    border: 2px solid rgba(255,255,255,0.1);
+    background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 38px,
+        rgba(255,255,255,0.05) 38px,
+        rgba(255,255,255,0.05) 40px
+    ),
+    repeating-linear-gradient(
+        90deg,
+        transparent,
+        transparent 38px,
+        rgba(255,255,255,0.05) 38px,
+        rgba(255,255,255,0.05) 40px
+    );
+}
+
+.axis-x {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: #ff477e;
+    margin-top: -1px;
+}
+
+.axis-y {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    width: 3px;
+    background: #507aff;
+    margin-left: -1px;
+}
+
+.arrow-right {
+    position: absolute;
+    top: 50%;
+    right: -10px;
+    margin-top: -8px;
+    width: 0; height: 0; 
+    border-top: 8px solid transparent;
+    border-bottom: 8px solid transparent;
+    border-left: 12px solid #ff477e;
+}
+
+.arrow-down {
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    margin-left: -8px;
+    width: 0; height: 0; 
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    border-top: 12px solid #507aff;
+}
+
+.axis-label {
+    position: absolute;
+    font-weight: 900;
+    font-size: 1.2rem;
+}
+
+.label-x {
+    right: 15px;
+    top: calc(50% + 15px);
+    color: #ff477e;
+}
+
+.label-y {
+    bottom: 15px;
+    left: calc(50% + 15px);
+    color: #507aff;
+}
+
+/* ==========================================================================
+   Godot Inspector Mockup
+   ========================================================================== */
+.godot-editor-layout {
+    display: flex;
+    border: 1px solid #3c414c;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+    background: #202531;
+    min-width: 240px;
+    flex-shrink: 0;
+    width: 100%;
+}
+
+.godot-editor-layout .godot-panel {
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+    flex: 1.3;
+}
+
+.godot-inspector {
+    display: flex;
+    flex-direction: column;
+    background: #202531;
+    border-left: 1px solid #3c414c;
+    flex: 1;
+}
+
+.godot-inspector-header {
+    background: #181b24;
+    padding: 8px 15px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    border-bottom: 1px solid #3c414c;
+    color: #cbd5e1;
+}
+
+.godot-inspector-body {
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.godot-prop-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.godot-prop-title {
+    background: rgba(255,255,255,0.05);
+    padding: 6px 8px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #e2e8f0;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.godot-prop-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 8px 0;
+}
+
+.godot-prop-label {
+    font-size: 0.85rem;
+    color: #94a3b8;
+}
+
+.godot-prop-input {
+    background: #181b24;
+    border: 1px solid #3c414c;
+    color: #4ade80;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-family: var(--font-code);
+    font-size: 0.85rem;
+    width: 65px;
+    text-align: left;
+    outline: none;
+}
+
+/* ==========================================================================
+   WASD Keyboard Layout
+   ========================================================================== */
+.keyboard-layout {
+    display: grid;
+    grid-template-areas: 
+        ". w ."
+        "a s d";
+    gap: 8px;
+    justify-content: center;
+    align-items: center;
+    margin: 15px 0;
+}
+
+.key {
+    background: rgba(255,255,255,0.1);
+    border-bottom: 4px solid rgba(0,0,0,0.4);
+    border-right: 2px solid rgba(0,0,0,0.2);
+    border-left: 1px solid rgba(255,255,255,0.1);
+    border-top: 1px solid rgba(255,255,255,0.1);
+    border-radius: 8px;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: var(--font-title);
+    font-weight: 700;
+    font-size: 1.3rem;
+    color: #ffffff;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+}
+
+.key-w { grid-area: w; }
+.key-a { grid-area: a; }
+.key-s { grid-area: s; }
+.key-d { grid-area: d; }
+
+
+
+/* --- CODE SIMULATOR CSS --- */
+.code-line {
+    display: inline-block;
+    width: 100%;
+    padding-left: 5px;
+    border-radius: 4px;
+    transition: background-color 0.2s, box-shadow 0.2s;
+}
+
+.code-line.active {
+    background-color: rgba(250, 204, 21, 0.2);
+    box-shadow: inset 2px 0 0 #facc15;
+}
+
+.play-sim-btn {
+    background: rgba(56, 189, 248, 0.15);
+    border: 1px solid rgba(56, 189, 248, 0.3);
+    color: #38bdf8;
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    float: right;
+    margin-top: -3px;
+    margin-right: 15px;
+}
+
+.play-sim-btn:hover {
+    background: rgba(56, 189, 248, 0.3);
+}
+
+.play-sim-btn.running {
+    background: rgba(250, 204, 21, 0.15);
+    border-color: rgba(250, 204, 21, 0.3);
+    color: #facc15;
+    cursor: default;
+}
+
+/* --- VARIABLE TRACKER CSS --- */
+.variable-tracker {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: rgba(30, 41, 59, 0.9);
+    border: 1px solid rgba(244, 63, 94, 0.5);
+    border-radius: 8px;
+    padding: 10px 15px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+    z-index: 10;
+    font-family: 'Fira Code', monospace;
+}
+
+.tracker-icon {
+    font-size: 1.5rem;
+}
+
+.tracker-var {
+    color: #94a3b8;
+    font-size: 0.9rem;
+}
+
+.tracker-val {
+    color: #f43f5e;
+    font-size: 1.2rem;
+    font-weight: bold;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.tracker-val.bump {
+    transform: scale(1.5);
+    color: #fff;
+}

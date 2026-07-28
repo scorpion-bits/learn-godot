@@ -112,7 +112,8 @@ document.addEventListener('DOMContentLoaded', () => {
             { line: 7, delay: 600 },
             { line: 8, delay: 600, output: "Nota B" },
             { line: 10, delay: 600 },
-            { line: 11, delay: 600, output: "Nota C" }
+            { line: 11, delay: 600, output: "Nota C" },
+            { line: 13, delay: 600 }
         ],
         'btn-play-com': [
             { line: 2, delay: 400 },

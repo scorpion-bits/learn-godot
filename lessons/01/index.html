@@ -464,15 +464,49 @@
 
                 <div class="col-right">
                     <div class="code-window">
-                        <div class="code-header"><span class="file-name">Conditions.gd</span><button class="play-sim-btn">▶ Executar</button><div class="window-dots"><span class="dot dot-blue">●</span><span class="dot dot-yellow">●</span><span class="dot dot-red">●</span></div></div>
-                        <pre class="code-content"><code><span class="k-keyword">func</span> <span class="k-func">check_direction</span>() -> <span class="k-type">void</span>:
-    <span class="k-keyword">var</span> <span class="k-var">speed_x</span> = <span class="k-number">10</span>
+                        <div class="code-header" style="padding: 0; align-items: stretch;">
+                            <div class="code-tabs">
+                                <div class="code-tab active" data-target="code-sem-elif">Sem elif</div>
+                                <div class="code-tab" data-target="code-com-elif">Com elif</div>
+                            </div>
+                            <div class="window-dots" style="padding: 0.75rem 1.25rem; align-items: center;">
+                                <span class="dot dot-red">●</span>
+                                <span class="dot dot-yellow">●</span>
+                                <span class="dot dot-blue">●</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Sem Elif -->
+                        <div id="code-sem-elif" class="code-content code-tab-content active-tab" style="padding: 0;">
+                            <div style="padding: 1.5rem; position: relative;">
+                                <button class="play-sim-btn" id="btn-play-sem" style="position: absolute; right: 15px; top: 15px;">▶ Executar</button>
+                                <pre style="margin:0;"><code><span class="k-keyword">func</span> <span class="k-func">check_score</span>():
+    <span class="k-keyword">var</span> <span class="k-var">score</span> = <span class="k-number">85</span>
     
-    <span class="k-keyword">if</span> (speed_x > <span class="k-number">0</span>):
-        <span class="k-func">print</span>(<span class="k-string">"Player moving to the right"</span>)
-    <span class="k-keyword">else</span>:
-        <span class="k-func">print</span>(<span class="k-string">"Player moving to the left"</span>)</code></pre>
-                        <div style="background: #111; border-top: 1px solid #333; padding: 10px; font-family: monospace; font-size: 0.85rem;"><div style="color: #fff; font-weight: bold; margin-bottom: 5px;">Output</div><div class="output-content"></div></div>
+    <span class="k-keyword">if</span> score >= <span class="k-number">80</span>:
+        <span class="k-func">print</span>(<span class="k-string">"Nota B"</span>)
+        
+    <span class="k-keyword">if</span> score >= <span class="k-number">70</span>:
+        <span class="k-func">print</span>(<span class="k-string">"Nota C"</span>)</code></pre>
+                            </div>
+                            <div style="background: #111; border-top: 1px solid #333; padding: 10px 15px; font-family: monospace; font-size: 0.85rem;"><div style="color: #fff; font-weight: bold; margin-bottom: 5px;">Output</div><div class="output-content" id="out-sem-elif"></div></div>
+                        </div>
+
+                        <!-- Com Elif -->
+                        <div id="code-com-elif" class="code-content code-tab-content" style="padding: 0; display: none;">
+                            <div style="padding: 1.5rem; position: relative;">
+                                <button class="play-sim-btn" id="btn-play-com" style="position: absolute; right: 15px; top: 15px;">▶ Executar</button>
+                                <pre style="margin:0;"><code><span class="k-keyword">func</span> <span class="k-func">check_score</span>():
+    <span class="k-keyword">var</span> <span class="k-var">score</span> = <span class="k-number">85</span>
+    
+    <span class="k-keyword">if</span> score >= <span class="k-number">80</span>:
+        <span class="k-func">print</span>(<span class="k-string">"Nota B"</span>)
+        
+    <span class="k-keyword">elif</span> score >= <span class="k-number">70</span>:
+        <span class="k-func">print</span>(<span class="k-string">"Nota C"</span>)</code></pre>
+                            </div>
+                            <div style="background: #111; border-top: 1px solid #333; padding: 10px 15px; font-family: monospace; font-size: 0.85rem;"><div style="color: #fff; font-weight: bold; margin-bottom: 5px;">Output</div><div class="output-content" id="out-com-elif"></div></div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -490,9 +524,11 @@
                     <p class="section-desc">No exemplo, temos uma função que recebe a tecla que o jogador apertou. Ela usa uma cascata de <code>elif</code> para encontrar qual é a direção correta e chamar a função correspondente!</p>
                     
                     <div style="display: flex; align-items: center; justify-content: center; margin-top: 2rem;">
-                        <div class="keyboard-layout">
-                            <div class="key key-w" style="border-color: #38bdf8; box-shadow: 0 0 15px rgba(56,189,248,0.5);">W</div>
-                            <div class="key key-a">A</div><div class="key key-s">S</div><div class="key key-d">D</div>
+                        <div class="keyboard-layout" style="gap: 8px;">
+                            <div class="key key-w interact-key" data-key="W" style="cursor: pointer; transition: all 0.1s; user-select: none;">W</div>
+                            <div class="key key-a interact-key" data-key="A" style="cursor: pointer; transition: all 0.1s; user-select: none;">A</div>
+                            <div class="key key-s interact-key" data-key="S" style="cursor: pointer; transition: all 0.1s; user-select: none;">S</div>
+                            <div class="key key-d interact-key" data-key="D" style="cursor: pointer; transition: all 0.1s; user-select: none;">D</div>
                         </div>
                     </div>
                 </div>
@@ -500,19 +536,18 @@
                 <div class="col-right">
                     <div class="code-window">
                         <div class="code-header"><span class="file-name">InputControl.gd</span><div class="window-dots"><span class="dot dot-blue">●</span><span class="dot dot-yellow">●</span><span class="dot dot-red">●</span></div></div>
-                        <pre class="code-content"><code><span class="k-keyword">func</span> <span class="k-func">handle_movement</span>(key_pressed: <span class="k-type">String</span>):
+                        <div class="code-content" style="padding: 1.5rem;">
+<pre style="margin:0;"><code id="input-code"><span class="k-keyword">func</span> <span class="k-func">handle_movement</span>(key_pressed: <span class="k-type">String</span>):
     
-    <span class="k-keyword">if</span> key_pressed == <span class="k-string">"W"</span>:
-        move_up()
-        
-    <span class="k-keyword">elif</span> key_pressed == <span class="k-string">"S"</span>:
-        move_down()
-        
-    <span class="k-keyword">elif</span> key_pressed == <span class="k-string">"A"</span>:
-        move_left()
-        
-    <span class="k-keyword">elif</span> key_pressed == <span class="k-string">"D"</span>:
-        move_right()</code></pre>
+<div id="line-W" style="transition: background 0.2s; padding: 2px 5px; border-radius: 4px; border: 1px solid transparent;">    <span class="k-keyword">if</span> key_pressed == <span class="k-string">"W"</span>:
+        move_up()</div>
+<div id="line-S" style="transition: background 0.2s; padding: 2px 5px; border-radius: 4px; border: 1px solid transparent;">    <span class="k-keyword">elif</span> key_pressed == <span class="k-string">"S"</span>:
+        move_down()</div>
+<div id="line-A" style="transition: background 0.2s; padding: 2px 5px; border-radius: 4px; border: 1px solid transparent;">    <span class="k-keyword">elif</span> key_pressed == <span class="k-string">"A"</span>:
+        move_left()</div>
+<div id="line-D" style="transition: background 0.2s; padding: 2px 5px; border-radius: 4px; border: 1px solid transparent;">    <span class="k-keyword">elif</span> key_pressed == <span class="k-string">"D"</span>:
+        move_right()</div></code></pre>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -631,5 +666,76 @@
 
     <!-- Scripts -->
     <script src="../../script.js"></script>
+
+    <script>
+        // Custom logic for Slide 12 & 13 interactions
+        document.addEventListener('DOMContentLoaded', () => {
+            // Slide 12 - Sem Elif / Com Elif Play Buttons
+            const btnSem = document.getElementById('btn-play-sem');
+            const outSem = document.getElementById('out-sem-elif');
+            if(btnSem && outSem) {
+                btnSem.addEventListener('click', () => {
+                    outSem.innerHTML = '<span style="color:#c3e88d;">Nota B</span><br><span style="color:#c3e88d;">Nota C</span>';
+                });
+            }
+
+            const btnCom = document.getElementById('btn-play-com');
+            const outCom = document.getElementById('out-com-elif');
+            if(btnCom && outCom) {
+                btnCom.addEventListener('click', () => {
+                    outCom.innerHTML = '<span style="color:#c3e88d;">Nota B</span>';
+                });
+            }
+
+            // Slide 13 - Interactive Keyboard
+            const keys = document.querySelectorAll('.interact-key');
+            keys.forEach(keyBtn => {
+                keyBtn.addEventListener('mousedown', () => {
+                    keyBtn.style.transform = 'scale(0.9)';
+                    keyBtn.style.borderColor = '#38bdf8';
+                    keyBtn.style.boxShadow = '0 0 15px rgba(56,189,248,0.5)';
+                });
+                keyBtn.addEventListener('mouseup', () => {
+                    keyBtn.style.transform = 'scale(1)';
+                });
+                keyBtn.addEventListener('mouseleave', () => {
+                    keyBtn.style.transform = 'scale(1)';
+                    keyBtn.style.borderColor = '';
+                    keyBtn.style.boxShadow = '';
+                });
+
+                keyBtn.addEventListener('click', () => {
+                    // Reset all keys styling
+                    keys.forEach(k => {
+                        k.style.borderColor = '';
+                        k.style.boxShadow = '';
+                    });
+                    
+                    // Set active key style
+                    keyBtn.style.borderColor = '#38bdf8';
+                    keyBtn.style.boxShadow = '0 0 15px rgba(56,189,248,0.5)';
+
+                    const kId = keyBtn.getAttribute('data-key');
+                    
+                    // Reset code highlights
+                    ['W', 'A', 'S', 'D'].forEach(l => {
+                        const line = document.getElementById('line-' + l);
+                        if(line) {
+                            line.style.background = 'transparent';
+                            line.style.borderColor = 'transparent';
+                        }
+                    });
+
+                    // Highlight active code block
+                    const targetLine = document.getElementById('line-' + kId);
+                    if(targetLine) {
+                        targetLine.style.background = 'rgba(56,189,248,0.15)';
+                        targetLine.style.borderColor = 'rgba(56,189,248,0.3)';
+                    }
+                });
+            });
+        });
+    </script>
+
 </body>
 </html>

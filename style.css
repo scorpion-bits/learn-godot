@@ -1153,3 +1153,32 @@ body.index-page {
         filter: hue-rotate(360deg);
     }
 }
+
+/* ==========================================================================
+   Godot UI Tabs
+   ========================================================================== */
+.godot-editor-tabs {
+    display: flex;
+    background: #181b24;
+    border-bottom: 1px solid #3c414c;
+    font-size: 0.85rem;
+    font-family: 'Inter', sans-serif;
+}
+.godot-editor-tab {
+    padding: 8px 15px;
+    color: #8b92a5;
+    border-top: 2px solid transparent;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.2s ease;
+}
+.godot-editor-tab.active {
+    background: #202531;
+    color: #e2e8f0;
+    border-top-color: #478cbf;
+}
+.godot-editor-tab:hover:not(.active) {
+    background: rgba(255,255,255,0.05);
+}

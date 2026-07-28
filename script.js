@@ -173,4 +173,66 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
+
+    // --- GLOBAL TABS LOGIC ---
+    document.querySelectorAll('.godot-editor-tab').forEach(tab => {
+        tab.addEventListener('click', function() {
+            const layout = this.closest('.godot-editor-layout');
+            if (!layout) return;
+            
+            layout.querySelectorAll('.godot-editor-tab').forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+            
+            const targetId = this.getAttribute('data-target');
+            if (targetId) {
+                layout.querySelectorAll('.godot-tab-content').forEach(content => {
+                    content.style.display = 'none';
+                });
+                
+                const targetContent = layout.querySelector('#' + targetId);
+                if (targetContent) {
+                    targetContent.style.display = 'block'; // or flex, depends. our css sets flex sometimes, but block for text. for .godot-tree we can use display='flex' wait, .godot-tree is flex. we should do style.display = '' so it uses CSS default.
+                    targetContent.style.display = '';
+                    targetContent.classList.add('active-tab'); // we can also just use CSS
+                }
+            }
+        });
+    });
+
+    // --- GLOBAL TIMER LOGIC ---
+    const startTimerBtn = document.getElementById('startTimerBtn');
+    const timerDisplay = document.getElementById('playtest-timer');
+    let timerInterval;
+
+    if (startTimerBtn && timerDisplay) {
+        startTimerBtn.addEventListener('click', () => {
+            clearInterval(timerInterval);
+            let timer = 900; 
+
+            startTimerBtn.innerHTML = "⏱ Rodando...";
+            startTimerBtn.style.opacity = "0.5";
+            startTimerBtn.style.pointerEvents = "none";
+            timerDisplay.style.color = "#c592ff";
+            timerDisplay.style.textShadow = "0 0 20px rgba(197, 146, 255, 0.8)";
+
+            timerInterval = setInterval(function () {
+                let minutes = parseInt(timer / 60, 10);
+                let seconds = parseInt(timer % 60, 10);
+
+                minutes = minutes < 10 ? "0" + minutes : minutes;
+                seconds = seconds < 10 ? "0" + seconds : seconds;
+
+                timerDisplay.textContent = minutes + ":" + seconds;
+
+                if (--timer < 0) {
+                    clearInterval(timerInterval);
+                    timerDisplay.textContent = "00:00";
+                    startTimerBtn.innerHTML = "Tempo Esgotado!";
+                    timerDisplay.style.color = "#ef4444";
+                    timerDisplay.style.textShadow = "0 0 20px rgba(239, 68, 68, 0.8)";
+                }
+            }, 1000);
+        });
+    }
+
 });

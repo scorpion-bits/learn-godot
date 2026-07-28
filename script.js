@@ -235,4 +235,30 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+
+    // --- CODE WINDOW TABS LOGIC ---
+    document.querySelectorAll('.code-tab').forEach(tab => {
+        tab.addEventListener('click', function() {
+            const window = this.closest('.code-window');
+            if (!window) return;
+            
+            window.querySelectorAll('.code-tab').forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+            
+            const targetId = this.getAttribute('data-target');
+            if (targetId) {
+                window.querySelectorAll('.code-tab-content').forEach(content => {
+                    content.classList.remove('active-tab');
+                    content.style.display = 'none';
+                });
+                
+                const targetContent = window.querySelector('#' + targetId);
+                if (targetContent) {
+                    targetContent.classList.add('active-tab');
+                    targetContent.style.display = 'block';
+                }
+            }
+        });
+    });
+
 });

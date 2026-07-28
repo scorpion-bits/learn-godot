@@ -1182,3 +1182,46 @@ body.index-page {
 .godot-editor-tab:hover:not(.active) {
     background: rgba(255,255,255,0.05);
 }
+
+/* ==========================================================================
+   Code Window Tabs
+   ========================================================================== */
+.code-tabs {
+    display: flex;
+    align-items: stretch;
+}
+
+.code-tab {
+    font-family: var(--font-code);
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    font-weight: 500;
+    padding: 0.75rem 1.25rem;
+    cursor: pointer;
+    border-top: 2px solid transparent;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(0, 0, 0, 0.1);
+    border-right: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.code-tab:hover:not(.active) {
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--text-main);
+}
+
+.code-tab.active {
+    background: transparent;
+    color: var(--text-accent);
+    border-top-color: var(--text-accent);
+}
+
+.code-tab-content {
+    display: none;
+}
+
+.code-tab-content.active-tab {
+    display: block;
+}

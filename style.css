@@ -305,15 +305,19 @@ body {
     line-height: 1.65;
     padding: 1.5rem;
     overflow-x: hidden;
-    white-space: pre-wrap;
-    overflow-wrap: break-word;
     color: var(--text-main);
 }
 
-/* Some tab panels nest a bare <pre> inside .code-content (e.g. the if/elif
-   tabs) — <pre> has its own UA default of white-space:pre, so it needs the
-   wrap behavior repeated here instead of relying on inheritance. */
-.code-content pre {
+/* Wrap behavior is scoped to the actual code text (a <pre> either wearing
+   .code-content itself, or nested inside it; or a bare <code> used without
+   a <pre>) — NOT to .code-content in general. Some tab panels reuse
+   .code-content as a plain layout wrapper alongside a "Executar" button;
+   putting white-space:pre-wrap there too made its whitespace-only text
+   nodes (indentation between tags) render as real blank lines, inflating
+   the panel with extra empty space above/below the code. */
+pre.code-content,
+.code-content pre,
+.code-content > code {
     white-space: pre-wrap;
     overflow-wrap: break-word;
 }

@@ -304,8 +304,18 @@ body {
     font-size: 0.95rem;
     line-height: 1.65;
     padding: 1.5rem;
-    overflow-x: auto;
+    overflow-x: hidden;
+    white-space: pre-wrap;
+    overflow-wrap: break-word;
     color: var(--text-main);
+}
+
+/* Some tab panels nest a bare <pre> inside .code-content (e.g. the if/elif
+   tabs) — <pre> has its own UA default of white-space:pre, so it needs the
+   wrap behavior repeated here instead of relying on inheritance. */
+.code-content pre {
+    white-space: pre-wrap;
+    overflow-wrap: break-word;
 }
 
 /* Syntax Color Tokens */
@@ -327,6 +337,23 @@ body {
     border-radius: 18px;
     padding: 1.5rem;
     box-shadow: var(--card-shadow);
+    margin-bottom: 16px;
+}
+
+/* Consistent vertical rhythm between stacked blocks inside a slide or a
+   grid-2 column — without this, cards/pill-lists/paragraphs render flush
+   against each other with no visual separation. Scoped to "preceded by a
+   sibling" so a lone mockup filling an entire grid-2 column isn't pushed
+   off-center by an unwanted top margin. */
+.lede + .pill-list, .card + .pill-list, .feature-card + .pill-list, .callout + .pill-list,
+.lede + .keyboard-layout, .feature-card + .keyboard-layout,
+.lede + .vector-graph-godot, .pill-list + .vector-graph-godot,
+.lede + .godot-editor-layout, .feature-card + .godot-editor-layout, .callout + .godot-editor-layout,
+.lede + .code-window, .card + .code-window, .callout + .code-window {
+    margin-top: 16px;
+}
+.pill-list, .keyboard-layout, .vector-graph-godot, .godot-editor-layout, .code-window {
+    margin-bottom: 16px;
 }
 
 .info-card.highlight-card {
@@ -886,6 +913,7 @@ body {
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
     background: #202531;
     min-width: 240px;
+    min-height: 150px;
     flex-shrink: 0;
     width: 100%;
 }
@@ -940,14 +968,16 @@ body {
 
 .godot-prop-row {
     display: flex;
-    justify-content: space-between;
     align-items: center;
+    gap: 8px;
     padding: 8px 8px 0;
 }
 
 .godot-prop-label {
     font-size: 0.85rem;
     color: #94a3b8;
+    flex-shrink: 0;
+    white-space: nowrap;
 }
 
 .godot-prop-input {
@@ -961,6 +991,11 @@ body {
     width: 65px;
     text-align: left;
     outline: none;
+    flex: 1 1 auto;
+    min-width: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 /* ==========================================================================
@@ -1086,7 +1121,7 @@ body.index-page {
     overflow-y: auto;
 }
 
-/* Scorpion Bits Academy Header - Official RGB Glow */
+/* Scorpion Bits Header - Official RGB Glow */
 .site-header {
     position: sticky;
     top: 0;
@@ -1133,16 +1168,6 @@ body.index-page {
         transform: scale(0.8);
         filter: hue-rotate(0deg);
     }
-    50% {
-        opacity: 0.85;
-        transform: scale(1.2);
-    }
-    100% {
-        opacity: 0.15;
-        transform: scale(0.8);
-        filter: hue-rotate(360deg);
-    }
-}
     50% {
         opacity: 0.85;
         transform: scale(1.2);
@@ -1225,3 +1250,291 @@ body.index-page {
 .code-tab-content.active-tab {
     display: block;
 }
+
+/* ==========================================================================
+   New Deck Chrome (Topbar, Cards, Callouts, Legends)
+   Used by the redesigned lessons/01, 02 and 06 decks. Reuses existing tokens
+   (--card-bg, --text-*, --font-*) and existing components (.orb, .nav-btn,
+   .key, .code-window, .code-content, .k-*, .play-sim-btn, .code-tab) instead
+   of duplicating them.
+   ========================================================================== */
+.topbar {
+    position: relative;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 28px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(10, 7, 24, 0.6);
+    backdrop-filter: blur(10px);
+}
+
+.topbar-left { display: flex; align-items: center; gap: 14px; }
+
+.back-link {
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 0.85rem;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: color 0.2s;
+}
+.back-link:hover { color: var(--text-accent); }
+
+.lesson-tag {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    background: rgba(192, 132, 252, 0.15);
+    color: var(--text-accent);
+    padding: 4px 10px;
+    border-radius: 20px;
+}
+
+.lesson-name {
+    font-family: var(--font-title);
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text-main);
+}
+
+.progress-wrap { display: flex; align-items: center; gap: 12px; }
+.progress-track { width: 160px; height: 4px; background: rgba(255, 255, 255, 0.1); border-radius: 4px; overflow: hidden; }
+.progress-fill { height: 100%; background: linear-gradient(90deg, #9333ea, var(--text-accent)); width: 0%; transition: width 0.3s ease; }
+.progress-text { font-size: 0.78rem; color: var(--text-muted); font-variant-numeric: tabular-nums; min-width: 52px; }
+
+/* Slide deck viewport: overrides .slide's display toggle to a scrollable
+   single column instead of the old centered 2-col flex layout. */
+.deck {
+    position: relative;
+    z-index: 5;
+    height: calc(100vh - 60px - 66px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+}
+.deck .slide {
+    width: 100%;
+    max-width: 1100px;
+    height: auto;
+    max-height: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 8px 6px 24px 2px;
+    transition: none;
+}
+.deck .slide.active {
+    display: block;
+    opacity: 1;
+    transform: none;
+    animation: deckSlideIn 0.35s ease;
+}
+.deck .slide::-webkit-scrollbar { width: 6px; }
+.deck .slide::-webkit-scrollbar-thumb { background: rgba(192, 132, 252, 0.3); border-radius: 4px; }
+
+@keyframes deckSlideIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.eyebrow {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--text-accent);
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.eyebrow .num { opacity: 0.5; }
+
+.slide-title {
+    font-family: var(--font-title);
+    font-weight: 900;
+    font-size: clamp(1.7rem, 3.4vw, 2.6rem);
+    line-height: 1.1;
+    margin-bottom: 8px;
+    letter-spacing: -0.5px;
+    color: #ffffff;
+}
+
+.slide-sub { color: var(--text-muted); font-size: 1.05rem; margin-bottom: 28px; }
+
+.lede { font-size: 1.05rem; line-height: 1.7; color: #e2e8f0; margin-bottom: 18px; }
+.lede strong { color: var(--text-main); font-weight: 600; }
+
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; align-items: center; margin: 10px 0; }
+
+.card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 18px;
+    padding: 20px 22px;
+    backdrop-filter: blur(14px);
+    box-shadow: var(--card-shadow);
+    margin-bottom: 16px;
+}
+.card h3 { font-family: var(--font-title); font-size: 1.05rem; margin-bottom: 10px; color: #ffffff; }
+.card ul { padding-left: 20px; color: #e2e8f0; line-height: 1.7; }
+.card ul li { margin-bottom: 4px; }
+
+/* Inline <code> pills inside prose (not inside .code-content blocks, which
+   already have their own syntax-highlight spans). */
+.lede code, .card code, .callout code, li code, p code {
+    font-family: var(--font-code);
+    background: rgba(192, 132, 252, 0.12);
+    color: #e879f9;
+    padding: 2px 7px;
+    border-radius: 6px;
+    font-size: 0.9em;
+}
+
+.callout {
+    border-radius: 12px;
+    padding: 14px 18px;
+    margin: 16px 0;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    border: 1px solid transparent;
+}
+.callout i { margin-top: 3px; font-size: 1rem; }
+.callout strong { color: #fff; }
+/* Only the leading "<strong>Título</strong> resto do texto" pattern gets its
+   own line — a <strong> used for inline emphasis mid-sentence must stay inline. */
+.callout > div > strong:first-child { display: block; margin-bottom: 2px; }
+.callout-tip { background: rgba(192, 132, 252, 0.1); border-color: rgba(192, 132, 252, 0.25); color: #eee1ff; }
+.callout-tip i { color: var(--text-accent); }
+.callout-warn { background: rgba(245, 158, 11, 0.1); border-color: rgba(245, 158, 11, 0.3); color: #fde9c8; }
+.callout-warn i { color: #f59e0b; }
+.callout-note { background: rgba(56, 189, 248, 0.1); border-color: rgba(56, 189, 248, 0.28); color: #d6f1ff; }
+.callout-note i { color: #38bdf8; }
+
+/* Output panel chrome inside .code-window; script.js already targets
+   .output-content to fill in printed lines. */
+.output-panel { border-top: 1px solid rgba(255, 255, 255, 0.08); background: #08060f; }
+.output-panel .out-label { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 1px; color: #64748b; padding: 8px 18px 0; }
+.output-panel .output-content { display: block; padding: 6px 18px 14px; color: #4ade80; font-family: var(--font-code); font-size: 0.85rem; }
+
+/* Annotated syntax legend (e.g. breaking down `func name(args) -> type:`) */
+.anno-line { display: flex; flex-wrap: wrap; gap: 0; font-family: var(--font-code); font-size: 1.05rem; margin: 22px 0 30px; }
+.anno { display: flex; flex-direction: column; align-items: center; padding: 0 10px 0 0; position: relative; }
+.anno code { color: var(--text-main); white-space: nowrap; background: none; padding: 0; }
+.anno .cap { margin-top: 10px; font-family: var(--font-body); font-size: 0.72rem; color: var(--text-muted); max-width: 110px; text-align: center; line-height: 1.3; position: relative; padding-top: 10px; }
+.anno .cap::before { content: ""; position: absolute; top: 0; left: 50%; width: 1px; height: 8px; background: rgba(192, 132, 252, 0.4); }
+
+/* Type / operator quick-reference grids */
+.type-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin: 18px 0; }
+.type-card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 14px; padding: 16px; }
+.type-card .t-head { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+.type-card .t-head i { color: var(--text-accent); font-size: 1rem; }
+.type-card .t-name { font-family: var(--font-code); font-weight: 700; color: #fff; }
+.type-card p { font-size: 0.82rem; color: var(--text-muted); line-height: 1.5; margin-bottom: 6px; }
+.type-card .t-default { font-size: 0.72rem; color: #64748b; }
+.type-card .t-default code { background: none; padding: 0; color: var(--text-accent); }
+
+.op-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 16px 0; }
+.op-chip { display: flex; align-items: center; gap: 10px; background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 10px; padding: 10px 14px; }
+.op-chip .sym { font-family: var(--font-code); font-weight: 700; color: var(--text-accent); min-width: 34px; }
+.op-chip .desc { font-size: 0.82rem; color: var(--text-muted); }
+
+/* Collapsible hints (used in the Lesson 01 challenge slide) */
+details.hint { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 12px; padding: 12px 16px; margin: 10px 0; }
+details.hint summary { cursor: pointer; font-weight: 600; color: var(--text-accent); font-size: 0.9rem; }
+details.hint p { margin-top: 8px; font-size: 0.88rem; color: #e2e8f0; line-height: 1.6; }
+
+@media (max-width: 1024px) {
+    .grid-2 { grid-template-columns: 1fr; }
+    .type-grid { grid-template-columns: repeat(2, 1fr); }
+    .op-grid { grid-template-columns: 1fr; }
+    .progress-track { width: 80px; }
+    .lesson-name { display: none; }
+}
+
+/* ==========================================================================
+   Dashboard (index.html) — reuses .eyebrow/.slide-title/.slide-sub/.lesson-tag
+   from the deck chrome above instead of a separate parallel component set.
+   ========================================================================== */
+.courses-wrapper {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 4rem 2rem;
+    position: relative;
+    z-index: 10;
+}
+
+.hero-section { text-align: center; max-width: 700px; margin: 0 auto 4rem; }
+.hero-section .eyebrow { justify-content: center; }
+.hero-section .slide-title { font-size: clamp(2.2rem, 4vw, 3.2rem); }
+.hero-section .slide-sub { margin-bottom: 0; }
+
+.section-heading {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: var(--font-title);
+    color: var(--text-main);
+    font-size: 1.3rem;
+    margin: 56px 0 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+.section-heading:first-of-type { margin-top: 0; }
+.section-heading i, .section-heading img { font-size: 1.2rem; color: var(--text-accent); width: 22px; text-align: center; }
+
+.course-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+}
+
+.course-card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 18px;
+    padding: 2rem;
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
+    backdrop-filter: blur(14px);
+    box-shadow: var(--card-shadow);
+}
+.course-card:hover {
+    transform: translateY(-5px);
+    border-color: rgba(192, 132, 252, 0.5);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 20px rgba(192, 132, 252, 0.2);
+}
+.course-card.disabled { opacity: 0.55; cursor: not-allowed; }
+.course-card.disabled:hover { transform: none; box-shadow: var(--card-shadow); border-color: var(--card-border); }
+
+.course-card .lesson-tag { align-self: flex-start; margin-bottom: 1rem; }
+.lesson-tag.pink { background: rgba(236, 72, 153, 0.15); color: #ec4899; }
+.lesson-tag.gray { background: rgba(148, 163, 184, 0.15); color: #94a3b8; }
+.lesson-tag.yellow { background: rgba(234, 179, 8, 0.15); color: #eab308; }
+
+.course-title { font-size: 1.4rem; color: var(--text-main); margin-bottom: 0.75rem; font-family: var(--font-title); }
+.course-desc { color: var(--text-muted); font-size: 0.95rem; line-height: 1.6; flex: 1; }
+
+.course-footer {
+    margin-top: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    padding-top: 1rem;
+    color: #64748b;
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+.start-btn { transition: color 0.3s ease; }
+.course-card:hover .start-btn { color: var(--text-accent); }
+.start-btn.pink, .course-card:hover .start-btn.pink { color: #ec4899; }

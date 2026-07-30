@@ -5,6 +5,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const prevBtn = document.getElementById('prev-btn');
     const nextBtn = document.getElementById('next-btn');
     const fullscreenBtn = document.getElementById('fullscreen-btn');
+    const progressFillEl = document.getElementById('progress-fill');
+    const progressTextEl = document.getElementById('progress-text');
 
     let currentSlideIndex = 0;
     const totalSlides = slides.length;
@@ -28,6 +30,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
         nextBtn.style.opacity = currentSlideIndex === totalSlides - 1 ? '0.4' : '1';
         nextBtn.style.pointerEvents = currentSlideIndex === totalSlides - 1 ? 'none' : 'auto';
+
+        // Topbar progress bar (only present on the redesigned lesson decks)
+        if (progressFillEl) {
+            progressFillEl.style.width = (((currentSlideIndex + 1) / totalSlides) * 100) + '%';
+        }
+        if (progressTextEl) {
+            progressTextEl.textContent = (currentSlideIndex + 1) + ' / ' + totalSlides;
+        }
     }
 
     function nextSlide() {
@@ -100,35 +110,62 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     const simScripts = {
+        'btn-play-print': [
+            { line: 1, delay: 400 },
+            { line: 2, delay: 700, output: "Hello, Godot!" },
+            { line: 3, delay: 700, output: "Meu primeiro script!" }
+        ],
+        'btn-play-args': [
+            { line: 1, delay: 300 },
+            { line: 2, delay: 500 },
+            { line: 3, delay: 500 },
+            { line: 6, delay: 500 },
+            { line: 7, delay: 600, output: "4" }
+        ],
+        'btn-play-math': [
+            { line: 1, delay: 300 },
+            { line: 2, delay: 500 },
+            { line: 3, delay: 500 },
+            { line: 5, delay: 500 },
+            { line: 6, delay: 500 },
+            { line: 8, delay: 600, output: "6" },
+            { line: 9, delay: 600, output: "25" }
+        ],
+        'btn-play-return': [
+            { line: 1, delay: 300 },
+            { line: 2, delay: 500 },
+            { line: 6, delay: 500 },
+            { line: 7, delay: 500 },
+            { line: 3, delay: 600, output: "15" }
+        ],
         'btn-play-else': [
             { line: 2, delay: 400 },
             { line: 4, delay: 600 },
-            { line: 7, delay: 600 },
-            { line: 8, delay: 600, output: "Reprovado" }
+            { line: 6, delay: 600 },
+            { line: 7, delay: 600, output: "Reprovado" }
         ],
         'btn-play-sem': [
             { line: 2, delay: 400 },
             { line: 4, delay: 600 },
-            { line: 7, delay: 600 },
-            { line: 8, delay: 600, output: "Nota B" },
-            { line: 10, delay: 600 },
-            { line: 11, delay: 600, output: "Nota C" },
-            { line: 13, delay: 600 }
+            { line: 6, delay: 600 },
+            { line: 7, delay: 600, output: "Nota B" },
+            { line: 8, delay: 600 },
+            { line: 9, delay: 600, output: "Nota C" }
         ],
         'btn-play-com': [
             { line: 2, delay: 400 },
             { line: 4, delay: 600 },
-            { line: 7, delay: 600 },
-            { line: 8, delay: 600, output: "Nota B" }
+            { line: 6, delay: 600 },
+            { line: 7, delay: 600, output: "Nota B" }
         ],
-        'slide-15': [
+        'btn-play-for': [
             { line: 2, delay: 600 }, { line: 3, delay: 600, output: "0" },
             { line: 2, delay: 600 }, { line: 3, delay: 600, output: "1" },
             { line: 2, delay: 600 }, { line: 3, delay: 600, output: "2" },
             { line: 2, delay: 600 }, { line: 3, delay: 600, output: "3" },
             { line: 2, delay: 600 }, { line: 3, delay: 600, output: "4" }
         ],
-        'slide-16': [
+        'btn-play-while': [
             { line: 2, delay: 800, updateTracker: { id: 'health-val', value: '3' } },
             { line: 4, delay: 600 }, { line: 5, delay: 600, output: "Ainda estou vivo!" }, { line: 6, delay: 600, updateTracker: { id: 'health-val', value: '2' } },
             { line: 4, delay: 600 }, { line: 5, delay: 600, output: "Ainda estou vivo!" }, { line: 6, delay: 600, updateTracker: { id: 'health-val', value: '1' } },

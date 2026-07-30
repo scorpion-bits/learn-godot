@@ -9,111 +9,10 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700;1,900&family=Fira+Code:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="./style.css">
-    <style>
-        .courses-wrapper {
-            max-width: 1000px;
-            margin: 0 auto;
-            padding: 4rem 2rem;
-            position: relative;
-            z-index: 10;
-        }
-
-        .header-section {
-            text-align: center;
-            margin-bottom: 4rem;
-        }
-
-        .header-section h1 {
-            font-size: 3.5rem;
-            color: #f8fafc;
-            margin-bottom: 1rem;
-            font-family: var(--font-title);
-            letter-spacing: -1px;
-        }
-
-        .header-section p {
-            font-size: 1.2rem;
-            color: #94a3b8;
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        .course-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-        }
-
-        .course-card {
-            background: rgba(30, 41, 59, 0.6);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 16px;
-            padding: 2rem;
-            transition: all 0.3s ease;
-            display: flex;
-            flex-direction: column;
-            cursor: pointer;
-            text-decoration: none;
-            backdrop-filter: blur(10px);
-        }
-
-        .course-card:hover {
-            transform: translateY(-5px);
-            border-color: rgba(192, 132, 252, 0.5);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 20px rgba(192, 132, 252, 0.2);
-            background: rgba(30, 41, 59, 0.8);
-        }
-
-        .course-tag {
-            background: rgba(192, 132, 252, 0.15);
-            color: #c084fc;
-            font-size: 0.8rem;
-            font-weight: 600;
-            padding: 0.4rem 0.8rem;
-            border-radius: 20px;
-            display: inline-block;
-            margin-bottom: 1rem;
-            align-self: flex-start;
-        }
-
-        .course-title {
-            font-size: 1.5rem;
-            color: #f8fafc;
-            margin-bottom: 1rem;
-            font-family: var(--font-title);
-        }
-
-        .course-desc {
-            color: #94a3b8;
-            font-size: 0.95rem;
-            line-height: 1.6;
-            flex: 1;
-        }
-
-        .course-footer {
-            margin-top: 1.5rem;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
-            padding-top: 1rem;
-            color: #64748b;
-            font-size: 0.85rem;
-            font-weight: 500;
-        }
-
-        .course-card:hover .course-footer .start-btn {
-            color: #c084fc;
-        }
-        
-        .start-btn {
-            transition: color 0.3s ease;
-        }
-    </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body class="index-page">
-        <!-- Scorpion Bits Academy Header -->
+        <!-- Scorpion Bits Header -->
     <header class="site-header" style="width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 15px 5%; background: rgba(16, 11, 41, 0.85); border-bottom: 1px solid rgba(255, 255, 255, 0.05);">
         <a href="#" style="display: flex; align-items: center; text-decoration: none;">
             <img src="./assets/visual_id/scorpion_bits_logo.svg" alt="Scorpion Bits" style="height: 50px; transition: transform 0.3s ease;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
@@ -148,26 +47,30 @@
     </div>
 
     <main class="courses-wrapper">
-        
 
-        
-        <h2 style="color: #f8fafc; font-family: var(--font-title); margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;"><img src="./assets/icons/Godot.svg" style="height: 30px; vertical-align: middle; margin-right: 10px;"> Godot Game Development</h2>
+        <div class="hero-section">
+            <div class="eyebrow"><i class="fa-solid fa-graduation-cap"></i> Scorpion Bits</div>
+            <h1 class="slide-title">TRILHA DE DESENVOLVIMENTO<br>DE JOGOS</h1>
+            <p class="slide-sub">Escolha uma aula abaixo e comece a construir seu jogo, um conceito de cada vez.</p>
+        </div>
+
+        <h2 class="section-heading"><img src="./assets/icons/Godot.svg" style="height: 20px;"> Godot Game Development</h2>
         <div class="course-grid">
-            
+
             <!-- Aula 1 -->
             <a href="./lessons/01/" class="course-card">
-                <span class="course-tag">AULA 1</span>
+                <span class="lesson-tag">AULA 1</span>
                 <h3 class="course-title">Introdução à Programação</h3>
                 <p class="course-desc">Aprenda o básico de programação com GDScript: Variáveis, Funções, Condicionais e Repetições. O alicerce para desenvolver jogos no Godot.</p>
                 <div class="course-footer">
-                    <span>16 Slides interativos</span>
+                    <span>17 Slides interativos</span>
                     <span class="start-btn">Começar ➔</span>
                 </div>
             </a>
 
             <!-- Aula 2 -->
             <a href="./lessons/02/" class="course-card">
-                <span class="course-tag">AULA 2</span>
+                <span class="lesson-tag">AULA 2</span>
                 <h3 class="course-title">Criando um Player Básico</h3>
                 <p class="course-desc">Aprenda a base profissional usando Nodes, CharacterBody2D, Sistema de Componentes isolados e Painel de Animação.</p>
                 <div class="course-footer">
@@ -178,7 +81,7 @@
 
             <!-- Aula 6 -->
             <a href="./lessons/06/" class="course-card">
-                <span class="course-tag">AULA 6</span>
+                <span class="lesson-tag">AULA 6</span>
                 <h3 class="course-title">Física para Jogos</h3>
                 <p class="course-desc">Dando peso, impacto e Game Feel aos seus componentes. Aprenda a lidar com inércia, fricção e Knockback usando vetores.</p>
                 <div class="course-footer">
@@ -187,48 +90,48 @@
                 </div>
             </a>
 
-
         </div>
 
-        <h2 style="color: #f8fafc; font-family: var(--font-title); margin-top: 50px; margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">Game Design</h2>
+        <h2 class="section-heading"><i class="fa-solid fa-puzzle-piece"></i> Game Design</h2>
         <div class="course-grid">
-            <a href="#" class="course-card" style="opacity: 0.6; cursor: not-allowed;">
-                <span class="course-tag" style="background: rgba(168, 85, 247, 0.15); color: #a855f7;">EM BREVE</span>
+            <a href="#" class="course-card disabled">
+                <span class="lesson-tag gray">EM BREVE</span>
                 <h3 class="course-title">Game Design Patterns</h3>
                 <p class="course-desc">Aprenda a planejar as mecânicas, o balanceamento e a curva de aprendizado do seu jogo para engajar os jogadores.</p>
             </a>
         </div>
 
-        <h2 style="color: #f8fafc; font-family: var(--font-title); margin-top: 50px; margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">Art & Animation</h2>
+        <h2 class="section-heading"><i class="fa-solid fa-palette"></i> Art &amp; Animation</h2>
         <div class="course-grid">
             <a href="./lessons/aseprite/aseprite-fundamentals.pdf" target="_blank" class="course-card">
-                <span class="course-tag" style="background: rgba(236, 72, 153, 0.15); color: #ec4899;">AULA EXTRA</span>
+                <span class="lesson-tag pink">AULA EXTRA</span>
                 <h3 class="course-title">Pixel Art no Aseprite</h3>
                 <p class="course-desc">Fundamentos de cores, silhuetas e animação frame-a-frame para dar vida aos personagens do seu jogo usando a ferramenta Aseprite.</p>
                 <div class="course-footer">
                     <span style="color: #ec4899;">Apresentação em PDF</span>
-                    <span class="start-btn" style="color: #ec4899;">Abrir PDF ➔</span>
+                    <span class="start-btn pink">Abrir PDF ➔</span>
                 </div>
             </a>
 
             <a href="./lessons/07/interface-ui.pdf" target="_blank" class="course-card">
-                <span class="course-tag" style="background: rgba(236, 72, 153, 0.15); color: #ec4899;">AULA 7</span>
-                <h3 class="course-title">UI & Interface I</h3>
+                <span class="lesson-tag pink">AULA 7</span>
+                <h3 class="course-title">UI &amp; Interface I</h3>
                 <p class="course-desc">Aprenda a construir menus, HUDs e telas interativas de forma responsiva usando o poderoso sistema de Control Nodes do Godot.</p>
                 <div class="course-footer">
                     <span style="color: #ec4899;">Apresentação em PDF</span>
-                    <span class="start-btn" style="color: #ec4899;">Abrir PDF ➔</span>
+                    <span class="start-btn pink">Abrir PDF ➔</span>
                 </div>
             </a>
         </div>
 
-        <h2 style="color: #f8fafc; font-family: var(--font-title); margin-top: 50px; margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">Music & SFX</h2>
+        <h2 class="section-heading"><i class="fa-solid fa-music"></i> Music &amp; SFX</h2>
         <div class="course-grid">
-            <a href="#" class="course-card" style="opacity: 0.6; cursor: not-allowed;">
-                <span class="course-tag" style="background: rgba(234, 179, 8, 0.15); color: #eab308;">EM BREVE</span>
+            <a href="#" class="course-card disabled">
+                <span class="lesson-tag yellow">EM BREVE</span>
                 <h3 class="course-title">Trilhas Sonoras Imersivas</h3>
                 <p class="course-desc">Como compor músicas em loop e criar efeitos sonoros de impacto usando softwares de áudio gratuitos.</p>
             </a>
+        </div>
 
     </main>
 

@@ -3,40 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Índice de Aulas</title>
+    <title>Trilha de Desenvolvimento de Jogos — Scorpion Bits</title>
+    <meta name="description" content="Trilha completa do curso de desenvolvimento de jogos com Godot: Programação, Game Design, Arte e Música.">
     <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700;1,900&family=Fira+Code:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./assets/fonts/fonts.css">
     <link rel="stylesheet" href="./style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body class="index-page">
-        <!-- Scorpion Bits Header -->
-    <header class="site-header" style="width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 15px 5%; background: rgba(16, 11, 41, 0.85); border-bottom: 1px solid rgba(255, 255, 255, 0.05);">
-        <a href="#" style="display: flex; align-items: center; text-decoration: none;">
-            <img src="./assets/visual_id/scorpion_bits_logo.svg" alt="Scorpion Bits" style="height: 50px; transition: transform 0.3s ease;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
-        
+    <script src="./assets/icons-ui/ui-icons.js"></script>
+
+    <!-- Scorpion Bits Header -->
+    <header class="site-header">
+        <a href="./index.html" class="site-logo">
+            <img src="./assets/visual_id/scorpion_bits_logo.svg" alt="Scorpion Bits">
         </a>
-        <div style="position: absolute; left: 50%; transform: translateX(-50%); font-family: 'Playfair Display', serif; color: #f8fafc; font-size: 1.1rem; letter-spacing: 4px; text-transform: uppercase; font-weight: 300;">
-            LEARN
-        </div>
-        <div style="display: flex; gap: 25px; align-items: center;">
-            <a href="https://scorpionbits.com" target="_blank" style="color: #cbd5e1; font-size: 1.2rem; transition: color 0.3s;" onmouseover="this.style.color='#c084fc'" onmouseout="this.style.color='#cbd5e1'" title="Site Oficial">
-                <i class="fa-solid fa-globe"></i>
+        <div class="site-wordmark">LEARN</div>
+        <nav class="site-links" aria-label="Links da Scorpion Bits">
+            <a href="https://scorpionbits.com" target="_blank" rel="noopener" title="Site Oficial" aria-label="Site Oficial">
+                <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-globe"></use></svg>
             </a>
-            <a href="https://github.com/scorpion-bits" target="_blank" style="color: #cbd5e1; font-size: 1.2rem; transition: color 0.3s;" onmouseover="this.style.color='#c084fc'" onmouseout="this.style.color='#cbd5e1'" title="GitHub">
-                <i class="fa-brands fa-github"></i>
+            <a href="https://github.com/scorpion-bits" target="_blank" rel="noopener" title="GitHub" aria-label="GitHub">
+                <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-github"></use></svg>
             </a>
-            <a href="https://instagram.com/scorpionbits_" target="_blank" style="color: #cbd5e1; font-size: 1.2rem; transition: color 0.3s;" onmouseover="this.style.color='#c084fc'" onmouseout="this.style.color='#cbd5e1'" title="Instagram">
-                <i class="fa-brands fa-instagram"></i>
+            <a href="https://instagram.com/scorpionbits_" target="_blank" rel="noopener" title="Instagram" aria-label="Instagram">
+                <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-instagram"></use></svg>
             </a>
-
-        </div>
-
+        </nav>
     </header>
-
-
 
     <!-- Background Orbs & Wave Overlay (Reused from style.css) -->
     <div class="bg-gradient-container">
@@ -49,135 +42,276 @@
     <main class="courses-wrapper">
 
         <div class="hero-section">
-            <div class="eyebrow"><i class="fa-solid fa-graduation-cap"></i> Scorpion Bits</div>
+            <div class="eyebrow"><svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-graduation-cap"></use></svg> Scorpion Bits</div>
             <h1 class="slide-title">TRILHA DE DESENVOLVIMENTO<br>DE JOGOS</h1>
-            <p class="slide-sub">Escolha uma aula abaixo e comece a construir seu jogo, um conceito de cada vez.</p>
+            <p class="slide-sub">Do primeiro <code>print()</code> ao seu próprio jogo 2D Top-Down feito no Godot.</p>
+            <p class="hero-note">O curso é dividido em quatro áreas que caminham juntas. Os módulos marcados como
+               <strong>Em breve</strong> ainda estão em produção e serão liberados ao longo das aulas.</p>
         </div>
 
-        <h2 class="section-heading"><img src="./assets/icons/Godot.svg" style="height: 20px;"> Godot Game Development</h2>
-        <div class="course-grid">
+        <!-- ==================================================================
+             Os cards abaixo são escritos à mão de propósito: se o JavaScript
+             falhar, a página inicial continua funcionando por inteiro.
+             A ORDEM e os caminhos também vivem em assets/course.js, que é o que
+             monta a navegação "módulo anterior / próximo" dentro dos decks.
+             Ao mexer aqui, espelhe lá — `python tools/check_course.py` compara.
+             ================================================================== -->
 
-            <!-- Aula 1 -->
-            <a href="./lessons/01/" class="course-card">
-                <span class="lesson-tag">AULA 1</span>
-                <h3 class="course-title">Introdução à Programação</h3>
-                <p class="course-desc">Aprenda o básico de programação com GDScript: Variáveis, Funções, Condicionais e Repetições. O alicerce para desenvolver jogos no Godot.</p>
-                <div class="course-footer">
-                    <span>17 Slides interativos</span>
-                    <span class="start-btn">Começar ➔</span>
+        <!-- ============================ PROGRAMAÇÃO ======================== -->
+        <section class="area" id="area-programacao">
+            <h2 class="section-heading">
+                <img src="./assets/icons/Godot.svg" alt="">
+                Programação
+                <span class="area-count">4 de 11 disponíveis</span>
+            </h2>
+            <div class="course-grid">
+
+                <div class="course-card locked">
+                    <span class="lesson-tag gray">MÓDULO 1 · EM BREVE</span>
+                    <h3 class="course-title">Introdução ao Godot</h3>
+                    <p class="course-desc">A engine por dentro: interface, sistema de cenas, Nodes, Inspector, FileSystem e como um projeto se organiza.</p>
+                    <div class="course-footer"><span class="soon-label">Em produção</span></div>
                 </div>
-            </a>
 
-            <!-- Aula 2 -->
-            <a href="./lessons/02/" class="course-card">
-                <span class="lesson-tag">AULA 2</span>
-                <h3 class="course-title">Criando um Player Básico</h3>
-                <p class="course-desc">Aprenda a base profissional usando Nodes, CharacterBody2D, Sistema de Componentes isolados e Painel de Animação.</p>
-                <div class="course-footer">
-                    <span>21 Slides interativos</span>
-                    <span class="start-btn">Começar ➔</span>
+                <a href="./lessons/programacao/02/" class="course-card">
+                    <span class="lesson-tag">MÓDULO 2</span>
+                    <h3 class="course-title">Introdução à Programação</h3>
+                    <p class="course-desc">Lógica de programação do zero com GDScript: variáveis, tipos, operadores, funções, condicionais e repetições.</p>
+                    <div class="course-footer">
+                        <span>25 slides interativos</span>
+                        <span class="start-btn">Começar ➔</span>
+                    </div>
+                </a>
+
+                <a href="./lessons/programacao/03-04/" class="course-card">
+                    <span class="lesson-tag">MÓDULOS 3 E 4</span>
+                    <h3 class="course-title">Criando um Player Básico</h3>
+                    <p class="course-desc">Nodes, Scenes e CharacterBody2D na prática: sprites, animações, Vector2, Input Map e uma arquitetura de componentes reutilizáveis.</p>
+                    <div class="course-footer">
+                        <span>29 slides interativos</span>
+                        <span class="start-btn">Começar ➔</span>
+                    </div>
+                </a>
+
+                <div class="course-card locked">
+                    <span class="lesson-tag gray">MÓDULO 5 · EM BREVE</span>
+                    <h3 class="course-title">Colisores e Area2D</h3>
+                    <p class="course-desc">CollisionShapes, camadas e máscaras de colisão, Signals, interação com paredes, obstáculos e áreas de gatilho.</p>
+                    <div class="course-footer"><span class="soon-label">Em produção</span></div>
                 </div>
-            </a>
 
-            <!-- Aula 6 -->
-            <a href="./lessons/06/" class="course-card">
-                <span class="lesson-tag">AULA 6</span>
-                <h3 class="course-title">Física para Jogos</h3>
-                <p class="course-desc">Dando peso, impacto e Game Feel aos seus componentes. Aprenda a lidar com inércia, fricção e Knockback usando vetores.</p>
-                <div class="course-footer">
-                    <span>11 Slides interativos</span>
-                    <span class="start-btn">Começar ➔</span>
+                <a href="./lessons/programacao/06/" class="course-card">
+                    <span class="lesson-tag">MÓDULO 6</span>
+                    <h3 class="course-title">Física para Jogos</h3>
+                    <p class="course-desc">Dando peso e impacto ao movimento: aceleração, fricção, knockback e a diferença entre física real e física divertida.</p>
+                    <div class="course-footer">
+                        <span>11 slides interativos</span>
+                        <span class="start-btn">Começar ➔</span>
+                    </div>
+                </a>
+
+                <a href="./lessons/programacao/07/interface-ui.pdf" target="_blank" rel="noopener" class="course-card">
+                    <span class="lesson-tag pink">MÓDULO 7</span>
+                    <h3 class="course-title">Interface 1 — Menu e Pausa</h3>
+                    <p class="course-desc">HUD, menu principal, sistema de pausa e navegação por botões usando os Control Nodes do Godot.</p>
+                    <div class="course-footer">
+                        <span class="pdf-label">Apresentação em PDF</span>
+                        <span class="start-btn pink">Abrir PDF ➔</span>
+                    </div>
+                </a>
+
+                <div class="course-card locked">
+                    <span class="lesson-tag gray">MÓDULO 8 · EM BREVE</span>
+                    <h3 class="course-title">Interface 2 — Diálogo e Save</h3>
+                    <p class="course-desc">Caixa de diálogo, sistema de NPC, interação por texto e persistência de dados com save manual e automático.</p>
+                    <div class="course-footer"><span class="soon-label">Em produção</span></div>
                 </div>
-            </a>
 
-        </div>
-
-        <h2 class="section-heading"><i class="fa-solid fa-puzzle-piece"></i> Game Design</h2>
-        <div class="course-grid">
-            <a href="#" class="course-card disabled">
-                <span class="lesson-tag gray">EM BREVE</span>
-                <h3 class="course-title">Game Design Patterns</h3>
-                <p class="course-desc">Aprenda a planejar as mecânicas, o balanceamento e a curva de aprendizado do seu jogo para engajar os jogadores.</p>
-            </a>
-        </div>
-
-        <h2 class="section-heading"><i class="fa-solid fa-palette"></i> Art &amp; Animation</h2>
-        <div class="course-grid">
-            <a href="./lessons/aseprite/aseprite-fundamentals.pdf" target="_blank" class="course-card">
-                <span class="lesson-tag pink">AULA EXTRA</span>
-                <h3 class="course-title">Pixel Art no Aseprite</h3>
-                <p class="course-desc">Fundamentos de cores, silhuetas e animação frame-a-frame para dar vida aos personagens do seu jogo usando a ferramenta Aseprite.</p>
-                <div class="course-footer">
-                    <span style="color: #ec4899;">Apresentação em PDF</span>
-                    <span class="start-btn pink">Abrir PDF ➔</span>
+                <div class="course-card locked">
+                    <span class="lesson-tag gray">MÓDULO 9 · EM BREVE</span>
+                    <h3 class="course-title">Inventário</h3>
+                    <p class="course-desc">Coleta, armazenamento e consumo de itens, equipamentos e a interface de inventário integrada ao gameplay.</p>
+                    <div class="course-footer"><span class="soon-label">Em produção</span></div>
                 </div>
-            </a>
 
-            <a href="./lessons/07/interface-ui.pdf" target="_blank" class="course-card">
-                <span class="lesson-tag pink">AULA 7</span>
-                <h3 class="course-title">UI &amp; Interface I</h3>
-                <p class="course-desc">Aprenda a construir menus, HUDs e telas interativas de forma responsiva usando o poderoso sistema de Control Nodes do Godot.</p>
-                <div class="course-footer">
-                    <span style="color: #ec4899;">Apresentação em PDF</span>
-                    <span class="start-btn pink">Abrir PDF ➔</span>
+                <div class="course-card locked">
+                    <span class="lesson-tag gray">MÓDULO 10 · EM BREVE</span>
+                    <h3 class="course-title">Status e Perigos</h3>
+                    <p class="course-desc">Sistema de dano, inimigos, espinhos, buracos, efeitos negativos e feedback claro de perigo para o jogador.</p>
+                    <div class="course-footer"><span class="soon-label">Em produção</span></div>
                 </div>
-            </a>
-        </div>
 
-        <h2 class="section-heading"><i class="fa-solid fa-music"></i> Music &amp; SFX</h2>
-        <div class="course-grid">
-            <a href="#" class="course-card disabled">
-                <span class="lesson-tag yellow">EM BREVE</span>
-                <h3 class="course-title">Trilhas Sonoras Imersivas</h3>
-                <p class="course-desc">Como compor músicas em loop e criar efeitos sonoros de impacto usando softwares de áudio gratuitos.</p>
-            </a>
-        </div>
+                <div class="course-card locked">
+                    <span class="lesson-tag gray">MÓDULO 11 · EM BREVE</span>
+                    <h3 class="course-title">Batalhas 1 — Turno</h3>
+                    <p class="course-desc">Ordem de turno, menus de combate, ataque, defesa, habilidades e uma IA básica para o fluxo estratégico.</p>
+                    <div class="course-footer"><span class="soon-label">Em produção</span></div>
+                </div>
+
+                <div class="course-card locked">
+                    <span class="lesson-tag gray">MÓDULO 12 · EM BREVE</span>
+                    <h3 class="course-title">Batalhas 2 — Tempo Real</h3>
+                    <p class="course-desc">Hitbox e hurtbox, ataques em tempo real, cooldowns, feedback de impacto e ajuste de responsividade.</p>
+                    <div class="course-footer"><span class="soon-label">Em produção</span></div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ============================ GAME DESIGN ======================== -->
+        <section class="area" id="area-game-design">
+            <h2 class="section-heading">
+                <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-puzzle-piece"></use></svg>
+                Game Design
+                <span class="area-count">0 de 7 disponíveis</span>
+            </h2>
+            <div class="course-grid">
+
+                <div class="course-card locked">
+                    <span class="lesson-tag gray">MÓDULO 1 · EM BREVE</span>
+                    <h3 class="course-title">Introdução ao Game Design</h3>
+                    <p class="course-desc">A diferença entre desenvolver e projetar um jogo, o que é um GDD, core loop e ritmo de jogo.</p>
+                    <div class="course-footer"><span class="soon-label">Em produção</span></div>
+                </div>
+
+                <div class="course-card locked">
+                    <span class="lesson-tag gray">MÓDULO 2 · EM BREVE</span>
+                    <h3 class="course-title">O que é um jogo?</h3>
+                    <p class="course-desc">Experiência e produto jogável, o que motiva alguém a jogar, e como estética, mecânicas, história e tecnologia reforçam uma mesma temática.</p>
+                    <div class="course-footer"><span class="soon-label">Em produção</span></div>
+                </div>
+
+                <div class="course-card locked">
+                    <span class="lesson-tag gray">MÓDULO 3 · EM BREVE</span>
+                    <h3 class="course-title">A ideia e o jogador</h3>
+                    <p class="course-desc">Análise de riscos, método de organização, público-alvo, tipos de jogadores e como engajar quem está do outro lado.</p>
+                    <div class="course-footer"><span class="soon-label">Em produção</span></div>
+                </div>
+
+                <div class="course-card locked">
+                    <span class="lesson-tag gray">MÓDULO 4 · EM BREVE</span>
+                    <h3 class="course-title">Teoria do Fluxo e Game Feel</h3>
+                    <p class="course-desc">Princípios de game feel, métricas de design de sistema e os limites da percepção humana aplicados ao jogo.</p>
+                    <div class="course-footer"><span class="soon-label">Em produção</span></div>
+                </div>
+
+                <div class="course-card locked">
+                    <span class="lesson-tag gray">MÓDULO 5 · EM BREVE</span>
+                    <h3 class="course-title">Mecânicas</h3>
+                    <p class="course-desc">Espaço, objetos, atributos, estados, ações, regras, recompensas, balanceamento e construção de puzzles.</p>
+                    <div class="course-footer"><span class="soon-label">Em produção</span></div>
+                </div>
+
+                <div class="course-card locked">
+                    <span class="lesson-tag gray">MÓDULO 6 · EM BREVE</span>
+                    <h3 class="course-title">História</h3>
+                    <p class="course-desc">Problema central, construção de mundo e de personagens, papel do protagonista e progressão narrativa.</p>
+                    <div class="course-footer"><span class="soon-label">Em produção</span></div>
+                </div>
+
+                <div class="course-card locked">
+                    <span class="lesson-tag gray">MÓDULO 7 · EM BREVE</span>
+                    <h3 class="course-title">Level Design e Estética</h3>
+                    <p class="course-desc">Fundamentos de level design, game juice, leitura visual, progressão natural e fases que ensinam sozinhas.</p>
+                    <div class="course-footer"><span class="soon-label">Em produção</span></div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ================================ ARTE =========================== -->
+        <section class="area" id="area-arte">
+            <h2 class="section-heading">
+                <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-palette"></use></svg>
+                Arte
+                <span class="area-count">1 de 2 disponíveis</span>
+            </h2>
+            <div class="course-grid">
+
+                <div class="course-card locked">
+                    <span class="lesson-tag gray">MÓDULO 1 · EM BREVE</span>
+                    <h3 class="course-title">Produção de Assets</h3>
+                    <p class="course-desc">Sprites, tilesets, props e backgrounds: pipeline de produção, padronização visual, exportação e integração com a engine.</p>
+                    <div class="course-footer"><span class="soon-label">Em produção</span></div>
+                </div>
+
+                <a href="./lessons/arte/02/aseprite-fundamentals.pdf" target="_blank" rel="noopener" class="course-card">
+                    <span class="lesson-tag pink">MÓDULO 2</span>
+                    <h3 class="course-title">Pixel Art no Aseprite</h3>
+                    <p class="course-desc">Fundamentos de cores, silhuetas e animação frame a frame, organização de spritesheets e exportação correta.</p>
+                    <div class="course-footer">
+                        <span class="pdf-label">Apresentação em PDF</span>
+                        <span class="start-btn pink">Abrir PDF ➔</span>
+                    </div>
+                </a>
+
+            </div>
+        </section>
+
+        <!-- =============================== MÚSICA ========================== -->
+        <section class="area" id="area-musica">
+            <h2 class="section-heading">
+                <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-music"></use></svg>
+                Música
+                <span class="area-count">0 de 1 disponível</span>
+            </h2>
+            <div class="course-grid">
+
+                <div class="course-card locked">
+                    <span class="lesson-tag yellow">MÓDULO 1 · EM BREVE</span>
+                    <h3 class="course-title">Música e SFX</h3>
+                    <p class="course-desc">Trilha sonora, música ambiente, efeitos, feedback auditivo, hit sounds, sons de UI e gestão de volume.</p>
+                    <div class="course-footer"><span class="soon-label">Em produção</span></div>
+                </div>
+
+            </div>
+        </section>
 
     </main>
 
+    <footer class="site-footer">
+        <p>Scorpion Bits · Trilha de Desenvolvimento de Jogos</p>
+    </footer>
 
     <script>
-        // Fix for local file:// viewing vs GitHub Pages HTTP routing
+        // Abertura via file:// (pendrive) não resolve "pasta/" para index.html
+        // como um servidor faz. Aqui completamos o caminho só nesse caso.
         document.addEventListener('DOMContentLoaded', () => {
             if (window.location.protocol === 'file:') {
                 document.querySelectorAll('a[href^="./lessons/"]').forEach(a => {
-                    let href = a.getAttribute('href');
-                    if (href.endsWith('/')) {
-                        a.setAttribute('href', href + 'index.html');
-                    }
+                    const href = a.getAttribute('href');
+                    if (href.endsWith('/')) a.setAttribute('href', href + 'index.html');
                 });
             }
         });
     </script>
 
     <script>
-        // Generate RGB Glowing Pixels
+        // Pixels RGB do header (identidade visual da Scorpion Bits).
         document.addEventListener('DOMContentLoaded', () => {
             const header = document.querySelector('.site-header');
-            if(header) {
-                const colors = ['#c084fc', '#8b5cf6', '#d8b4fe', '#a855f7', '#e879f9'];
-                for(let i=0; i<25; i++) {
-                    const pixel = document.createElement('div');
-                    pixel.className = 'navbar-pixel';
-                    pixel.style.position = 'absolute';
-                    pixel.style.left = Math.random() * 100 + '%';
-                    pixel.style.top = Math.random() * 100 + '%';
-                    
-                    const size = Math.random() * 3 + 1; // 1 to 4px
-                    pixel.style.width = size + 'px';
-                    pixel.style.height = size + 'px';
-                    
-                    const color = colors[Math.floor(Math.random() * colors.length)];
-                    pixel.style.backgroundColor = color;
-                    pixel.style.boxShadow = `0 0 ${size*3}px ${color}`;
-                    
-                    pixel.style.animationDuration = (Math.random() * 3 + 2) + 's';
-                    pixel.style.animationDelay = '-' + (Math.random() * 5) + 's';
-                    
-                    header.appendChild(pixel);
-                }
-                header.style.position = 'relative'; // Ensure pixels stay inside header
-                header.style.overflow = 'hidden';
+            if (!header) return;
+            if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+            const colors = ['#c084fc', '#8b5cf6', '#d8b4fe', '#a855f7', '#e879f9'];
+            for (let i = 0; i < 25; i++) {
+                const pixel = document.createElement('div');
+                pixel.className = 'navbar-pixel';
+                pixel.style.left = Math.random() * 100 + '%';
+                pixel.style.top = Math.random() * 100 + '%';
+
+                const size = Math.random() * 3 + 1;
+                pixel.style.width = size + 'px';
+                pixel.style.height = size + 'px';
+
+                const color = colors[Math.floor(Math.random() * colors.length)];
+                pixel.style.backgroundColor = color;
+                pixel.style.boxShadow = `0 0 ${size * 3}px ${color}`;
+
+                pixel.style.animationDuration = (Math.random() * 3 + 2) + 's';
+                pixel.style.animationDelay = '-' + (Math.random() * 5) + 's';
+
+                header.appendChild(pixel);
             }
         });
     </script>

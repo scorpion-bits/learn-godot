@@ -27,6 +27,17 @@
     --font-title: 'Playfair Display', serif;
     --font-body: 'Inter', system-ui, -apple-system, sans-serif;
     --font-code: 'Fira Code', monospace;
+
+    /* Ritmo vertical adaptativo.
+       O deck é usado em projetor 1366x768 e em notebooks de tela baixa, onde
+       espaçamento fixo empurra o fim do slide para fora da área visível — o
+       professor não vê que sobrou conteúdo e acaba pulando. Ancorando o
+       espaçamento em vh, telas baixas comprimem sozinhas e telas grandes
+       respiram, sem precisar ajustar slide por slide. */
+    --space-2: clamp(6px, 0.9vh, 10px);
+    --space-3: clamp(8px, 1.3vh, 14px);
+    --space-4: clamp(10px, 1.7vh, 18px);
+    --space-6: clamp(14px, 2.6vh, 28px);
 }
 
 * {
@@ -45,6 +56,16 @@ body {
     flex-direction: column;
     justify-content: space-between;
     position: relative;
+}
+
+/* Páginas de aula: a altura é distribuída por flexbox, não por conta de
+   cabeça. A versão anterior usava calc(100vh - 60px - 66px) com valores que
+   não batiam com a topbar (51px) nem com o rodapé (70px), sobrando folga
+   morta. dvh em vez de vh porque no mobile a barra do navegador some/aparece
+   e vh não acompanha. */
+body:has(.deck) {
+    height: 100dvh;
+    min-height: 100dvh;
 }
 
 /* ==========================================================================
@@ -111,21 +132,8 @@ body {
 }
 
 /* ==========================================================================
-   Presentation Wrapper & Slides
+   Slides
    ========================================================================== */
-.presentation-wrapper {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 2rem 4rem;
-    position: relative;
-    max-width: 1400px;
-    margin: 0 auto;
-    width: 100%;
-    height: calc(100vh - 80px);
-}
-
 .slide {
     display: none;
     flex-direction: column;
@@ -140,67 +148,6 @@ body {
     display: flex;
     opacity: 1;
     transform: translateY(0);
-}
-
-/* ==========================================================================
-   Slide Header
-   ========================================================================== */
-.slide-header {
-    text-align: center;
-    margin-bottom: 2rem;
-    flex-shrink: 0;
-}
-
-.slide-header .title {
-    font-family: var(--font-title);
-    font-size: 3.2rem;
-    font-weight: 700;
-    letter-spacing: 3px;
-    color: #ffffff;
-    text-shadow: 0 4px 20px rgba(255, 255, 255, 0.2);
-    text-transform: uppercase;
-}
-
-.slide-header .subtitle {
-    font-size: 1.15rem;
-    color: var(--text-accent);
-    margin-top: 0.5rem;
-    font-weight: 500;
-    letter-spacing: 0.5px;
-}
-
-/* ==========================================================================
-   Slide Body Layouts
-   ========================================================================== */
-.slide-body {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    gap: 3rem;
-    overflow: visible;
-}
-
-.grid-2col {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    width: 100%;
-    height: 100%;
-    align-items: center;
-}
-
-.col-left, .col-right {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-}
-
-.space-y-4 > * + * { margin-top: 1rem; }
-.space-y-6 > * + * { margin-top: 1.5rem; }
-
-.section-desc {
-    font-size: 1.15rem;
-    line-height: 1.6;
-    color: var(--text-muted);
 }
 
 /* ==========================================================================
@@ -243,12 +190,16 @@ body {
 .pill-code.red { color: var(--syn-keyword); border: 1px solid rgba(255, 71, 126, 0.3); }
 .pill-code.blue { color: var(--syn-type); border: 1px solid rgba(56, 189, 248, 0.3); }
 .pill-code.green { color: var(--syn-func); border: 1px solid rgba(74, 222, 128, 0.3); }
+/* .pink estava sendo usado no HTML sem existir aqui — a pílula saía sem cor
+   nem borda, quebrando o código de cores dos componentes. */
+.pill-code.pink { color: var(--syn-annotation); border: 1px solid rgba(192, 132, 252, 0.3); }
 
-.arrow {
-    color: var(--text-accent);
-    font-weight: bold;
-    font-size: 1.1rem;
-}
+/* .compact também era usado no HTML sem definição nenhuma: a variante não
+   comprimia coisa alguma. Agora encolhe de fato o ritmo da lista, que é onde
+   ela aparece — ao lado de blocos altos como mocks do editor. */
+.pill-list.compact { gap: var(--space-2); }
+.pill-list.compact .pill-item { padding: 0.55rem 1rem; }
+.pill-list.compact .pill-text { font-size: 0.88rem; }
 
 .pill-text {
     font-size: 0.95rem;
@@ -301,11 +252,17 @@ body {
 
 .code-content {
     font-family: var(--font-code);
-    font-size: 0.95rem;
-    line-height: 1.65;
-    padding: 1.5rem;
+    font-size: clamp(0.82rem, 0.92vw, 0.95rem);
+    line-height: 1.55;
+    padding: clamp(0.85rem, 1.9vh, 1.5rem) 1.5rem;
     overflow-x: hidden;
     color: var(--text-main);
+}
+
+/* Telas baixas (projetor 768p e notebooks): aperta o entrelinha do código,
+   que é o bloco mais alto de quase todo slide prático. */
+@media (max-height: 820px) {
+    .code-content { line-height: 1.45; }
 }
 
 /* Wrap behavior is scoped to the actual code text (a <pre> either wearing
@@ -334,14 +291,14 @@ pre.code-content,
 /* ==========================================================================
    Cards & Diagrams
    ========================================================================== */
-.info-card, .feature-card, .diagram-card, .summary-box {
+.feature-card, .diagram-card {
     background: var(--card-bg);
     border: 1px solid var(--card-border);
     backdrop-filter: blur(14px);
     border-radius: 18px;
-    padding: 1.5rem;
+    padding: var(--space-4) 1.5rem;
     box-shadow: var(--card-shadow);
-    margin-bottom: 16px;
+    margin-bottom: var(--space-4);
 }
 
 /* Consistent vertical rhythm between stacked blocks inside a slide or a
@@ -354,22 +311,10 @@ pre.code-content,
 .lede + .vector-graph-godot, .pill-list + .vector-graph-godot,
 .lede + .godot-editor-layout, .feature-card + .godot-editor-layout, .callout + .godot-editor-layout,
 .lede + .code-window, .card + .code-window, .callout + .code-window {
-    margin-top: 16px;
+    margin-top: var(--space-4);
 }
 .pill-list, .keyboard-layout, .vector-graph-godot, .godot-editor-layout, .code-window {
-    margin-bottom: 16px;
-}
-
-.info-card.highlight-card {
-    border-color: rgba(192, 132, 252, 0.3);
-    background: linear-gradient(135deg, rgba(35, 28, 70, 0.7) 0%, rgba(20, 16, 45, 0.7) 100%);
-}
-
-.icon-header {
-    display: flex;
-    align-items: center;
-    gap: 0.8rem;
-    margin-bottom: 0.75rem;
+    margin-bottom: var(--space-4);
 }
 
 .badge {
@@ -386,6 +331,23 @@ pre.code-content,
 .feature-card.bad { border-left: 4px solid #ef4444; }
 .feature-card.good { border-left: 4px solid #10b981; }
 .feature-card.highlight { border-left: 4px solid #c084fc; }
+
+/* Card "ícone do Node + explicação" — o componente mais repetido das aulas.
+   Vinha escrito à mão com o mesmo bloco de style inline em 8 lugares, o que
+   fazia cada um divergir um pouquinho. A cor de destaque vem de --accent,
+   então a variante é uma variável e não um segundo conjunto de regras. */
+.node-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 15px;
+    border-left-color: var(--accent, #c084fc);
+}
+.node-card > img { width: 48px; height: 48px; flex-shrink: 0; }
+.node-card h4 { color: var(--accent, #ffffff); }
+.node-card p { font-size: 0.95rem; line-height: 1.45; }
+
+.accent-blue   { --accent: #38bdf8; }
+.accent-purple { --accent: #c084fc; }
 
 .feature-card h4 {
     font-size: 1.1rem;
@@ -404,7 +366,6 @@ pre.code-content,
     padding-left: 1.2rem;
 }
 
-/* Tree Diagram Visual */
 .diagram-title {
     font-size: 1.1rem;
     color: var(--text-accent);
@@ -413,175 +374,11 @@ pre.code-content,
     font-family: var(--font-code);
 }
 
-.tree-visual {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-}
-
-.tree-node {
-    padding: 0.6rem 1rem;
-    border-radius: 10px;
-    background: rgba(0, 0, 0, 0.3);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    font-size: 0.9rem;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-}
-
-.tree-node.parent {
-    border-color: rgba(56, 189, 248, 0.4);
-    background: rgba(56, 189, 248, 0.1);
-}
-
-.tree-children {
-    margin-left: 1.5rem;
-    display: flex;
-    flex-direction: column;
-    gap: 0.4rem;
-    border-left: 2px dashed rgba(255, 255, 255, 0.15);
-    padding-left: 0.8rem;
-}
-
-.tree-node.highlight-node {
-    border-color: rgba(74, 222, 128, 0.5);
-    background: rgba(74, 222, 128, 0.15);
-    color: #4ade80;
-}
-
-.node-type {
-    font-size: 0.8rem;
-    color: var(--text-muted);
-}
-
-.divider-line {
-    height: 1px;
-    background: rgba(255, 255, 255, 0.1);
-    margin: 1.2rem 0;
-}
-
-/* Type Table Rows */
-.type-explanation-list {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-}
-
-.type-row {
-    display: flex;
-    align-items: center;
-    gap: 0.8rem;
-}
-
-.type-tag {
-    font-family: var(--font-code);
-    font-size: 0.85rem;
-    padding: 0.4rem 0.8rem;
-    border-radius: 8px;
-    font-weight: 600;
-    min-width: 170px;
-    text-align: center;
-}
-
-.type-tag.blue { background: rgba(56, 189, 248, 0.15); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.3); }
-.type-tag.pink { background: rgba(255, 71, 126, 0.15); color: #ff477e; border: 1px solid rgba(255, 71, 126, 0.3); }
-.type-tag.green { background: rgba(74, 222, 128, 0.15); color: #4ade80; border: 1px solid rgba(74, 222, 128, 0.3); }
-
-.type-arrow { color: var(--text-accent); font-weight: bold; }
-.type-desc { font-size: 0.9rem; color: var(--text-muted); }
-
-/* Godot Scene Mockup */
-.godot-scene-mockup {
-    padding: 1.5rem;
-    display: flex;
-    flex-direction: column;
-    gap: 0.6rem;
-    font-family: var(--font-code);
-    font-size: 0.9rem;
-}
-
-.godot-node {
-    display: flex;
-    align-items: center;
-    gap: 0.6rem;
-    padding: 0.5rem 0.8rem;
-    border-radius: 6px;
-    background: rgba(0, 0, 0, 0.25);
-}
-
-.godot-node.sub {
-    margin-left: 1.5rem;
-    border-left: 2px solid rgba(192, 132, 252, 0.4);
-}
-
-.node-script {
-    color: var(--text-accent);
-    font-size: 0.8rem;
-    margin-left: auto;
-}
-
-/* Summary Box */
-.summary-box h3 {
-    font-family: var(--font-title);
-    color: #ffffff;
-    font-size: 1.4rem;
-    margin-bottom: 1.2rem;
-    text-align: center;
-    letter-spacing: 2px;
-}
-
-.summary-steps {
-    display: flex;
-    flex-direction: column;
-    gap: 1.2rem;
-}
-
-.step-item {
-    display: flex;
-    align-items: flex-start;
-    gap: 1rem;
-}
-
-.step-num {
-    background: linear-gradient(135deg, #c084fc, #9333ea);
-    color: #ffffff;
-    font-weight: 700;
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-    box-shadow: 0 4px 10px rgba(147, 51, 234, 0.4);
-}
-
-.step-text strong {
-    color: var(--text-main);
-    display: block;
-    margin-bottom: 0.2rem;
-    font-size: 1rem;
-}
-
-.step-text p {
-    color: var(--text-muted);
-    font-size: 0.9rem;
-}
-
-.info-box-sm {
-    background: rgba(192, 132, 252, 0.1);
-    border: 1px dashed rgba(192, 132, 252, 0.3);
-    padding: 0.8rem 1.2rem;
-    border-radius: 12px;
-    font-size: 0.9rem;
-    color: var(--text-muted);
-}
-
 /* ==========================================================================
    Presentation Navigation Controls Footer
    ========================================================================== */
 .presentation-controls {
+    position: relative;
     height: 70px;
     background: rgba(12, 9, 30, 0.85);
     border-top: 1px solid rgba(255, 255, 255, 0.08);
@@ -620,6 +417,45 @@ pre.code-content,
     color: var(--text-muted);
 }
 
+/* Navegação entre módulos, ancorada à direita do rodapé para não competir
+   com os botões de slide, que ficam centralizados. Rótulo escrito ("Módulo N")
+   em vez de só uma seta, justamente para não ser confundido com avançar slide. */
+.module-nav {
+    position: absolute;
+    right: 1.5rem;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.module-nav-link {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 0.4rem 0.9rem;
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: rgba(255, 255, 255, 0.04);
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 0.78rem;
+    font-weight: 600;
+    white-space: nowrap;
+    transition: all 0.2s ease;
+}
+.module-nav-link:hover {
+    color: var(--text-accent);
+    border-color: rgba(192, 132, 252, 0.45);
+    background: rgba(192, 132, 252, 0.12);
+}
+.module-nav-link .chev { font-size: 0.95rem; line-height: 1; }
+
+@media (max-width: 1100px) {
+    .module-nav { position: static; }
+    .module-nav-link .mn-label { display: none; }
+    .module-nav-link { padding: 0.4rem 0.6rem; }
+}
+
 .slide-indicator {
     font-family: var(--font-code);
     font-size: 0.95rem;
@@ -628,116 +464,6 @@ pre.code-content,
     padding: 0.4rem 1.2rem;
     border-radius: 20px;
     border: 1px solid rgba(255, 255, 255, 0.05);
-}
-
-/* Responsive adjustments */
-@media (max-width: 1024px) {
-    .grid-2col {
-        grid-template-columns: 1fr;
-        gap: 1.5rem;
-        overflow-y: auto;
-    }
-    .slide-header .title {
-        font-size: 2.2rem;
-    }
-    .presentation-wrapper {
-        padding: 1rem;
-    }
-}
-
-/* ==========================================================================
-   Slide 1 (Cover) Custom Styles
-   ========================================================================== */
-.center-content-flex {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100%;
-    width: 100%;
-}
-
-.icon-cover-container {
-    margin-bottom: 1rem;
-}
-
-.terminal-icon-mockup {
-    background: linear-gradient(180deg, rgba(30, 30, 45, 0.9) 0%, rgba(15, 15, 25, 0.9) 100%);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 12px;
-    width: 160px;
-    height: 120px;
-    padding: 12px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-    display: flex;
-    flex-direction: column;
-}
-
-.terminal-icon-mockup .dots {
-    display: flex;
-    gap: 6px;
-    margin-bottom: 15px;
-    justify-content: flex-end;
-}
-
-.terminal-icon-mockup .dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-}
-
-.terminal-icon-mockup .dot.yellow { background: #facc15; }
-.terminal-icon-mockup .dot.blue { background: #38bdf8; }
-.terminal-icon-mockup .dot.red { background: #ff477e; }
-
-.terminal-icon-mockup .lines {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
-.terminal-icon-mockup .line {
-    height: 4px;
-    border-radius: 2px;
-}
-
-.red-line { background: #ff477e; width: 80%; }
-.purple-line { background: #c084fc; width: 100%; }
-.pink-line { background: #f472b6; width: 90%; }
-.blue-line { background: #38bdf8; width: 70%; }
-.green-line { background: #4ade80; width: 85%; }
-
-/* ==========================================================================
-   Speech Bubbles
-   ========================================================================== */
-.relative-container {
-    position: relative;
-}
-
-.speech-bubble {
-    position: absolute;
-    background: #507aff;
-    color: #ffffff;
-    padding: 14px 20px;
-    border-radius: 30px;
-    font-size: 0.9rem;
-    font-weight: 500;
-    line-height: 1.4;
-    box-shadow: 0 10px 25px rgba(80, 122, 255, 0.4);
-    z-index: 10;
-    font-family: var(--font-body);
-}
-
-.speech-bubble::after {
-    content: '';
-    position: absolute;
-    top: -15px;
-    left: 30px;
-    border-width: 0 20px 25px 0;
-    border-style: solid;
-    border-color: transparent transparent #507aff transparent;
-    display: block;
-    width: 0;
 }
 
 /* ==========================================================================
@@ -826,8 +552,12 @@ pre.code-content,
    ========================================================================== */
 .vector-graph-godot {
     position: relative;
-    width: 320px;
-    height: 320px;
+    /* Largura fixa estourava a lateral em telas estreitas; aspect-ratio
+       mantém o gráfico quadrado enquanto ele encolhe. */
+    width: min(320px, 100%);
+    max-width: 100%;
+    aspect-ratio: 1 / 1;
+    height: auto;
     margin: 20px auto;
     border: 2px solid rgba(255,255,255,0.1);
     background: repeating-linear-gradient(
@@ -911,16 +641,20 @@ pre.code-content,
    ========================================================================== */
 .godot-editor-layout {
     display: flex;
+    flex-wrap: wrap;
     border: 1px solid #3c414c;
     border-radius: 8px;
     overflow: hidden;
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
     background: #202531;
-    min-width: 240px;
+    /* min-width: 240px + flex-shrink: 0 forçava o mock a estourar a lateral
+       em telas estreitas. Agora Scene e Inspector empilham em vez de vazar. */
+    min-width: 0;
     min-height: 150px;
-    flex-shrink: 0;
     width: 100%;
 }
+.godot-editor-layout .godot-panel,
+.godot-editor-layout .godot-inspector { min-width: min(240px, 100%); }
 
 .godot-editor-layout .godot-panel {
     border: none;
@@ -1040,6 +774,13 @@ pre.code-content,
 .key-s { grid-area: s; }
 .key-d { grid-area: d; }
 
+/* Teclas clicáveis do slide de condicionais na prática. */
+.key.interact-key { cursor: pointer; user-select: none; }
+
+/* Anotação à direita numa linha de mockup (ex.: "frames 1 → 8" ao lado do
+   nome da animação). Aparecia 8 vezes como style inline idêntico. */
+.mock-note { margin-left: auto; color: #64748b; }
+
 
 
 /* --- CODE SIMULATOR CSS --- */
@@ -1125,13 +866,49 @@ body.index-page {
     overflow-y: auto;
 }
 
-/* Scorpion Bits Header - Official RGB Glow */
+/* Scorpion Bits Header - Official RGB Glow.
+   O layout vinha de 25 linhas de style inline no HTML (e position/overflow
+   eram aplicados por JS depois). Trazido para cá para que o header seja um
+   componente de verdade, editável num lugar só. */
 .site-header {
     position: sticky;
     top: 0;
     z-index: 100;
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    width: 100%;
+    padding: 15px 5%;
+    background: rgba(16, 11, 41, 0.85);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    overflow: hidden;
+}
+
+.site-logo { display: flex; align-items: center; text-decoration: none; }
+.site-logo img { height: 50px; transition: transform 0.3s ease; }
+.site-logo:hover img { transform: scale(1.05); }
+
+.site-wordmark {
+    font-family: var(--font-title);
+    color: var(--text-main);
+    font-size: 1.1rem;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    font-weight: 300;
+}
+
+.site-links { display: flex; gap: 25px; align-items: center; }
+.site-links a { color: var(--text-muted); font-size: 1.2rem; transition: color 0.3s; display: flex; }
+.site-links a:hover { color: var(--text-accent); }
+
+/* O wordmark central some antes de colidir com o logo ou com os links. */
+@media (max-width: 640px) {
+    .site-wordmark { display: none; }
+    .site-links { gap: 16px; }
+    .site-logo img { height: 38px; }
 }
 .site-header::after {
     content: '';
@@ -1186,13 +963,6 @@ body.index-page {
 /* ==========================================================================
    Godot UI Tabs
    ========================================================================== */
-.godot-editor-tabs {
-    display: flex;
-    background: #181b24;
-    border-bottom: 1px solid #3c414c;
-    font-size: 0.85rem;
-    font-family: 'Inter', sans-serif;
-}
 .godot-editor-tab {
     padding: 8px 15px;
     color: #8b92a5;
@@ -1220,6 +990,8 @@ body.index-page {
     align-items: stretch;
 }
 
+/* <button> em vez de <div>: as abas precisam receber foco e responder a
+   Enter/Espaço. Daí o reset explícito de borda/aparência herdadas do botão. */
 .code-tab {
     font-family: var(--font-code);
     font-size: 0.85rem;
@@ -1227,13 +999,20 @@ body.index-page {
     font-weight: 500;
     padding: 0.75rem 1.25rem;
     cursor: pointer;
+    border: 0;
     border-top: 2px solid transparent;
+    border-right: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 0;
+    appearance: none;
     transition: all 0.2s ease;
     display: flex;
     align-items: center;
     gap: 8px;
     background: rgba(0, 0, 0, 0.1);
-    border-right: 1px solid rgba(255, 255, 255, 0.05);
+}
+.code-tab:focus-visible {
+    outline: 2px solid var(--text-accent);
+    outline-offset: -3px;
 }
 
 .code-tab:hover:not(.active) {
@@ -1315,11 +1094,12 @@ body.index-page {
 .deck {
     position: relative;
     z-index: 5;
-    height: calc(100vh - 60px - 66px);
+    flex: 1 1 auto;
+    min-height: 0;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 24px;
+    padding: clamp(12px, 2vh, 24px) clamp(16px, 2vw, 28px);
 }
 .deck .slide {
     width: 100%;
@@ -1328,8 +1108,11 @@ body.index-page {
     max-height: 100%;
     overflow-y: auto;
     overflow-x: hidden;
-    padding: 8px 6px 24px 2px;
+    padding: 4px 6px var(--space-4) 2px;
     transition: none;
+    /* Reserva a calha do scrollbar sempre, para que o conteúdo não pule
+       horizontalmente ao trocar de um slide que rola para um que não rola. */
+    scrollbar-gutter: stable;
 }
 .deck .slide.active {
     display: block;
@@ -1337,8 +1120,51 @@ body.index-page {
     transform: none;
     animation: deckSlideIn 0.35s ease;
 }
-.deck .slide::-webkit-scrollbar { width: 6px; }
-.deck .slide::-webkit-scrollbar-thumb { background: rgba(192, 132, 252, 0.3); border-radius: 4px; }
+.deck .slide::-webkit-scrollbar { width: 10px; }
+.deck .slide::-webkit-scrollbar-track { background: rgba(255, 255, 255, 0.04); border-radius: 5px; }
+.deck .slide::-webkit-scrollbar-thumb { background: rgba(192, 132, 252, 0.55); border-radius: 5px; border: 2px solid transparent; background-clip: padding-box; }
+.deck .slide::-webkit-scrollbar-thumb:hover { background: rgba(216, 180, 254, 0.8); background-clip: padding-box; }
+
+/* Aviso de conteúdo cortado.
+   Quando um slide não cabe na tela, o professor precisa SABER — antes, o
+   corte era silencioso e a única pista era um scrollbar de 6px. O script
+   marca .has-overflow enquanto houver conteúdo abaixo da dobra e remove a
+   marca ao chegar no fim. */
+.deck { position: relative; }
+.scroll-hint {
+    position: absolute;
+    left: 50%;
+    bottom: clamp(4px, 1vh, 12px);
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 5px 14px;
+    border-radius: 20px;
+    background: rgba(20, 14, 45, 0.92);
+    border: 1px solid rgba(192, 132, 252, 0.45);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.55);
+    color: var(--text-accent);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.4px;
+    pointer-events: none;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.25s ease;
+    z-index: 20;
+}
+.deck.has-overflow .scroll-hint { opacity: 1; visibility: visible; }
+.scroll-hint .chev { animation: hintBounce 1.4s ease-in-out infinite; }
+
+@keyframes hintBounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(3px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .scroll-hint .chev { animation: none; }
+}
 
 @keyframes deckSlideIn {
     from { opacity: 0; transform: translateY(10px); }
@@ -1351,7 +1177,7 @@ body.index-page {
     letter-spacing: 2px;
     text-transform: uppercase;
     color: var(--text-accent);
-    margin-bottom: 10px;
+    margin-bottom: var(--space-2);
     display: flex;
     align-items: center;
     gap: 8px;
@@ -1361,28 +1187,34 @@ body.index-page {
 .slide-title {
     font-family: var(--font-title);
     font-weight: 900;
-    font-size: clamp(1.7rem, 3.4vw, 2.6rem);
-    line-height: 1.1;
-    margin-bottom: 8px;
+    /* Escala pela largura E pela altura: num projetor 768p o título deixa de
+       comer ~50px que fazem falta ao conteúdo. */
+    font-size: clamp(1.5rem, 1.6vw + 1.4vh, 2.5rem);
+    line-height: 1.12;
+    margin-bottom: 6px;
     letter-spacing: -0.5px;
     color: #ffffff;
 }
 
-.slide-sub { color: var(--text-muted); font-size: 1.05rem; margin-bottom: 28px; }
+.slide-sub { color: var(--text-muted); font-size: clamp(0.95rem, 1.05vw, 1.05rem); margin-bottom: var(--space-6); }
 
-.lede { font-size: 1.05rem; line-height: 1.7; color: #e2e8f0; margin-bottom: 18px; }
+.lede { font-size: clamp(0.95rem, 1.05vw, 1.05rem); line-height: 1.62; color: #e2e8f0; margin-bottom: var(--space-4); }
 .lede strong { color: var(--text-main); font-weight: 600; }
 
-.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; align-items: center; margin: 10px 0; }
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(16px, 2vw, 28px); align-items: center; margin: var(--space-2) 0; }
+/* Três colunas para fileiras de callouts curtos: empilhados eles somam três
+   alturas, lado a lado somam uma só. */
+.grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(12px, 1.4vw, 20px); align-items: stretch; margin: var(--space-2) 0; }
+.grid-3 > * { min-width: 0; margin: 0; }
 
 .card {
     background: var(--card-bg);
     border: 1px solid var(--card-border);
     border-radius: 18px;
-    padding: 20px 22px;
+    padding: var(--space-4) 22px;
     backdrop-filter: blur(14px);
     box-shadow: var(--card-shadow);
-    margin-bottom: 16px;
+    margin-bottom: var(--space-4);
 }
 .card h3 { font-family: var(--font-title); font-size: 1.05rem; margin-bottom: 10px; color: #ffffff; }
 .card ul { padding-left: 20px; color: #e2e8f0; line-height: 1.7; }
@@ -1401,16 +1233,28 @@ body.index-page {
 
 .callout {
     border-radius: 12px;
-    padding: 14px 18px;
-    margin: 16px 0;
+    padding: var(--space-3) 18px;
+    margin: var(--space-4) 0;
     display: flex;
     gap: 12px;
     align-items: flex-start;
-    font-size: 0.95rem;
-    line-height: 1.6;
+    font-size: clamp(0.88rem, 0.95vw, 0.95rem);
+    line-height: 1.55;
     border: 1px solid transparent;
 }
-.callout i { margin-top: 3px; font-size: 1rem; }
+/* Ícones de interface em SVG (sprite local injetado por ui-icons.js).
+   Dimensionados em em e pintados com currentColor para se comportarem
+   exatamente como o <i> da webfont que substituíram — herdando cor e
+   tamanho do contexto, sem precisar ajustar caso a caso. */
+.ui-icon {
+    width: 1em;
+    height: 1em;
+    fill: currentColor;
+    flex-shrink: 0;
+    vertical-align: -0.125em;
+}
+
+.callout i, .callout .ui-icon { margin-top: 3px; font-size: 1rem; }
 .callout strong { color: #fff; }
 /* Only the leading "<strong>Título</strong> resto do texto" pattern gets its
    own line — a <strong> used for inline emphasis mid-sentence must stay inline. */
@@ -1426,41 +1270,437 @@ body.index-page {
    .output-content to fill in printed lines. */
 .output-panel { border-top: 1px solid rgba(255, 255, 255, 0.08); background: #08060f; }
 .output-panel .out-label { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 1px; color: #64748b; padding: 8px 18px 0; }
-.output-panel .output-content { display: block; padding: 6px 18px 14px; color: #4ade80; font-family: var(--font-code); font-size: 0.85rem; }
+.output-panel .output-content { display: block; padding: 6px 18px 14px; color: #4ade80; font-family: var(--font-code); font-size: 0.85rem; min-height: 1.4em; }
+.output-panel .out-line { display: block; color: #c3e88d; }
 
 /* Annotated syntax legend (e.g. breaking down `func name(args) -> type:`) */
-.anno-line { display: flex; flex-wrap: wrap; gap: 0; font-family: var(--font-code); font-size: 1.05rem; margin: 22px 0 30px; }
-.anno { display: flex; flex-direction: column; align-items: center; padding: 0 10px 0 0; position: relative; }
+.anno-line { display: flex; flex-wrap: wrap; gap: 0; font-family: var(--font-code); font-size: 1.05rem; margin: var(--space-4) 0 var(--space-6); }
+.anno { display: flex; flex-direction: column; align-items: center; padding: 0 18px 0 0; position: relative; }
 .anno code { color: var(--text-main); white-space: nowrap; background: none; padding: 0; }
 .anno .cap { margin-top: 10px; font-family: var(--font-body); font-size: 0.72rem; color: var(--text-muted); max-width: 110px; text-align: center; line-height: 1.3; position: relative; padding-top: 10px; }
 .anno .cap::before { content: ""; position: absolute; top: 0; left: 50%; width: 1px; height: 8px; background: rgba(192, 132, 252, 0.4); }
 
 /* Type / operator quick-reference grids */
-.type-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin: 18px 0; }
-.type-card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 14px; padding: 16px; }
+.type-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin: var(--space-4) 0; }
+.type-card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 14px; padding: var(--space-3) 16px; }
 .type-card .t-head { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
-.type-card .t-head i { color: var(--text-accent); font-size: 1rem; }
+.type-card .t-head i, .type-card .t-head .ui-icon { color: var(--text-accent); font-size: 1rem; }
 .type-card .t-name { font-family: var(--font-code); font-weight: 700; color: #fff; }
 .type-card p { font-size: 0.82rem; color: var(--text-muted); line-height: 1.5; margin-bottom: 6px; }
 .type-card .t-default { font-size: 0.72rem; color: #64748b; }
 .type-card .t-default code { background: none; padding: 0; color: var(--text-accent); }
 
-.op-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 16px 0; }
-.op-chip { display: flex; align-items: center; gap: 10px; background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 10px; padding: 10px 14px; }
+/* auto-fit em vez de 3 colunas fixas: a grade se adapta sozinha à largura e
+   ao número de chips. Antes, dois slides precisavam sobrescrever as colunas
+   por style inline — e estilo inline vence media query, então em tela estreita
+   eles continuavam com 3 colunas e vazavam a lateral. */
+.op-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 10px; margin: var(--space-4) 0; }
+.op-chip { display: flex; align-items: center; gap: 10px; background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 10px; padding: var(--space-2) 14px; }
 .op-chip .sym { font-family: var(--font-code); font-weight: 700; color: var(--text-accent); min-width: 34px; }
 .op-chip .desc { font-size: 0.82rem; color: var(--text-muted); }
 
+/* ==========================================================================
+   Checkpoint prático ("mãos no código")
+   ==========================================================================
+   Momento em que a aula PARA de expor e o aluno executa. Ganha tratamento
+   visual próprio — verde, borda sólida, numeração grande — porque precisa ser
+   reconhecível à distância: tanto o professor quanto a turma têm que perceber
+   na hora que a dinâmica mudou. Aula de três horas sem esses marcos vira
+   palestra, e iniciante não aprende programação assistindo.
+   ========================================================================== */
+.checkpoint-slide .slide-title { color: #6ee7b7; }
+.checkpoint-slide .eyebrow { color: #6ee7b7; }
+
+.checkpoint {
+    background: rgba(16, 185, 129, 0.07);
+    border: 1px solid rgba(16, 185, 129, 0.35);
+    border-radius: 16px;
+    padding: var(--space-4) 22px;
+    margin-bottom: var(--space-4);
+}
+.checkpoint h3 {
+    font-family: var(--font-title);
+    font-size: 1.05rem;
+    color: #6ee7b7;
+    margin-bottom: 10px;
+}
+
+/* Lista de passos numerada, com o número em destaque para a turma conseguir
+   se localizar ("estou no passo 3") sem precisar perguntar.
+   ATENÇÃO: o <li> NÃO pode ser flex. Num container flex, cada trecho de texto
+   solto entre elementos vira um item anônimo independente — então uma frase
+   com <code> no meio se parte em três colunas que quebram linha cada uma por
+   conta própria, espalhando as palavras. Aqui o número é posicionado de forma
+   absoluta e o texto segue como fluxo inline normal. */
+.step-list { list-style: none; display: flex; flex-direction: column; gap: var(--space-3); counter-reset: step; }
+.step-list li {
+    position: relative;
+    padding-left: 36px;
+    min-height: 24px;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: #e2e8f0;
+    counter-increment: step;
+}
+.step-list li::before {
+    content: counter(step);
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: rgba(16, 185, 129, 0.18);
+    border: 1px solid rgba(16, 185, 129, 0.45);
+    color: #6ee7b7;
+    font-family: var(--font-code);
+    font-size: 0.78rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Cronômetro do checkpoint. Existe para o professor não perder a noção do
+   tempo — o maior risco de um exercício em sala é ele comer a aula inteira. */
+.timer-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    background: rgba(197, 146, 255, 0.08);
+    border: 1px solid rgba(197, 146, 255, 0.28);
+    border-radius: 16px;
+    padding: var(--space-6) 24px;
+    text-align: center;
+}
+.timer-box .timer-label {
+    font-size: 0.75rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: var(--text-accent);
+}
+.timer-box .timer-display {
+    font-family: var(--font-code);
+    font-size: clamp(2.4rem, 6vh, 3.8rem);
+    font-weight: 700;
+    line-height: 1;
+    color: var(--text-accent);
+    font-variant-numeric: tabular-nums;
+    transition: color 0.3s ease;
+}
+.timer-box .timer-btn {
+    padding: 9px 28px;
+    border: none;
+    border-radius: 30px;
+    background: var(--text-accent);
+    color: #0b0914;
+    font-family: var(--font-body);
+    font-weight: 700;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+.timer-box .timer-btn:hover:not(:disabled) { filter: brightness(1.12); transform: translateY(-1px); }
+.timer-box .timer-btn:disabled { opacity: 0.45; cursor: default; }
+.timer-box.running .timer-display { text-shadow: 0 0 22px rgba(197, 146, 255, 0.55); }
+.timer-box.done .timer-display { color: #ef4444; text-shadow: 0 0 22px rgba(239, 68, 68, 0.6); }
+
+/* ==========================================================================
+   Player animado (assets/player.png)
+   ==========================================================================
+   Spritesheet real do curso: 288x128, grade de 9 colunas x 4 linhas,
+   quadros de 32x32. Linha 0 = baixo, 1 = esquerda, 2 = direita, 3 = cima.
+   O quadro 0 de cada linha é o PARADO; os 8 seguintes são a caminhada.
+   (Conferido por análise de alfa: as faixas transparentes entre os bonecos
+   caem em múltiplos de 32, não de 36.)
+
+   Animado por steps() em background-position em vez de GIF: mantém o pixel
+   art nítido em qualquer escala, pesa zero a mais (a imagem já existe no
+   projeto) e os mesmos números aparecem nos mockups do Inspector — o aluno
+   vê a mesma Hframes/Vframes que vai digitar no Godot.
+
+   A URL vem daqui, do próprio style.css, e não de uma variável definida no
+   HTML de cada aula: URL em CSS resolve contra a folha de estilo, então o
+   mesmo caminho vale para qualquer profundidade de pasta e não há como uma
+   aula esquecer de declarar a variável e o sprite sumir sem aviso.
+   ========================================================================== */
+/* --scale e --row NÃO são declarados aqui de propósito: propriedade
+   personalizada declarada no próprio elemento vence a herdada do pai, então
+   um `--scale` posto no .sprite-showcase seria ignorado. Ficam como valor de
+   fallback dentro do var(), que só entra em ação quando ninguém definiu. */
+.sprite-player {
+    --frame: 32px;
+    --cols: 9;
+    --rows: 4;
+    width: calc(var(--frame) * var(--scale, 3));
+    height: calc(var(--frame) * var(--scale, 3));
+    background-image: url('./assets/player.png');
+    background-repeat: no-repeat;
+    image-rendering: pixelated;
+    background-size: calc(var(--frame) * var(--cols) * var(--scale, 3)) calc(var(--frame) * var(--rows) * var(--scale, 3));
+    background-position: 0 calc(var(--row, 0) * var(--frame) * var(--scale, 3) * -1);
+    animation: spriteWalk 0.8s steps(8) infinite;
+}
+
+/* Começa no quadro 1 (o 0 é o parado) e percorre os 8 de caminhada. */
+@keyframes spriteWalk {
+    from { background-position-x: calc(var(--frame) * var(--scale, 3) * -1); }
+    to   { background-position-x: calc(var(--frame) * 9 * var(--scale, 3) * -1); }
+}
+
+.sprite-player.down  { --row: 0; }
+.sprite-player.left  { --row: 1; }
+.sprite-player.right { --row: 2; }
+.sprite-player.up    { --row: 3; }
+
+@media (prefers-reduced-motion: reduce) {
+    .sprite-player { animation: none; background-position-x: 0; }
+}
+
+/* Spritesheet inteira com grade sobreposta, para o aluno enxergar onde o
+   Godot corta e de onde sai cada número de frame. */
+.sheet-map { display: flex; align-items: stretch; gap: 10px; }
+.sheet-map .rows { display: flex; flex-direction: column; }
+.sheet-map .rows span {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    font-family: var(--font-code);
+    font-size: 0.68rem;
+    color: var(--text-muted);
+    white-space: nowrap;
+    padding-right: 4px;
+}
+.sheet-sheet {
+    position: relative;
+    width: calc(288px * var(--sheet-scale, 1.6));
+    height: calc(128px * var(--sheet-scale, 1.6));
+    background-image: url('./assets/player.png');
+    background-size: 100% 100%;
+    image-rendering: pixelated;
+    border: 1px solid #3c414c;
+    border-radius: 4px;
+    background-color: #14121f;
+}
+/* Grade de 9 x 4 por cima, como o editor mostra.
+   Cada gradiente desenha UMA linha e é ladrilhado por background-size — com
+   repeating-linear-gradient em porcentagem, o arredondamento sub-pixel
+   deslocava as divisórias e elas não caíam em cima do corte real. */
+.sheet-sheet::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+        linear-gradient(90deg, rgba(56, 189, 248, 0.65) 0 1px, transparent 1px),
+        linear-gradient(180deg, rgba(250, 204, 21, 0.65) 0 1px, transparent 1px);
+    background-size: calc(100% / 9) 100%, 100% calc(100% / 4);
+    pointer-events: none;
+}
+.sheet-cols {
+    display: grid;
+    grid-template-columns: repeat(9, 1fr);
+    width: calc(288px * var(--sheet-scale, 1.6));
+    margin-top: 3px;
+}
+.sheet-cols span { text-align: center; font-family: var(--font-code); font-size: 0.65rem; color: #64748b; }
+
+/* ==========================================================================
+   Mockup do painel AnimationPlayer do Godot
+   ==========================================================================
+   Era montado com dezenas de style inline em cada slide. Virou componente
+   para que as várias etapas da criação da animação usem a MESMA interface —
+   o aluno reconhece o painel de um slide para o outro em vez de reaprender
+   um desenho diferente a cada passo.
+   ========================================================================== */
+.anim-panel {
+    background: #242938;
+    border: 1px solid #3c414c;
+    border-radius: 8px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+    overflow: hidden;
+    font-family: var(--font-body);
+}
+.anim-panel .ap-title {
+    background: #181b24;
+    padding: 6px 10px;
+    font-weight: 600;
+    font-size: 0.78rem;
+    color: #cbd5e1;
+    border-bottom: 1px solid #3c414c;
+}
+.anim-panel .ap-toolbar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    background: #1e2230;
+    border-bottom: 1px solid #3c414c;
+    padding: 6px 10px;
+    font-size: 0.75rem;
+}
+.anim-panel .ap-select {
+    background: #181b24;
+    border: 1px solid #3c414c;
+    border-radius: 4px;
+    padding: 3px 8px;
+    color: #4ade80;
+    font-family: var(--font-code);
+}
+.anim-panel .ap-btn {
+    background: #33394a;
+    border: 1px solid #3c414c;
+    border-radius: 4px;
+    padding: 3px 9px;
+    color: #e2e8f0;
+    font-weight: 600;
+}
+.anim-panel .ap-time { color: #cbd5e1; font-family: var(--font-code); }
+.anim-panel .ap-loop {
+    margin-left: auto;
+    background: #4ade80;
+    color: #181b24;
+    border-radius: 4px;
+    padding: 2px 7px;
+    font-size: 0.68rem;
+    font-weight: 700;
+}
+
+.anim-panel .ap-tracks { padding: 8px 10px; display: flex; flex-direction: column; gap: 6px; }
+.anim-panel .ap-track {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: rgba(0, 0, 0, 0.22);
+    border-radius: 4px;
+    padding: 4px 6px;
+    height: 30px;
+}
+.anim-panel .ap-track-name {
+    font-family: var(--font-code);
+    font-size: 0.7rem;
+    color: #94a3b8;
+    width: 118px;
+    flex-shrink: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.anim-panel .ap-lane { flex: 1; position: relative; height: 100%; border-left: 1px solid #3c414c; }
+
+/* Cada chave é um losango, como no editor. --at é a posição em % da trilha. */
+.anim-panel .ap-key {
+    position: absolute;
+    top: 50%;
+    left: var(--at, 0%);
+    width: 8px;
+    height: 8px;
+    margin: -4px 0 0 -4px;
+    background: #38bdf8;
+    transform: rotate(45deg);
+}
+.anim-panel .ap-key[data-label]::after {
+    content: attr(data-label);
+    position: absolute;
+    left: 50%;
+    top: -17px;
+    transform: translateX(-50%) rotate(-45deg);
+    font-family: var(--font-code);
+    font-size: 0.6rem;
+    color: #64748b;
+}
+.anim-panel .ap-playhead {
+    position: absolute;
+    left: var(--at, 0%);
+    top: -6px;
+    bottom: -6px;
+    width: 2px;
+    background: #ff477e;
+    z-index: 2;
+}
+
+/* Vitrine das quatro direções lado a lado */
+.sprite-showcase {
+    display: flex;
+    gap: clamp(12px, 3vw, 40px);
+    justify-content: center;
+    align-items: flex-end;
+    flex-wrap: wrap;
+    background: rgba(0, 0, 0, 0.25);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-radius: 16px;
+    padding: var(--space-4) 20px;
+}
+.sprite-showcase figure { display: flex; flex-direction: column; align-items: center; gap: 8px; margin: 0; }
+.sprite-showcase figcaption {
+    font-family: var(--font-code);
+    font-size: 0.75rem;
+    color: var(--text-muted);
+}
+
+/* Slide de objetivos / recapitulação */
+.goal-list { display: flex; flex-direction: column; gap: var(--space-3); }
+.goal-item {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 14px;
+    padding: var(--space-3) 18px;
+}
+.goal-item .ui-icon { color: #6ee7b7; font-size: 1.05rem; margin-top: 2px; }
+.goal-item strong { color: #fff; display: block; margin-bottom: 2px; }
+.goal-item span { font-size: 0.9rem; color: var(--text-muted); line-height: 1.5; }
+
+
 /* Collapsible hints (used in the Lesson 01 challenge slide) */
-details.hint { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 12px; padding: 12px 16px; margin: 10px 0; }
+details.hint { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 12px; padding: var(--space-2) 16px; margin: var(--space-2) 0; }
 details.hint summary { cursor: pointer; font-weight: 600; color: var(--text-accent); font-size: 0.9rem; }
 details.hint p { margin-top: 8px; font-size: 0.88rem; color: #e2e8f0; line-height: 1.6; }
 
+/* Itens de grid têm min-width auto por padrão, o que faz conteúdo largo
+   (mocks do editor, blocos de código) empurrar a coluna além da célula e
+   vazar a lateral do slide. */
+.grid-2 > * { min-width: 0; }
+
+/* ==========================================================================
+   Utilitários de espaçamento e alinhamento
+   ==========================================================================
+   Os slides tinham ~300 atributos style= repetindo as MESMAS quatro ou cinco
+   declarações (margin:0, margin-bottom:0, align-items:start). Como estilo
+   inline vence qualquer regra e não é reaproveitável, cada ajuste de ritmo
+   virava caça manual arquivo por arquivo. Estas classes cobrem os casos
+   recorrentes; o style= fica só para valores realmente únicos de um slide.
+   ========================================================================== */
+.align-start { align-items: start; }
+
+/* Primeiro e último filho de uma coluna não devem empurrar a coluna com
+   margem sobrando — resolve sozinho a maior parte dos margin:0 inline. */
+.grid-2 > div > :first-child,
+.grid-3 > div > :first-child { margin-top: 0; }
+.grid-2 > div > :last-child,
+.grid-3 > div > :last-child { margin-bottom: 0; }
+.grid-2 > .callout, .grid-3 > .callout,
+.grid-2 > .code-window, .grid-3 > .code-window,
+.grid-2 > .card, .grid-3 > .card { margin: 0; }
+
 @media (max-width: 1024px) {
     .grid-2 { grid-template-columns: 1fr; }
+    .grid-3 { grid-template-columns: 1fr; }
     .type-grid { grid-template-columns: repeat(2, 1fr); }
-    .op-grid { grid-template-columns: 1fr; }
     .progress-track { width: 80px; }
     .lesson-name { display: none; }
+}
+
+@media (max-width: 640px) {
+    .type-grid { grid-template-columns: 1fr; }
+    .anno-line { font-size: 0.9rem; }
+    .presentation-controls { gap: 0.75rem; padding: 0 0.75rem; }
+    .nav-btn { padding: 0.5rem 0.9rem; font-size: 0.8rem; }
 }
 
 /* ==========================================================================
@@ -1475,10 +1715,22 @@ details.hint p { margin-top: 8px; font-size: 0.88rem; color: #e2e8f0; line-heigh
     z-index: 10;
 }
 
-.hero-section { text-align: center; max-width: 700px; margin: 0 auto 4rem; }
+.hero-section { text-align: center; max-width: 760px; margin: 0 auto 3.5rem; }
 .hero-section .eyebrow { justify-content: center; }
 .hero-section .slide-title { font-size: clamp(2.2rem, 4vw, 3.2rem); }
-.hero-section .slide-sub { margin-bottom: 0; }
+.hero-section .slide-sub { margin-bottom: 1.25rem; }
+.hero-note {
+    font-size: 0.9rem;
+    line-height: 1.6;
+    color: #94a3b8;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-radius: 12px;
+    padding: 12px 18px;
+}
+.hero-note strong { color: var(--text-muted); }
+
+.area + .area { margin-top: 56px; }
 
 .section-heading {
     display: flex;
@@ -1487,12 +1739,27 @@ details.hint p { margin-top: 8px; font-size: 0.88rem; color: #e2e8f0; line-heigh
     font-family: var(--font-title);
     color: var(--text-main);
     font-size: 1.3rem;
-    margin: 56px 0 20px;
+    margin: 0 0 20px;
     padding-bottom: 10px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
-.section-heading:first-of-type { margin-top: 0; }
-.section-heading i, .section-heading img { font-size: 1.2rem; color: var(--text-accent); width: 22px; text-align: center; }
+
+/* Quantos módulos da área já podem ser abertos — dá ao aluno a noção de
+   tamanho do curso e de progresso, que a lista plana anterior não dava. */
+.area-count {
+    margin-left: auto;
+    font-family: var(--font-body);
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    color: #94a3b8;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 20px;
+    padding: 4px 12px;
+    white-space: nowrap;
+}
+.section-heading i, .section-heading img, .section-heading .ui-icon { font-size: 1.2rem; color: var(--text-accent); width: 22px; text-align: center; }
 
 .course-grid {
     display: grid;
@@ -1517,8 +1784,25 @@ details.hint p { margin-top: 8px; font-size: 0.88rem; color: #e2e8f0; line-heigh
     border-color: rgba(192, 132, 252, 0.5);
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 20px rgba(192, 132, 252, 0.2);
 }
-.course-card.disabled { opacity: 0.55; cursor: not-allowed; }
-.course-card.disabled:hover { transform: none; box-shadow: var(--card-shadow); border-color: var(--card-border); }
+/* Módulos ainda não liberados.
+   Antes eram <a href="#"> com classe .disabled: continuavam clicáveis e
+   focáveis por teclado, e clicar jogava a página para o topo. Agora são
+   <div> — sem href, fora da ordem de tabulação, impossíveis de abrir. */
+.course-card.locked {
+    opacity: 0.5;
+    cursor: default;
+    background: rgba(24, 20, 48, 0.4);
+    border-style: dashed;
+}
+.course-card.locked:hover {
+    transform: none;
+    box-shadow: var(--card-shadow);
+    border-color: var(--card-border);
+}
+.course-card.locked .course-title { color: var(--text-muted); }
+
+.soon-label { color: #94a3b8; font-style: italic; }
+.pdf-label { color: #ec4899; }
 
 .course-card .lesson-tag { align-self: flex-start; margin-bottom: 1rem; }
 .lesson-tag.pink { background: rgba(236, 72, 153, 0.15); color: #ec4899; }
@@ -1535,10 +1819,34 @@ details.hint p { margin-top: 8px; font-size: 0.88rem; color: #e2e8f0; line-heigh
     justify-content: space-between;
     border-top: 1px solid rgba(255, 255, 255, 0.05);
     padding-top: 1rem;
-    color: #64748b;
+    /* #64748b dava 3.73:1 sobre o card — reprova no WCAG AA (mín. 4.5:1
+       para texto abaixo de 18.66px). #94a3b8 dá 6.93:1. */
+    color: #94a3b8;
     font-size: 0.85rem;
     font-weight: 500;
 }
 .start-btn { transition: color 0.3s ease; }
 .course-card:hover .start-btn { color: var(--text-accent); }
 .start-btn.pink, .course-card:hover .start-btn.pink { color: #ec4899; }
+
+.site-footer {
+    text-align: center;
+    padding: 2.5rem 2rem 3rem;
+    color: #64748b;
+    font-size: 0.82rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    margin-top: 4rem;
+}
+
+/* Foco visível — sem isso, navegar o índice por teclado é navegar às cegas. */
+.course-card:focus-visible,
+.site-links a:focus-visible,
+.site-logo:focus-visible,
+.back-link:focus-visible,
+.nav-btn:focus-visible,
+.module-nav-link:focus-visible,
+details.hint summary:focus-visible {
+    outline: 2px solid var(--text-accent);
+    outline-offset: 3px;
+    border-radius: 8px;
+}

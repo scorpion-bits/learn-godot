@@ -29,5 +29,25 @@ Sempre que atuar como assistente para criar aulas, apresentações ou códigos v
 - **Sempre peça permissão explicitamente** antes de rodar `git push`. Nunca faça push sem o aval do usuário na conversa.
 - **Clean URLs:** links entre aulas devem apontar para o diretório (ex: `href="./lessons/01/"`), nunca para o arquivo final (`href=".../index.html"`). O projeto tem um script na raiz que corrige isso localmente para testes via `file:///` — sempre respeite esse padrão de roteamento.
 
-## 7. Auto-registro de Aprendizados
+## 7. Propriedade dos Módulos (quem pode editar o quê)
+
+O curso é feito por uma equipe. **O usuário é o Milan.** Fonte da verdade: o kanban do Notion.
+
+- **Módulos do Milan (editar livremente):** Programação **2, 3, 4, 9, 10, 11**.
+  - Módulos 3 e 4 foram **intencionalmente unidos** numa única aula ("Criando um Player Básico"). Não tratar como erro.
+- **Módulos de outros integrantes (NÃO alterar conteúdo, texto, ordem nem didática):** Programação 1, 5, 6, 7, 8, 12; Game Design 1–7; Arte 1–2; Música 1.
+  - **Módulo 6 – Física para Jogos** é do **Thales e Giovane**. `lessons/06` pode receber apenas correções de **forma** (layout, overflow, acessibilidade, padronização visual). Melhorias de conteúdo viram sugestões escritas para a equipe.
+- Quando houver divergência entre uma aula minha e uma aula de outro integrante, **a adaptação acontece do meu lado** — o deck do colega é a referência fixa.
+
+## 8. Convenções de Nomenclatura do Curso
+
+- **"Módulo N"** = unidade de conteúdo (o que aparece no site). **"Aula N"** = encontro do calendário no cronograma. Nunca usar uma palavra no lugar da outra.
+- **Input Map:** ações de gameplay são sempre próprias e em inglês (`move_up`, `move_down`, `move_left`, `move_right`). **Nunca reaproveitar as ações nativas `ui_*`** — elas são a navegação de UI da engine e vão conflitar com os menus do Módulo 7.
+- **Assinatura dos componentes** (contrato compartilhado entre os módulos 3+4 e 6):
+  - `InputComponent` — tem `class_name`, expõe `var direction : Vector2` e o método `update_direction()`.
+  - `MovementComponent` — tem `class_name`, usa `@export var max_speed : float` e `move(direction : Vector2, delta : float)`.
+  - `VisualComponent` — tem `class_name`, lê `input_component.direction`.
+  - Alterar qualquer uma dessas assinaturas quebra a continuidade com o deck do Módulo 6.
+
+## 9. Auto-registro de Aprendizados
 - Toda vez que o usuário expressar uma nova preferência, diretriz, fluxo de trabalho ou correção de padrão durante a conversa — ou quando o assistente resolver um problema complexo ou ficar travado em algo — o assistente deve **proativamente editar este arquivo** para registrar o aprendizado. Isso evita repetir erros ou pedir as mesmas instruções em conversas futuras.

@@ -13,6 +13,42 @@ document.addEventListener('DOMContentLoaded', () => {
 
     totalSlidesEl.textContent = totalSlides;
 
+    // O número do slide na eyebrow é derivado da posição, não escrito à mão.
+    // Antes, inserir ou remover um slide obrigava a renumerar todos os
+    // seguintes na mão — e um número errado passa despercebido até a aula.
+    slides.forEach((slide, index) => {
+        const num = slide.querySelector('.eyebrow .num');
+        if (num) num.textContent = String(index + 1).padStart(2, '0');
+    });
+
+    // --- AVISO DE CONTEÚDO CORTADO ---------------------------------------
+    // Num slide mais alto que a tela o corte é invisível: o professor
+    // simplesmente não apresenta o que ficou embaixo. Este indicador aparece
+    // enquanto sobrar conteúdo e some ao chegar no fim da rolagem.
+    const deck = document.querySelector('.deck');
+    let scrollHint = null;
+
+    if (deck) {
+        scrollHint = document.createElement('div');
+        scrollHint.className = 'scroll-hint';
+        scrollHint.setAttribute('aria-hidden', 'true');
+        scrollHint.innerHTML = '<span>continua abaixo</span><span class="chev">⌄</span>';
+        deck.appendChild(scrollHint);
+    }
+
+    function updateScrollHint() {
+        if (!deck) return;
+        const slide = slides[currentSlideIndex];
+        if (!slide) return;
+        // 4px de tolerância: arredondamento sub-pixel faz scrollHeight ficar
+        // 1-2px acima de clientHeight em slides que na prática cabem.
+        const remaining = slide.scrollHeight - slide.clientHeight - slide.scrollTop;
+        deck.classList.toggle('has-overflow', remaining > 4);
+    }
+
+    slides.forEach(slide => slide.addEventListener('scroll', updateScrollHint, { passive: true }));
+    window.addEventListener('resize', updateScrollHint);
+
     function updateSlides() {
         slides.forEach((slide, index) => {
             if (index === currentSlideIndex) {
@@ -38,6 +74,11 @@ document.addEventListener('DOMContentLoaded', () => {
         if (progressTextEl) {
             progressTextEl.textContent = (currentSlideIndex + 1) + ' / ' + totalSlides;
         }
+
+        // Todo slide começa do topo — sem isso, voltar a um slide já visitado
+        // o traz rolado no meio.
+        slides[currentSlideIndex].scrollTop = 0;
+        updateScrollHint();
     }
 
     function nextSlide() {
@@ -60,7 +101,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Keyboard navigation
     document.addEventListener('keydown', (e) => {
-        if (e.key === 'ArrowRight' || e.key === 'Space' || e.key === 'PageDown') {
+        // Não sequestrar o teclado quando o foco está num controle que
+        // legitimamente usa Espaço/setas (inputs, botões, <summary> das dicas).
+        // (nodeType 1 = Element: o alvo pode ser o próprio document, que não tem .matches)
+        const t = e.target;
+        if (t && t.nodeType === 1 && (t.matches('input, textarea, select, button, summary') || t.isContentEditable)) return;
+
+        // Space: o valor de e.key para a barra de espaço é ' ' (o literal),
+        // não 'Space' — 'Space' é o e.code. Aceitamos os dois porque muitos
+        // apresentadores/controles remotos de slide enviam a barra de espaço.
+        if (e.key === 'ArrowRight' || e.key === ' ' || e.code === 'Space' || e.key === 'PageDown') {
             e.preventDefault();
             nextSlide();
         } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
@@ -90,141 +140,181 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    // --- NAVEGAÇÃO ENTRE MÓDULOS -----------------------------------------
+    // Cada deck declara só quem ele é (<body data-module="...">); quem vem
+    // antes e depois sai do manifesto em assets/course.js. Assim, inserir um
+    // módulo no meio do curso não exige editar link nenhum nas aulas vizinhas.
+    (function buildModuleNav() {
+        const moduleId = document.body.dataset.module;
+        const course = window.COURSE;
+        if (!moduleId || !course || !document.querySelector('.presentation-controls')) return;
+
+        const list = course.flat;
+        const here = list.findIndex(m => m.slug === moduleId);
+        if (here === -1) return;
+
+        // Pula os módulos ainda indisponíveis: mandar o aluno para uma página
+        // bloqueada seria pior do que não oferecer o link.
+        const findOpen = step => {
+            for (let i = here + step; i >= 0 && i < list.length; i += step) {
+                if (list[i].state !== 'soon') return list[i];
+            }
+            return null;
+        };
+
+        const depth = (moduleId.match(/\//g) || []).length + 2; // lessons/<area>/<mod>/
+        const toRoot = '../'.repeat(depth);
+        const nav = document.createElement('div');
+        nav.className = 'module-nav';
+
+        // Módulos 3 e 4 foram unidos numa aula só, então o rótulo precisa
+        // concordar no plural ("Módulos 3 e 4", não "Módulo 3 e 4").
+        const label = mod => (mod.n.includes(' e ') ? 'Módulos ' : 'Módulo ') + mod.n;
+
+        [['prev', findOpen(-1), '‹'], ['next', findOpen(1), '›']].forEach(([dir, mod, chev]) => {
+            if (!mod) return;
+            const a = document.createElement('a');
+            a.className = 'module-nav-link ' + dir;
+            a.href = toRoot + mod.path;
+            if (mod.state === 'pdf') a.target = '_blank';
+            a.innerHTML = dir === 'prev'
+                ? '<span class="chev">' + chev + '</span><span class="mn-label">' + label(mod) + '</span>'
+                : '<span class="mn-label">' + label(mod) + '</span><span class="chev">' + chev + '</span>';
+            a.title = (dir === 'prev' ? 'Módulo anterior: ' : 'Próximo módulo: ') + mod.title;
+            nav.appendChild(a);
+        });
+
+        if (nav.children.length) {
+            document.querySelector('.presentation-controls').appendChild(nav);
+        }
+    })();
+
     // Initialize
     updateSlides();
 
+    // As fontes web mudam a altura do texto ao carregar; remede depois delas
+    // para não marcar (ou deixar de marcar) overflow com base no fallback.
+    if (document.fonts && document.fonts.ready) {
+        document.fonts.ready.then(updateScrollHint);
+    }
+
     // --- CODE SIMULATOR LOGIC ---
     
-    // Auto-wrap code lines in spans for animation
-    document.querySelectorAll('.code-content code').forEach(codeBlock => {
-        // Skip if already wrapped
-        if (codeBlock.querySelector('.code-line')) return;
-        
-        let lines = codeBlock.innerHTML.split('\n');
-        let newHtml = '';
-        lines.forEach((line, index) => {
-            // Include empty lines to maintain line numbers properly
-            newHtml += `<span class="code-line" data-line="${index + 1}">${line}</span>\n`;
+    // Devolve o contêiner que agrupa um simulador (aba de código ou janela
+    // inteira). Usado tanto na preparação quanto na execução, para que os dois
+    // sempre enxerguem o mesmo <code> e o mesmo painel de Output.
+    function simContext(btn) {
+        return btn.closest('.code-tab-content') || btn.closest('.code-window');
+    }
+
+    // Auto-wrap code lines in spans for animation.
+    //
+    // Só embrulhamos blocos que realmente pertencem a um simulador ("▶ Executar").
+    // O wrapper quebra o innerHTML por '\n' e remonta cada linha num <span>, o que
+    // destrói qualquer elemento que envolva MAIS DE UMA linha (o navegador reequilibra
+    // a árvore e o elemento perde o restante do conteúdo). Blocos de código puramente
+    // ilustrativos podem conter spans multi-linha propositais — como o destaque
+    // interativo por tecla da Aula de Introdução à Programação — então ficam de fora.
+    document.querySelectorAll('.play-sim-btn').forEach(btn => {
+        const context = simContext(btn);
+        if (!context) return;
+
+        context.querySelectorAll('code').forEach(codeBlock => {
+            // Skip if already wrapped
+            if (codeBlock.querySelector('.code-line')) return;
+
+            let lines = codeBlock.innerHTML.split('\n');
+            let newHtml = '';
+            lines.forEach((line, index) => {
+                // Include empty lines to maintain line numbers properly
+                newHtml += `<span class="code-line" data-line="${index + 1}">${line}</span>\n`;
+            });
+            codeBlock.innerHTML = newHtml;
         });
-        codeBlock.innerHTML = newHtml;
     });
 
-    const simScripts = {
-        'btn-play-print': [
-            { line: 1, delay: 400 },
-            { line: 2, delay: 700, output: "Hello, Godot!" },
-            { line: 3, delay: 700, output: "Meu primeiro script!" }
-        ],
-        'btn-play-args': [
-            { line: 1, delay: 300 },
-            { line: 2, delay: 500 },
-            { line: 3, delay: 500 },
-            { line: 6, delay: 500 },
-            { line: 7, delay: 600, output: "4" }
-        ],
-        'btn-play-math': [
-            { line: 1, delay: 300 },
-            { line: 2, delay: 500 },
-            { line: 3, delay: 500 },
-            { line: 5, delay: 500 },
-            { line: 6, delay: 500 },
-            { line: 8, delay: 600, output: "6" },
-            { line: 9, delay: 600, output: "25" }
-        ],
-        'btn-play-return': [
-            { line: 1, delay: 300 },
-            { line: 2, delay: 500 },
-            { line: 6, delay: 500 },
-            { line: 7, delay: 500 },
-            { line: 3, delay: 600, output: "15" }
-        ],
-        'btn-play-else': [
-            { line: 2, delay: 400 },
-            { line: 4, delay: 600 },
-            { line: 6, delay: 600 },
-            { line: 7, delay: 600, output: "Reprovado" }
-        ],
-        'btn-play-sem': [
-            { line: 2, delay: 400 },
-            { line: 4, delay: 600 },
-            { line: 6, delay: 600 },
-            { line: 7, delay: 600, output: "Nota B" },
-            { line: 8, delay: 600 },
-            { line: 9, delay: 600, output: "Nota C" }
-        ],
-        'btn-play-com': [
-            { line: 2, delay: 400 },
-            { line: 4, delay: 600 },
-            { line: 6, delay: 600 },
-            { line: 7, delay: 600, output: "Nota B" }
-        ],
-        'btn-play-for': [
-            { line: 2, delay: 600 }, { line: 3, delay: 600, output: "0" },
-            { line: 2, delay: 600 }, { line: 3, delay: 600, output: "1" },
-            { line: 2, delay: 600 }, { line: 3, delay: 600, output: "2" },
-            { line: 2, delay: 600 }, { line: 3, delay: 600, output: "3" },
-            { line: 2, delay: 600 }, { line: 3, delay: 600, output: "4" }
-        ],
-        'btn-play-while': [
-            { line: 2, delay: 800, updateTracker: { id: 'health-val', value: '3' } },
-            { line: 4, delay: 600 }, { line: 5, delay: 600, output: "Ainda estou vivo!" }, { line: 6, delay: 600, updateTracker: { id: 'health-val', value: '2' } },
-            { line: 4, delay: 600 }, { line: 5, delay: 600, output: "Ainda estou vivo!" }, { line: 6, delay: 600, updateTracker: { id: 'health-val', value: '1' } },
-            { line: 4, delay: 600 }, { line: 5, delay: 600, output: "Ainda estou vivo!" }, { line: 6, delay: 600, updateTracker: { id: 'health-val', value: '0' } },
-            { line: 4, delay: 600 } // condition fails
-        ]
-    };
+    // A simulação é declarada no próprio HTML, no atributo data-sim do botão,
+    // e não mais numa tabela aqui indexada pelo id do botão. Antes, mexer numa
+    // linha de código de um slide exigia lembrar de vir renumerar os passos
+    // neste arquivo — e o JS carregava conhecimento de aulas específicas.
+    //
+    // Formato de um passo:  <linha>[@atraso][#tracker=valor][> texto do Output]
+    // Passos separados por ";". O atraso padrão é 600 ms.
+    //
+    //   data-sim="1@400; 2@700 > Hello, Godot!; 3@700 > Meu primeiro script!"
+    //
+    // O ">" delimita o texto de saída, então ele pode conter qualquer coisa;
+    // @ e # só são lidos antes dele.
+    const SIM_DEFAULT_DELAY = 600;
 
-    document.querySelectorAll('.play-sim-btn').forEach(btn => {
-        btn.addEventListener('click', async (e) => {
+    function parseSim(spec) {
+        return spec.split(';').reduce((steps, raw) => {
+            const m = raw.trim().match(/^(\d+)(?:@(\d+))?(?:#([\w-]+)=(\S+))?(?:\s*>\s*(.*))?$/);
+            if (m) {
+                steps.push({
+                    line: parseInt(m[1], 10),
+                    delay: m[2] ? parseInt(m[2], 10) : SIM_DEFAULT_DELAY,
+                    tracker: m[3] ? { id: m[3], value: m[4] } : null,
+                    output: m[5] !== undefined ? m[5] : null
+                });
+            }
+            return steps;
+        }, []);
+    }
+
+    document.querySelectorAll('.play-sim-btn[data-sim]').forEach(btn => {
+        const script = parseSim(btn.dataset.sim);
+        if (!script.length) return;
+
+        const idleLabel = btn.textContent.trim() || '▶ Executar';
+
+        btn.addEventListener('click', async () => {
             if (btn.classList.contains('running')) return;
-            
-            const scriptId = btn.id || btn.closest('.slide').id;
-            const script = simScripts[scriptId];
-            if (!script) return;
-            
+
             btn.classList.add('running');
-            btn.innerHTML = '⏳ Executando...';
-            
-            const codeWindow = btn.closest('.code-window');
-            const context = btn.closest('.code-tab-content') || codeWindow;
-            const lines = context.querySelectorAll('.code-line');
+            btn.textContent = '⏳ Executando...';
+
+            const context = simContext(btn);
+            const lines = [...context.querySelectorAll('.code-line')];
             const outputBox = context.querySelector('.output-content');
-            
-            // Reset
-            lines.forEach(l => l.classList.remove('active'));
-            if (outputBox) outputBox.innerHTML = '';
-            const trackers = context.querySelectorAll(".tracker-val");
-            trackers.forEach(t => t.textContent = t.dataset.initial || "0");
-            
-            for (let step of script) {
-                lines.forEach(l => l.classList.remove('active'));
-                
-                const lineEl = Array.from(lines).find(l => parseInt(l.dataset.line) === step.line);
-                if (lineEl) {
-                    lineEl.classList.add('active');
+            const clear = () => lines.forEach(l => l.classList.remove('active'));
+
+            clear();
+            if (outputBox) outputBox.textContent = '';
+            context.querySelectorAll('.tracker-val').forEach(t => {
+                t.textContent = t.dataset.initial || '0';
+            });
+
+            for (const step of script) {
+                clear();
+
+                const lineEl = lines.find(l => parseInt(l.dataset.line, 10) === step.line);
+                if (lineEl) lineEl.classList.add('active');
+
+                // textContent, não innerHTML: a saída é texto do aluno e não
+                // deve ser interpretada como marcação.
+                if (step.output !== null && outputBox) {
+                    const out = document.createElement('span');
+                    out.className = 'out-line';
+                    out.textContent = step.output;
+                    outputBox.appendChild(out);
                 }
-                
-                if (step.output && outputBox) {
-                    outputBox.innerHTML += `<span style="color: #c3e88d;">${step.output}</span><br>`;
-                }
-                
-                
-                if (step.updateTracker) {
-                    const t = document.getElementById(step.updateTracker.id);
+
+                if (step.tracker) {
+                    const t = document.getElementById(step.tracker.id);
                     if (t) {
-                        t.textContent = step.updateTracker.value;
-                        t.classList.add("bump");
-                        setTimeout(() => t.classList.remove("bump"), 300);
+                        t.textContent = step.tracker.value;
+                        t.classList.add('bump');
+                        setTimeout(() => t.classList.remove('bump'), 300);
                     }
                 }
-                
-                // Wait delay
+
                 await new Promise(r => setTimeout(r, step.delay));
             }
-            
-            lines.forEach(l => l.classList.remove('active'));
+
+            clear();
             btn.classList.remove('running');
-            btn.innerHTML = '▶ Executar Código';
+            btn.textContent = idleLabel;
         });
     });
 
@@ -254,37 +344,77 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // --- GLOBAL TIMER LOGIC ---
-    const startTimerBtn = document.getElementById('startTimerBtn');
-    const timerDisplay = document.getElementById('playtest-timer');
-    let timerInterval;
+    // --- CRONÔMETROS DOS CHECKPOINTS -------------------------------------
+    // Antes existia um único cronômetro, com IDs fixos e 15 minutos cravados
+    // no código. Com vários checkpoints por aula, cada caixa passa a declarar
+    // a própria duração em data-minutes e o comportamento vem daqui.
+    function setupTimer(box) {
+        const display = box.querySelector('.timer-display');
+        const btn = box.querySelector('.timer-btn');
+        if (!display || !btn) return;
 
-    if (startTimerBtn && timerDisplay) {
-        startTimerBtn.addEventListener('click', () => {
-            clearInterval(timerInterval);
-            let timer = 900; 
+        const total = Math.round(parseFloat(box.dataset.minutes || '10') * 60);
+        const format = secs => String(Math.floor(secs / 60)).padStart(2, '0') + ':' +
+                               String(secs % 60).padStart(2, '0');
+        let interval = null;
 
-            startTimerBtn.innerHTML = "⏱ Rodando...";
-            startTimerBtn.style.opacity = "0.5";
-            startTimerBtn.style.pointerEvents = "none";
-            timerDisplay.style.color = "#c592ff";
-            timerDisplay.style.textShadow = "0 0 20px rgba(197, 146, 255, 0.8)";
+        display.textContent = format(total);
 
-            timerInterval = setInterval(function () {
-                let minutes = parseInt(timer / 60, 10);
-                let seconds = parseInt(timer % 60, 10);
+        btn.addEventListener('click', () => {
+            clearInterval(interval);
+            let left = total;
 
-                minutes = minutes < 10 ? "0" + minutes : minutes;
-                seconds = seconds < 10 ? "0" + seconds : seconds;
+            box.classList.add('running');
+            box.classList.remove('done');
+            btn.disabled = true;
+            btn.textContent = 'Rodando…';
+            display.textContent = format(left);
 
-                timerDisplay.textContent = minutes + ":" + seconds;
+            interval = setInterval(() => {
+                left -= 1;
+                if (left <= 0) {
+                    clearInterval(interval);
+                    display.textContent = '00:00';
+                    box.classList.remove('running');
+                    box.classList.add('done');
+                    btn.disabled = false;
+                    btn.textContent = 'Reiniciar';
+                    return;
+                }
+                display.textContent = format(left);
+            }, 1000);
+        });
+    }
+
+    document.querySelectorAll('.timer-box[data-minutes]').forEach(setupTimer);
+
+    // Compatibilidade: o deck do Módulo 6 usa a marcação antiga (IDs fixos).
+    // Mantido intacto para não alterar uma aula de outro integrante.
+    const legacyBtn = document.getElementById('startTimerBtn');
+    const legacyDisplay = document.getElementById('playtest-timer');
+    if (legacyBtn && legacyDisplay) {
+        let legacyInterval;
+        legacyBtn.addEventListener('click', () => {
+            clearInterval(legacyInterval);
+            let timer = 900;
+
+            legacyBtn.innerHTML = '⏱ Rodando...';
+            legacyBtn.style.opacity = '0.5';
+            legacyBtn.style.pointerEvents = 'none';
+            legacyDisplay.style.color = '#c592ff';
+            legacyDisplay.style.textShadow = '0 0 20px rgba(197, 146, 255, 0.8)';
+
+            legacyInterval = setInterval(function () {
+                const minutes = String(Math.floor(timer / 60)).padStart(2, '0');
+                const seconds = String(timer % 60).padStart(2, '0');
+                legacyDisplay.textContent = minutes + ':' + seconds;
 
                 if (--timer < 0) {
-                    clearInterval(timerInterval);
-                    timerDisplay.textContent = "00:00";
-                    startTimerBtn.innerHTML = "Tempo Esgotado!";
-                    timerDisplay.style.color = "#ef4444";
-                    timerDisplay.style.textShadow = "0 0 20px rgba(239, 68, 68, 0.8)";
+                    clearInterval(legacyInterval);
+                    legacyDisplay.textContent = '00:00';
+                    legacyBtn.innerHTML = 'Tempo Esgotado!';
+                    legacyDisplay.style.color = '#ef4444';
+                    legacyDisplay.style.textShadow = '0 0 20px rgba(239, 68, 68, 0.8)';
                 }
             }, 1000);
         });

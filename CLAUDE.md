@@ -28,15 +28,18 @@ divisão de responsabilidade é levada a sério.
 Programação **2, 3, 4, 9, 10 e 11**.
 
 **De outros integrantes — NÃO alterar conteúdo, texto, ordem nem didática:**
-Programação 1, 5, 6, 7, 8, 12 · Game Design 1–7 · Arte 1–2 · Música 1.
+Programação 1, 5, 7, 8, 12 · Game Design 1–7 · Arte 1–2 · Música 1.
 
-Em `lessons/programacao/06/` (Física para Jogos, do **Thales e Giovane**) só é
-permitido mexer na **forma**: layout, overflow, acessibilidade, padronização
-visual. Nada de conteúdo. Melhorias percebidas em material alheio viram
-sugestões escritas para a equipe, nunca commits.
+**Exceção — Módulo 6 (Física para Jogos), do Thales e Giovane:** em 31/07/2026
+o Thales autorizou reestruturar o deck livremente, incluindo conteúdo, ordem e
+didática. `lessons/programacao/06/` deixou de ser somente-forma. Continue
+tratando o material como dele: mudanças grandes merecem ser comunicadas, e o
+vocabulário que ele criou (`LifeComponent`, `KnockbackComponent`,
+`external_force`, o fluxo Hitbox→Hurtbox→Signal) deve ser preservado, porque é
+ele quem vai dar a aula.
 
-Quando uma aula do Milan divergir de uma aula de colega, **a adaptação
-acontece do lado do Milan** — o deck do colega é referência fixa.
+Quando uma aula do Milan divergir de uma aula de colega **sem essa permissão**,
+a adaptação acontece do lado do Milan — o deck do colega é referência fixa.
 
 Os módulos 3 e 4 foram **unidos de propósito** numa aula só ("Criando um
 Player Básico"), num único encontro. Não é erro; não desfaça.

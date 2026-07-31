@@ -169,7 +169,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Módulos 3 e 4 foram unidos numa aula só, então o rótulo precisa
         // concordar no plural ("Módulos 3 e 4", não "Módulo 3 e 4").
-        const label = mod => (mod.n.includes(' e ') ? 'Módulos ' : 'Módulo ') + mod.n;
+        //
+        // E cada área tem a própria numeração: pular de Programação 9 para
+        // Arte 2 mostrava só "Módulo 2", que parece um retrocesso. Quando o
+        // vizinho é de outra área, o nome dela entra no rótulo.
+        const here_area = list[here].areaId;
+        const label = mod => (mod.n.includes(' e ') ? 'Módulos ' : 'Módulo ') + mod.n +
+                             (mod.areaId !== here_area ? ' · ' + mod.area : '');
 
         [['prev', findOpen(-1), '‹'], ['next', findOpen(1), '›']].forEach(([dir, mod, chev]) => {
             if (!mod) return;

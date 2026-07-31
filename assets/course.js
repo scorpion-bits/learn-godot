@@ -35,9 +35,9 @@ window.COURSE = {
                 { n: '6',    slug: 'programacao/06',    title: 'Física para Jogos',                   state: 'deck', path: 'lessons/programacao/06/' },
                 { n: '7',    slug: 'programacao/07',    title: 'Interface 1 — Menu e Pausa',          state: 'pdf',  path: 'lessons/programacao/07/interface-ui.pdf' },
                 { n: '8',    slug: 'programacao/08',    title: 'Interface 2 — Diálogo e Save',        state: 'soon' },
-                { n: '9',    slug: 'programacao/09',    title: 'Inventário',                          state: 'soon' },
-                { n: '10',   slug: 'programacao/10',    title: 'Status e Perigos',                    state: 'soon' },
-                { n: '11',   slug: 'programacao/11',    title: 'Batalhas 1 — Turno',                  state: 'soon' },
+                { n: '9',    slug: 'programacao/09',    title: 'Inventário',                          state: 'deck', path: 'lessons/programacao/09/' },
+                { n: '10',   slug: 'programacao/10',    title: 'Status e Perigos',                    state: 'deck', path: 'lessons/programacao/10/' },
+                { n: '11',   slug: 'programacao/11',    title: 'Batalhas 1 — Turno',                  state: 'deck', path: 'lessons/programacao/11/' },
                 { n: '12',   slug: 'programacao/12',    title: 'Batalhas 2 — Tempo Real',             state: 'soon' }
             ]
         },

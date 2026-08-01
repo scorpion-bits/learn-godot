@@ -98,11 +98,11 @@
                         <p>O espinho procura o player e subtrai 1. O inimigo procura o player e subtrai 2. O buraco procura o player e subtrai 3. Três scripts que precisam saber onde mora a vida do personagem — e que quebram juntos no dia em que ela mudar de lugar.</p>
                     </div>
                     <div class="code-window">
-                        <div class="code-header"><span class="file-name">NãoFaçaIsso.gd</span><div class="window-dots"><span class="dot dot-blue">●</span><span class="dot dot-yellow">●</span><span class="dot dot-red">●</span></div></div>
+                        <div class="code-header"><span class="file-name">DontDoThis.gd</span><div class="window-dots"><span class="dot dot-blue">●</span><span class="dot dot-yellow">●</span><span class="dot dot-red">●</span></div></div>
                         <pre class="code-content"><code><span class="k-comment"># no script do espinho</span>
 <span class="k-keyword">func</span> <span class="k-func">_on_body_entered</span>(body):
-    body.vida -= <span class="k-number">1</span>
-    <span class="k-comment"># e se o inimigo não tiver "vida"?</span>
+    body.health -= <span class="k-number">1</span>
+    <span class="k-comment"># e se o inimigo não tiver "health"?</span>
     <span class="k-comment"># e se um dia ela virar "life"?</span></code></pre>
                     </div>
                 </div>
@@ -197,7 +197,6 @@
 <span class="k-keyword">signal</span> <span class="k-func">died</span>
 
 <span class="k-annotation">@export</span> <span class="k-keyword">var</span> <span class="k-var">max_life</span> : <span class="k-type">int</span> = <span class="k-number">5</span>
-
 <span class="k-keyword">var</span> <span class="k-var">life</span> : <span class="k-type">int</span>
 
 <span class="k-keyword">func</span> <span class="k-func">_ready</span>() -> <span class="k-type">void</span>:
@@ -212,7 +211,6 @@
         life = <span class="k-number">0</span>
 
     life_changed.<span class="k-func">emit</span>(life, max_life)
-
     <span class="k-keyword">if</span>(life == <span class="k-number">0</span>):
         died.<span class="k-func">emit</span>()</code></pre>
                 </div>
@@ -223,7 +221,7 @@
                     </div>
                     <div class="callout callout-warn">
                         <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-shield-halved"></use></svg>
-                        <div><strong>O <code>return</code> logo no começo evita um bug clássico</strong> Sem ele, um personagem já morto continuaria "tomando dano" e o signal <code>died</code> dispararia várias vezes — fazendo a tela de morte aparecer três vezes, ou o inimigo soltar três recompensas.</div>
+                        <div><strong>O <code>return</code> logo no começo evita um bug clássico</strong> Sem ele, um personagem já morto continuaria "tomando dano" e o <code>died</code> dispararia várias vezes — três telas de morte, ou três recompensas.</div>
                     </div>
                     <div class="callout callout-note mb-0">
                         <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-circle-question"></use></svg>

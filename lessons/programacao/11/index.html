@@ -129,9 +129,9 @@
                     <p class="lede">Precisamos guardar de quem é a vez. Dá para usar um número (0 = player, 1 = inimigo), mas três meses depois ninguém lembra o que era 1. O <code>enum</code> resolve isso: cria uma <strong>lista fechada de opções com nome</strong>.</p>
                     <div class="code-window">
                         <div class="code-header"><span class="file-name">o problema</span><div class="window-dots"><span class="dot dot-blue">●</span><span class="dot dot-yellow">●</span><span class="dot dot-red">●</span></div></div>
-                        <pre class="code-content"><code><span class="k-keyword">var</span> <span class="k-var">turno</span> = <span class="k-number">1</span>   <span class="k-comment"># 1 é o quê mesmo?</span>
+                        <pre class="code-content"><code><span class="k-keyword">var</span> <span class="k-var">turn</span> = <span class="k-number">1</span>   <span class="k-comment"># 1 é o quê mesmo?</span>
 
-<span class="k-keyword">if</span>(turno == <span class="k-number">2</span>):   <span class="k-comment"># e 2 existe?</span></code></pre>
+<span class="k-keyword">if</span>(turn == <span class="k-number">2</span>):   <span class="k-comment"># e 2 existe?</span></code></pre>
                     </div>
                 </div>
                 <div>
@@ -226,7 +226,7 @@
 
     <span class="k-keyword">if</span>(<span class="k-func">randf</span>() < <span class="k-number">0.5</span>):
         state = <span class="k-type">State</span>.OVER
-        battle_ended.<span class="k-func">emit</span>(<span class="k-string">"fuga"</span>)
+        battle_ended.<span class="k-func">emit</span>(<span class="k-string">"fled"</span>)
     <span class="k-keyword">else</span>:
         <span class="k-func">end_player_turn</span>()   <span class="k-comment"># falhou: perdeu a vez</span></code></pre>
                 </div>
@@ -334,7 +334,7 @@ player_defending = <span class="k-keyword">false</span>   <span class="k-comment
                     <pre class="code-content"><code><span class="k-keyword">func</span> <span class="k-func">end_player_turn</span>() -> <span class="k-type">void</span>:
     <span class="k-keyword">if</span>(enemy_life.life == <span class="k-number">0</span>):
         state = <span class="k-type">State</span>.OVER
-        battle_ended.<span class="k-func">emit</span>(<span class="k-string">"vitoria"</span>)
+        battle_ended.<span class="k-func">emit</span>(<span class="k-string">"victory"</span>)
         <span class="k-keyword">return</span>
 
     state = <span class="k-type">State</span>.ENEMY_TURN
@@ -349,7 +349,7 @@ player_defending = <span class="k-keyword">false</span>   <span class="k-comment
 
     <span class="k-keyword">if</span>(player_life.life == <span class="k-number">0</span>):
         state = <span class="k-type">State</span>.OVER
-        battle_ended.<span class="k-func">emit</span>(<span class="k-string">"derrota"</span>)
+        battle_ended.<span class="k-func">emit</span>(<span class="k-string">"defeat"</span>)
         <span class="k-keyword">return</span>
 
     state = <span class="k-type">State</span>.PLAYER_TURN
@@ -542,7 +542,7 @@ player_defending = <span class="k-keyword">false</span>   <span class="k-comment
             <div class="grid-2">
                 <div class="callout callout-tip mt-0">
                     <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-tower-broadcast"></use></svg>
-                    <div><strong>Quem escuta decide</strong> Pela terceira vez no curso: o <code>BattleManager</code> emite <code>battle_ended("vitoria")</code> e não faz mais nada. Quem trocar de cena, quem der a recompensa, quem mostrar a tela — é outro. O árbitro só apita.</div>
+                    <div><strong>Quem escuta decide</strong> Pela terceira vez no curso: o <code>BattleManager</code> emite <code>battle_ended("victory")</code> e não faz mais nada. Quem trocar de cena, quem der a recompensa, quem mostrar a tela — é outro. O árbitro só apita.</div>
                 </div>
                 <div class="callout callout-note mt-0">
                     <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-file-lines"></use></svg>

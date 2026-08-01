@@ -50,7 +50,7 @@
         <section class="slide" id="slide-goals">
             <div class="eyebrow"><span class="num">02</span> · Roteiro</div>
             <h1 class="slide-title">O QUE VOCÊ VAI CONSTRUIR</h1>
-            <p class="slide-sub">É este personagem aqui — montado peça por peça, andando nas quatro direções com o teclado.</p>
+            <p class="slide-sub">Este personagem — montado peça por peça, andando nas quatro direções.</p>
             <div class="sprite-showcase">
                 <figure><div class="sprite-player down"></div><figcaption>move_down</figcaption></figure>
                 <figure><div class="sprite-player left"></div><figcaption>move_left</figcaption></figure>
@@ -65,11 +65,11 @@
                     </div>
                     <div class="goal-item">
                         <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-shapes"></use></svg>
-                        <div><strong>Dar corpo e colisão ao personagem</strong><span>CharacterBody2D e CollisionShape2D — por que ele precisa dos dois.</span></div>
+                        <div><strong>Dar corpo e colisão</strong><span>CharacterBody2D e CollisionShape2D — por que ele precisa dos dois.</span></div>
                     </div>
                     <div class="goal-item">
                         <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-clapperboard"></use></svg>
-                        <div><strong>Animar com spritesheet</strong><span>Fatiar a imagem em quadros e gravar as oito animações no AnimationPlayer.</span></div>
+                        <div><strong>Animar com spritesheet</strong><span>Fatiar a imagem e gravar as oito animações no AnimationPlayer.</span></div>
                     </div>
                 </div>
                 <div class="goal-list">
@@ -79,7 +79,7 @@
                     </div>
                     <div class="goal-item">
                         <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-diagram-project"></use></svg>
-                        <div><strong>Separar a lógica em componentes</strong><span>Input, movimento e visual em peças independentes — do jeito que se faz em projeto de verdade.</span></div>
+                        <div><strong>Separar a lógica em componentes</strong><span>Input, movimento e visual em peças independentes.</span></div>
                     </div>
                     <div class="goal-item">
                         <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-play"></use></svg>
@@ -89,7 +89,7 @@
             </div>
             <div class="callout callout-note">
                 <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-circle-info"></use></svg>
-                <div><strong>Esta aula cobre dois módulos</strong> Os Módulos 3 e 4 foram reunidos porque contam uma história só: montar o personagem. Primeiro damos a ele um corpo e uma aparência; depois, a lógica que faz ele se mexer.</div>
+                <div><strong>Esta aula cobre dois módulos</strong> Os Módulos 3 e 4 contam uma história só: primeiro damos ao personagem um corpo e uma aparência, depois a lógica que faz ele se mexer.</div>
             </div>
         </section>
 
@@ -582,9 +582,9 @@ animation.<span class="k-func">play</span>(anim)</code></pre>
                         <h3>Faça agora</h3>
                         <ol class="step-list">
                             <li>Crie uma Scene nova com um <code>CharacterBody2D</code> na raiz e renomeie para <strong>Player</strong>.</li>
-                            <li>Adicione um <code>CollisionShape2D</code> e escolha um <em>RectangleShape2D</em> — o aviso amarelo tem que sumir.</li>
+                            <li>Adicione um <code>CollisionShape2D</code> com um <em>RectangleShape2D</em> — o aviso amarelo tem que sumir.</li>
                             <li>Adicione um <code>Sprite2D</code> e arraste o <code>player.png</code> para o campo <em>Texture</em>.</li>
-                            <li>Ponha <em>Hframes</em> = <strong>9</strong> e <em>Vframes</em> = <strong>4</strong>. Passeie pelo campo <em>Frame</em> de 0 a 35 e confirme que as quatro direções aparecem.</li>
+                            <li>Ponha <em>Hframes</em> = <strong>9</strong> e <em>Vframes</em> = <strong>4</strong>. Passeie pelo <em>Frame</em> de 0 a 35 e confira as quatro direções.</li>
                             <li>Volte ao CollisionShape2D e encolha a caixa até cobrir só <strong>os pés</strong>.</li>
                             <li>Adicione um <code>AnimationPlayer</code> e grave a <code>running_down</code>: 8 chaves na trilha <em>frame</em> (do 1 ao 8), 0,8 s, com o 🔁 <em>loop</em> ligado.</li>
                             <li>Duplique-a para criar <code>running_left</code>, <code>running_right</code> e <code>running_up</code>, ajustando os números das chaves.</li>
@@ -704,7 +704,7 @@ animation.<span class="k-func">play</span>(anim)</code></pre>
             <p class="slide-sub">Como o jogo responde à pergunta "para onde?"</p>
             <div class="grid-2 align-start">
                 <div>
-                    <p class="lede">Uma variável comum guarda <strong>um</strong> valor: <code>vida = 10</code>. Mas "para onde o personagem está indo" não cabe num número só — precisa de dois: quanto na horizontal e quanto na vertical. Para isso existe o <code>Vector2</code>: um tipo que guarda um <strong>par</strong> de números, sempre juntos, chamados <code>x</code> e <code>y</code>.</p>
+                    <p class="lede">Uma variável comum guarda <strong>um</strong> valor: <code>health = 10</code>. Mas "para onde o personagem vai" precisa de dois — horizontal e vertical. Para isso existe o <code>Vector2</code>: um <strong>par</strong> de números sempre juntos, <code>x</code> e <code>y</code>.</p>
                     <div class="pill-list compact">
                         <div class="pill-item"><span class="pill-code blue">(0, 0)</span><span class="pill-text">Parado. Nenhuma tecla apertada.</span></div>
                         <div class="pill-item"><span class="pill-code green">(1, 0)</span><span class="pill-text">Andando para a <strong>direita</strong>.</span></div>
@@ -746,7 +746,7 @@ animation.<span class="k-func">play</span>(anim)</code></pre>
                         <img src="../../../assets/icons/Node.svg" alt="Ícone do Node no editor do Godot">
                         <div>
                             <h4>O Node Básico</h4>
-                            <p>Usamos este Node (que é invisível e não tem física) apenas para guardar a lógica. Renomeamos para <code>InputComponent</code> e adicionamos um Script. Ele será o ouvido do jogo!</p>
+                            <p>Um Node invisível e sem física, só para guardar lógica. Renomeie para <code>InputComponent</code> e anexe um Script — ele é o ouvido do jogo.</p>
                         </div>
                     </div>
                     <div style="display: flex; align-items: center; justify-content: center; gap: 20px; background: rgba(0,0,0,0.2); padding: 10px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.05);">
@@ -777,7 +777,7 @@ animation.<span class="k-func">play</span>(anim)</code></pre>
             <div class="grid-3">
                 <div class="callout callout-note">
                     <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-diagram-project"></use></svg>
-                    <div><strong>O que <code>get_vector()</code> faz?</strong> Recebe 4 ações e devolve um único <code>Vector2</code>, já combinando as duas opostas de cada eixo — segurando A e D juntos o X dá zero, eles se cancelam. É daí que sai a diagonal.</div>
+                    <div><strong>O que <code>get_vector()</code> faz?</strong> Recebe 4 ações e devolve um <code>Vector2</code>, combinando as opostas de cada eixo — A e D juntos dão X igual a zero. É daí que sai a diagonal.</div>
                 </div>
                 <div class="callout callout-tip">
                     <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-tag"></use></svg>
@@ -785,7 +785,7 @@ animation.<span class="k-func">play</span>(anim)</code></pre>
                 </div>
                 <div class="callout callout-tip">
                     <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-pen-to-square"></use></svg>
-                    <div><strong>Por que <code>update_direction</code> e não <code>get_direction</code>?</strong> Porque a função <strong>atualiza</strong> a variável e devolve o valor. Nomes com <code>get_</code> prometem que nada muda por dentro — nomear com honestidade evita bugs difíceis.</div>
+                    <div><strong>Por que <code>update_direction</code> e não <code>get_direction</code>?</strong> Porque ela <strong>atualiza</strong> a variável e devolve o valor. Nomes com <code>get_</code> prometem que nada muda por dentro.</div>
                 </div>
             </div>
         </section>
@@ -949,7 +949,7 @@ animation.<span class="k-func">play</span>(anim)</code></pre>
                     </div>
                     <div class="callout callout-tip">
                         <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-dollar-sign"></use></svg>
-                        <div><strong>O que é esse "$"?</strong> <code>$NomeDoNode</code> é um atalho do Godot para "pegar a referência de um Node filho pelo nome" — <code>$InputComponent</code> significa "me dê o Node chamado InputComponent que está dentro desta Scene".</div>
+                        <div><strong>O que é esse "$"?</strong> <code>$NodeName</code> é um atalho do Godot para "pegar a referência de um Node filho pelo nome" — <code>$InputComponent</code> significa "me dê o Node chamado InputComponent que está dentro desta Scene".</div>
                     </div>
                     <div class="callout callout-note">
                         <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-hourglass-half"></use></svg>
@@ -1019,13 +1019,6 @@ animation.<span class="k-func">play</span>(anim)</code></pre>
             <div class="eyebrow"><span class="num">20</span> · Prática</div>
             <h1 class="slide-title">CRIANDO O VISUAL COMPONENT</h1>
             <p class="slide-sub">Adicionando vida ao personagem que já se move!</p>
-            <div class="feature-card highlight node-card accent-purple">
-                <img src="../../../assets/icons/Node.svg" alt="Ícone do Node no editor do Godot">
-                <div>
-                    <h4>O terceiro Node Básico</h4>
-                    <p>Nosso bloco já se move perfeitamente. Agora criamos mais um Node invisível, o <code>VisualComponent</code>, para tocar as animações certas por cima dessa movimentação física.</p>
-                </div>
-            </div>
             <div class="grid-2 align-start">
                 <div class="code-window">
                     <div class="code-header"><span class="file-name">VisualComponent.gd</span><div class="window-dots"><span class="dot dot-blue">●</span><span class="dot dot-yellow">●</span><span class="dot dot-red">●</span></div></div>
@@ -1062,6 +1055,13 @@ animation.<span class="k-func">play</span>(anim)</code></pre>
     animation.<span class="k-func">play</span>(anim)</code></pre>
                 </div>
                 <div>
+                    <div class="feature-card highlight node-card accent-purple mt-0">
+                        <img src="../../../assets/icons/Node.svg" alt="Ícone do Node no editor do Godot">
+                        <div>
+                            <h4>O terceiro Node Básico</h4>
+                            <p>O bloco já se move. Agora criamos mais um Node invisível, o <code>VisualComponent</code>, para tocar a animação certa por cima da movimentação física.</p>
+                        </div>
+                    </div>
                     <div class="godot-editor-layout">
                         <div class="godot-inspector">
                             <div class="godot-inspector-header"><span>Inspector</span></div>

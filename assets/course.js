@@ -33,7 +33,7 @@ window.COURSE = {
                 { n: '3 e 4', slug: 'programacao/03-04', title: 'Criando um Player Básico',           state: 'deck', path: 'lessons/programacao/03-04/' },
                 { n: '5',    slug: 'programacao/05',    title: 'Colisores e Area2D',                  state: 'soon' },
                 { n: '6',    slug: 'programacao/06',    title: 'Física para Jogos',                   state: 'deck', path: 'lessons/programacao/06/' },
-                { n: '7',    slug: 'programacao/07',    title: 'Interface 1 — Menu e Pausa',          state: 'pdf',  path: 'lessons/programacao/07/interface-ui.pdf' },
+                { n: '7',    slug: 'programacao/07',    title: 'Interface 1 — Menu e Pausa',          state: 'pdf',  path: 'lessons/programacao/07/' },
                 { n: '8',    slug: 'programacao/08',    title: 'Interface 2 — Diálogo e Save',        state: 'soon' },
                 { n: '9',    slug: 'programacao/09',    title: 'Inventário',                          state: 'deck', path: 'lessons/programacao/09/' },
                 { n: '10',   slug: 'programacao/10',    title: 'Status e Perigos',                    state: 'deck', path: 'lessons/programacao/10/' },
@@ -59,7 +59,7 @@ window.COURSE = {
             name: 'Arte',
             modules: [
                 { n: '1', slug: 'arte/01', title: 'Produção de Assets',  state: 'soon' },
-                { n: '2', slug: 'arte/02', title: 'Pixel Art no Aseprite', state: 'pdf', path: 'lessons/arte/02/aseprite-fundamentals.pdf' }
+                { n: '2', slug: 'arte/02', title: 'Pixel Art no Aseprite', state: 'pdf', path: 'lessons/arte/02/' }
             ]
         },
         {

@@ -98,13 +98,13 @@
                         <p>Escrever o item direto no código de quem precisa dele. Funciona no primeiro item. No décimo, o nome da poção está escrito em quatro arquivos diferentes, e mudar o ícone significa caçar todos.</p>
                     </div>
                     <div class="code-window">
-                        <div class="code-header"><span class="file-name">NãoFaçaIsso.gd</span><div class="window-dots"><span class="dot dot-blue">●</span><span class="dot dot-yellow">●</span><span class="dot dot-red">●</span></div></div>
-                        <pre class="code-content"><code><span class="k-keyword">if</span> item_id == <span class="k-string">"pocao"</span>:
-    nome = <span class="k-string">"Poção de Vida"</span>
-    icone = <span class="k-func">load</span>(<span class="k-string">"res://arte/pocao.png"</span>)
-<span class="k-keyword">elif</span> item_id == <span class="k-string">"chave"</span>:
-    nome = <span class="k-string">"Chave Enferrujada"</span>
-    icone = <span class="k-func">load</span>(<span class="k-string">"res://arte/chave.png"</span>)
+                        <div class="code-header"><span class="file-name">DontDoThis.gd</span><div class="window-dots"><span class="dot dot-blue">●</span><span class="dot dot-yellow">●</span><span class="dot dot-red">●</span></div></div>
+                        <pre class="code-content"><code><span class="k-keyword">if</span> item_id == <span class="k-string">"potion"</span>:
+    item_name = <span class="k-string">"Poção de Vida"</span>
+    icon = <span class="k-func">load</span>(<span class="k-string">"res://art/potion.png"</span>)
+<span class="k-keyword">elif</span> item_id == <span class="k-string">"key"</span>:
+    item_name = <span class="k-string">"Chave Enferrujada"</span>
+    icon = <span class="k-func">load</span>(<span class="k-string">"res://art/key.png"</span>)
 <span class="k-comment"># ...e mais 30 elif conforme o jogo cresce</span></code></pre>
                     </div>
                 </div>
@@ -202,7 +202,7 @@
                     <ol class="step-list">
                         <li>No painel <strong>FileSystem</strong>, clique com o botão direito numa pasta → <em>New Resource…</em></li>
                         <li>Na busca, digite <code>ItemData</code> — ele aparece na lista porque demos um <code>class_name</code>.</li>
-                        <li>Salve como <code>pocao.tres</code>, dentro de uma pasta <code>itens/</code>.</li>
+                        <li>Salve como <code>potion.tres</code>, dentro de uma pasta <code>items/</code>.</li>
                         <li>Clique no arquivo criado: o <strong>Inspector</strong> mostra os três campos. Preencha.</li>
                     </ol>
                     <div class="callout callout-note mb-0">
@@ -215,16 +215,16 @@
                         <div class="godot-panel">
                             <div class="godot-panel-header"><span>FileSystem</span></div>
                             <div class="godot-tree">
-                                <div class="godot-node"><img src="../../../assets/icons/Folder.svg" class="godot-icon" alt=""><span>itens</span></div>
+                                <div class="godot-node"><img src="../../../assets/icons/Folder.svg" class="godot-icon" alt=""><span>items</span></div>
                                 <div class="godot-tree-children">
-                                    <div class="godot-node child selected"><img src="../../../assets/icons/File.svg" class="godot-icon" alt=""><span>pocao.tres</span></div>
-                                    <div class="godot-node child"><img src="../../../assets/icons/File.svg" class="godot-icon" alt=""><span>chave.tres</span></div>
-                                    <div class="godot-node child"><img src="../../../assets/icons/File.svg" class="godot-icon" alt=""><span>espada.tres</span></div>
+                                    <div class="godot-node child selected"><img src="../../../assets/icons/File.svg" class="godot-icon" alt=""><span>potion.tres</span></div>
+                                    <div class="godot-node child"><img src="../../../assets/icons/File.svg" class="godot-icon" alt=""><span>key.tres</span></div>
+                                    <div class="godot-node child"><img src="../../../assets/icons/File.svg" class="godot-icon" alt=""><span>sword.tres</span></div>
                                 </div>
                             </div>
                         </div>
                         <div class="godot-inspector">
-                            <div class="godot-inspector-header"><span>Inspector — pocao.tres</span></div>
+                            <div class="godot-inspector-header"><span>Inspector — potion.tres</span></div>
                             <div class="godot-inspector-body">
                                 <div class="godot-prop-group">
                                     <div class="godot-prop-title">ItemData</div>
@@ -234,7 +234,7 @@
                                     </div>
                                     <div class="godot-prop-row">
                                         <span class="godot-prop-label">Icon</span>
-                                        <span class="godot-prop-input">pocao.png</span>
+                                        <span class="godot-prop-input">potion.png</span>
                                     </div>
                                     <div class="godot-prop-row">
                                         <span class="godot-prop-label">Description</span>
@@ -314,7 +314,7 @@
                                     <div class="godot-prop-title">WorldItem.gd</div>
                                     <div class="godot-prop-row">
                                         <span class="godot-prop-label">Data</span>
-                                        <span class="godot-prop-input">pocao.tres</span>
+                                        <span class="godot-prop-input">potion.tres</span>
                                     </div>
                                 </div>
                             </div>
@@ -341,7 +341,7 @@
                     </div>
                     <div class="callout callout-tip mb-0">
                         <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-lightbulb"></use></svg>
-                        <div><strong>A linha que faz a mágica é a última</strong> Você não escolhe o sprite no editor: o item <em>lê</em> o próprio ícone do dado que recebeu. Arraste <code>chave.tres</code> na gaveta e a mesma cena vira uma chave.</div>
+                        <div><strong>A linha que faz a mágica é a última</strong> Você não escolhe o sprite no editor: o item <em>lê</em> o próprio ícone do dado que recebeu. Arraste <code>key.tres</code> na gaveta e a mesma cena vira uma chave.</div>
                     </div>
                 </div>
             </div>
@@ -516,7 +516,6 @@
                 <div class="code-window">
                     <div class="code-header"><span class="file-name">InventoryUI.gd</span><div class="window-dots"><span class="dot dot-blue">●</span><span class="dot dot-yellow">●</span><span class="dot dot-red">●</span></div></div>
                     <pre class="code-content"><code><span class="k-keyword">extends</span> <span class="k-type">GridContainer</span>
-
 <span class="k-annotation">@export</span> <span class="k-keyword">var</span> <span class="k-var">inventory</span> : <span class="k-type">InventoryComponent</span>
 
 <span class="k-keyword">func</span> <span class="k-func">_ready</span>() -> <span class="k-type">void</span>:
@@ -579,7 +578,7 @@
             <div class="grid-2">
                 <div class="callout callout-tip mt-0">
                     <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-circle-check"></use></svg>
-                    <div><strong>Faça o teste mental</strong> Você decidiu que a poção agora chama "Elixir" e tem outro ícone. Quantos arquivos você abre? <strong>Um</strong> — o <code>pocao.tres</code>. O chão, a mochila e a interface mudam juntos, porque os três estavam olhando para o mesmo lugar.</div>
+                    <div><strong>Faça o teste mental</strong> Você decidiu que a poção agora chama "Elixir" e tem outro ícone. Quantos arquivos você abre? <strong>Um</strong> — o <code>potion.tres</code>. O chão, a mochila e a interface mudam juntos, porque os três estavam olhando para o mesmo lugar.</div>
                 </div>
                 <div class="callout callout-note mt-0">
                     <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-bolt"></use></svg>
@@ -608,7 +607,7 @@
                 </div>
                 <div>
                     <div class="code-window mt-0">
-                        <div class="code-header"><span class="file-name">Desafio.gd — esqueleto</span><div class="window-dots"><span class="dot dot-blue">●</span><span class="dot dot-yellow">●</span><span class="dot dot-red">●</span></div></div>
+                        <div class="code-header"><span class="file-name">Challenge.gd — esqueleto</span><div class="window-dots"><span class="dot dot-blue">●</span><span class="dot dot-yellow">●</span><span class="dot dot-red">●</span></div></div>
                         <pre class="code-content"><code><span class="k-keyword">func</span> <span class="k-func">use_item</span>(item : <span class="k-type">ItemData</span>) -> <span class="k-type">void</span>:
     <span class="k-comment"># seu código aqui...</span></code></pre>
                     </div>

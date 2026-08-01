@@ -112,6 +112,15 @@ Não há Node.js instalado nesta máquina — não escreva ferramentas em `node`
   1366×768. Conteúdo que estoura a altura fica escondido atrás de um scroll
   que o professor não percebe — e a aula pula o conteúdo. Depois de mexer num
   slide, meça: `scrollHeight - clientHeight` do `.slide` ativo.
+- **Ao medir overflow, só um slide pode estar `.active` por vez.** O `.deck` é
+  um flex container: com dois slides ativos os dois dividem a largura, cada um
+  fica com metade, o texto quebra em muito mais linhas e a medição acusa
+  overflow gigante e falso (chegou a marcar 9744px num slide que cabia).
+  Remova `.active` de todos, meça um a um, e devolva o original no fim.
+  Confira sempre a largura medida: tem que bater com a do slide sozinho.
+- **`innerWidth` zero = viewport perdida.** Ao trocar de aba no navegador de
+  teste, o viewport volta a 0×0 e toda medição vira lixo. Redimensione depois
+  de cada navegação e confirme `innerWidth` antes de confiar no número.
 - **Não use `display:flex` num elemento que mistura texto solto com tags.**
   Cada trecho de texto vira um item de flex independente e a frase se parte em
   colunas. Já quebrou o `.step-list` uma vez.
@@ -153,14 +162,36 @@ Não há Node.js instalado nesta máquina — não escreva ferramentas em `node`
    orientado a dados via `data-sim` no HTML, e acessibilidade (`alt` em todas
    as imagens, abas como `<button>`, foco visível).
 
-**Próximo passo: Etapa 6** — produzir do zero os Módulos 9 (Inventário),
-10 (Status e Perigos) e 11 (Batalhas 1 — Turno). Estavam com prazo 27/07 no
-Notion. O Módulo 2 já planta `Array` e `Dictionary` pensando no Inventário.
+**Etapa 6 concluída** — Módulos 9 (Inventário), 10 (Status e Perigos) e 11
+(Batalhas 1 — Turno) produzidos do zero, 16 slides cada. O Módulo 2 já
+plantava `Array` e `Dictionary` pensando no Inventário.
+
+**Etapa 7 concluída:**
+
+- Nomes de identificadores em inglês nos códigos de exemplo de todos os decks
+  (48 trocas). Textos que o jogador lê seguem em português; o Módulo 2 ganhou
+  um slide próprio ("Como nomear as coisas") ensinando a regra.
+- Módulos 7 e Arte 2 viraram páginas-invólucro com a moldura do site
+  (`lessons/programacao/07/`, `lessons/arte/02/`), embutindo o PDF original
+  sem alterar o conteúdo de ninguém. `script.js` passou a tolerar página sem
+  deck (antes quebrava na primeira linha e derrubava a navegação junto).
+- Módulo 6 reestruturado com a permissão do Thales: 11 → 18 slides, com
+  objetivos, recapitulação, três checkpoints cronometrados (20/25/15 min),
+  slide próprio para `move_toward` vs `lerp`, o `KnockbackComponent` final
+  corrigido (faltava no deck original) e o aviso de que `deceleration * delta`
+  acima de 1 faz o personagem vibrar. O arco de descoberta dele (construa
+  quebrado → observe → entenda) e o vocabulário foram preservados.
+- Densidade: **zero slides com overflow** em 1366×768 e 1280×720, nos seis
+  decks. A verificação anterior media com dois slides `.active` ao mesmo
+  tempo e estava errada — ver a armadilha registrada acima.
+- `.mt-0` / `.mb-0` eram usadas em 88 lugares e não existiam no CSS. Agora
+  existem.
 
 **Pendências registradas para a equipe** (não são do Milan resolver sozinho):
 - Notion diz "Introdução ao LibreSprite"; o PDF entregue é "Pixel Art no
   Aseprite" — e o Aseprite é pago.
-- Módulos 7 e Arte 2 são PDF solto, sem a topbar nem a identidade do site.
 - `assets/lessons/06/` manteve o nome antigo enquanto as aulas viraram
   `programacao/06`.
 - O cenário `file://` (pendrive) foi projetado mas nunca verificado de fato.
+- O PDF embutido nas páginas-invólucro carrega (200, sem erro), mas nunca foi
+  visto renderizando de fato — confira num navegador comum.

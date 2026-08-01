@@ -262,7 +262,10 @@ body:has(.deck) {
 /* Telas baixas (projetor 768p e notebooks): aperta o entrelinha do código,
    que é o bloco mais alto de quase todo slide prático. */
 @media (max-height: 820px) {
-    .code-content { line-height: 1.45; }
+    .code-content {
+        line-height: 1.38;
+        padding: clamp(0.5rem, 1.1vh, 0.9rem) 1.25rem;
+    }
 }
 
 /* Wrap behavior is scoped to the actual code text (a <pre> either wearing
@@ -1635,11 +1638,91 @@ body.index-page {
     padding: var(--space-4) 20px;
 }
 .sprite-showcase figure { display: flex; flex-direction: column; align-items: center; gap: 8px; margin: 0; }
+/* Projetor 768p: a vitrine divide o slide com a lista de objetivos, então o
+   boneco encolhe um pouco em vez de empurrar o conteúdo para fora da tela.
+   Funciona porque .sprite-player lê --scale com var(--scale, 3), sem declarar. */
+@media (max-height: 820px) {
+    .sprite-showcase { --scale: 2.5; padding: var(--space-3) 20px; }
+}
 .sprite-showcase figcaption {
     font-family: var(--font-code);
     font-size: 0.75rem;
     color: var(--text-muted);
 }
+
+/* ==========================================================================
+   Invólucro de PDF
+   ==========================================================================
+   Aulas entregues como PDF (Módulo 7 e Arte 2) abriam cruas, sem a topbar,
+   sem a navegação entre módulos e sem a identidade do site — o aluno saía do
+   curso e caía num arquivo solto. Esta página embute o PDF mantendo a mesma
+   moldura das aulas em HTML, SEM tocar no conteúdo de quem produziu.
+   ========================================================================== */
+.pdf-stage {
+    position: relative;
+    z-index: 5;
+    flex: 1 1 auto;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    padding: clamp(10px, 1.6vh, 18px) clamp(14px, 2vw, 26px);
+    gap: var(--space-3);
+}
+
+.pdf-frame {
+    flex: 1 1 auto;
+    min-height: 0;
+    width: 100%;
+    border: 1px solid var(--card-border);
+    border-radius: 14px;
+    background: #14121f;
+    box-shadow: var(--card-shadow);
+}
+
+/* Alternativa para quem não consegue ver o PDF embutido — alguns navegadores
+   móveis simplesmente não renderizam <object> de PDF. */
+.pdf-fallback {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    text-align: center;
+    padding: var(--space-6) 20px;
+    color: var(--text-muted);
+    font-size: 0.95rem;
+}
+
+.pdf-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+.pdf-note {
+    font-size: 0.82rem;
+    color: #94a3b8;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.pdf-open {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0.5rem 1.1rem;
+    border-radius: 30px;
+    border: 1px solid rgba(236, 72, 153, 0.45);
+    background: rgba(236, 72, 153, 0.12);
+    color: #f9a8d4;
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-weight: 600;
+    transition: all 0.2s ease;
+}
+.pdf-open:hover { background: rgba(236, 72, 153, 0.22); color: #fff; }
+.pdf-open:focus-visible { outline: 2px solid var(--text-accent); outline-offset: 3px; }
 
 /* Slide de objetivos / recapitulação */
 .goal-list { display: flex; flex-direction: column; gap: var(--space-3); }
@@ -1687,6 +1770,11 @@ details.hint p { margin-top: 8px; font-size: 0.88rem; color: #e2e8f0; line-heigh
 .grid-2 > .callout, .grid-3 > .callout,
 .grid-2 > .code-window, .grid-3 > .code-window,
 .grid-2 > .card, .grid-3 > .card { margin: 0; }
+
+/* As regras acima cobrem primeiro e último filho. Estas duas cobrem o resto:
+   um callout no meio de uma coluna que precisa encostar no vizinho. */
+.mt-0 { margin-top: 0; }
+.mb-0 { margin-bottom: 0; }
 
 @media (max-width: 1024px) {
     .grid-2 { grid-template-columns: 1fr; }

@@ -11,7 +11,15 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentSlideIndex = 0;
     const totalSlides = slides.length;
 
-    totalSlidesEl.textContent = totalSlides;
+    // Nem toda página do curso é um deck: as aulas entregues em PDF usam a
+    // mesma moldura (topbar, rodapé, navegação entre módulos) sem ter slides.
+    // Sem esta guarda, a primeira linha abaixo lançaria erro e derrubaria o
+    // script inteiro — inclusive a navegação, que essas páginas precisam.
+    const hasDeck = totalSlides > 0 && totalSlidesEl && prevBtn && nextBtn;
+
+    if (hasDeck) {
+        totalSlidesEl.textContent = totalSlides;
+    }
 
     // O número do slide na eyebrow é derivado da posição, não escrito à mão.
     // Antes, inserir ou remover um slide obrigava a renumerar todos os
@@ -58,7 +66,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        currentSlideEl.textContent = currentSlideIndex + 1;
+        if (currentSlideEl) currentSlideEl.textContent = currentSlideIndex + 1;
 
         // Button states
         prevBtn.style.opacity = currentSlideIndex === 0 ? '0.4' : '1';
@@ -95,12 +103,14 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Event Listeners
-    nextBtn.addEventListener('click', nextSlide);
-    prevBtn.addEventListener('click', prevSlide);
+    // Event Listeners — só existem em página de deck.
+    if (hasDeck) {
+        nextBtn.addEventListener('click', nextSlide);
+        prevBtn.addEventListener('click', prevSlide);
+    }
 
     // Keyboard navigation
-    document.addEventListener('keydown', (e) => {
+    if (hasDeck) document.addEventListener('keydown', (e) => {
         // Não sequestrar o teclado quando o foco está num controle que
         // legitimamente usa Espaço/setas (inputs, botões, <summary> das dicas).
         // (nodeType 1 = Element: o alvo pode ser o próprio document, que não tem .matches)
@@ -127,8 +137,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Fullscreen toggle
-    fullscreenBtn.addEventListener('click', () => {
+    // Fullscreen toggle — existe também nas páginas de PDF.
+    if (fullscreenBtn) fullscreenBtn.addEventListener('click', () => {
         if (!document.fullscreenElement) {
             document.documentElement.requestFullscreen().catch(err => {
                 console.log(`Error attempting to enable fullscreen: ${err.message}`);
@@ -182,7 +192,6 @@ document.addEventListener('DOMContentLoaded', () => {
             const a = document.createElement('a');
             a.className = 'module-nav-link ' + dir;
             a.href = toRoot + mod.path;
-            if (mod.state === 'pdf') a.target = '_blank';
             a.innerHTML = dir === 'prev'
                 ? '<span class="chev">' + chev + '</span><span class="mn-label">' + label(mod) + '</span>'
                 : '<span class="mn-label">' + label(mod) + '</span><span class="chev">' + chev + '</span>';
@@ -196,12 +205,14 @@ document.addEventListener('DOMContentLoaded', () => {
     })();
 
     // Initialize
-    updateSlides();
+    if (hasDeck) {
+        updateSlides();
 
-    // As fontes web mudam a altura do texto ao carregar; remede depois delas
-    // para não marcar (ou deixar de marcar) overflow com base no fallback.
-    if (document.fonts && document.fonts.ready) {
-        document.fonts.ready.then(updateScrollHint);
+        // As fontes web mudam a altura do texto ao carregar; remede depois delas
+        // para não marcar (ou deixar de marcar) overflow com base no fallback.
+        if (document.fonts && document.fonts.ready) {
+            document.fonts.ready.then(updateScrollHint);
+        }
     }
 
     // --- CODE SIMULATOR LOGIC ---
@@ -393,38 +404,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     document.querySelectorAll('.timer-box[data-minutes]').forEach(setupTimer);
-
-    // Compatibilidade: o deck do Módulo 6 usa a marcação antiga (IDs fixos).
-    // Mantido intacto para não alterar uma aula de outro integrante.
-    const legacyBtn = document.getElementById('startTimerBtn');
-    const legacyDisplay = document.getElementById('playtest-timer');
-    if (legacyBtn && legacyDisplay) {
-        let legacyInterval;
-        legacyBtn.addEventListener('click', () => {
-            clearInterval(legacyInterval);
-            let timer = 900;
-
-            legacyBtn.innerHTML = '⏱ Rodando...';
-            legacyBtn.style.opacity = '0.5';
-            legacyBtn.style.pointerEvents = 'none';
-            legacyDisplay.style.color = '#c592ff';
-            legacyDisplay.style.textShadow = '0 0 20px rgba(197, 146, 255, 0.8)';
-
-            legacyInterval = setInterval(function () {
-                const minutes = String(Math.floor(timer / 60)).padStart(2, '0');
-                const seconds = String(timer % 60).padStart(2, '0');
-                legacyDisplay.textContent = minutes + ':' + seconds;
-
-                if (--timer < 0) {
-                    clearInterval(legacyInterval);
-                    legacyDisplay.textContent = '00:00';
-                    legacyBtn.innerHTML = 'Tempo Esgotado!';
-                    legacyDisplay.style.color = '#ef4444';
-                    legacyDisplay.style.textShadow = '0 0 20px rgba(239, 68, 68, 0.8)';
-                }
-            }, 1000);
-        });
-    }
 
 
     // --- CODE WINDOW TABS LOGIC ---

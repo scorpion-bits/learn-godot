@@ -127,8 +127,12 @@ for area_id, shown, total in COUNT_RE.findall(index_html):
     if int(total) != len(area['modules']):
         note('area "%s": indice diz %s modulos, o real e %d' % (area_id, total, len(area['modules'])))
 
-# ---------- 4. cada deck se declara ---------------------------------------
-for mod in [m for m in flat if m['state'] == 'deck']:
+# ---------- 4. cada pagina de aula se declara ------------------------------
+# Vale para 'deck' e para 'pdf': a pagina-involucro do PDF usa a mesma moldura
+# e a mesma navegacao entre modulos, entao depende igualmente do data-module
+# bater com o slug do manifesto. Deixar o 'pdf' de fora ja escondeu um
+# data-module desatualizado uma vez.
+for mod in [m for m in flat if m['state'] in ('deck', 'pdf')]:
     rel = os.path.join(mod['path'], 'index.html')
     if not os.path.exists(os.path.join(ROOT, rel)):
         continue

@@ -1,0 +1,925 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Módulo 9 — Inventário</title>
+    <!-- Fonts -->
+    <link rel="stylesheet" href="../../../assets/fonts/fonts.css">
+    <link rel="stylesheet" href="../../../style.css">
+</head>
+<body data-module="programming/09">
+    <script src="../../../assets/icons-ui/ui-icons.js"></script>
+
+    <!-- Background Orbs & Wave Overlay -->
+    <div class="bg-gradient-container">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+        <div class="wave-bg"></div>
+    </div>
+
+    <!-- Topbar -->
+    <div class="topbar">
+        <div class="topbar-left">
+            <a href="../../../index.html" class="back-link"><svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-arrow-left"></use></svg> Índice</a>
+            <span class="lesson-tag">Módulo 9</span>
+            <span class="lesson-name">Inventário</span>
+        </div>
+        <div class="progress-wrap">
+            <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
+            <span class="progress-text" id="progress-text">1 / 20</span>
+        </div>
+    </div>
+
+    <main class="deck">
+
+        <!-- 1: Capa -->
+        <section class="slide active" id="slide-cover">
+            <div class="eyebrow"><span class="num">01</span> · Boas-vindas</div>
+            <h1 class="slide-title">INVENTÁRIO</h1>
+            <p class="slide-sub">Um mesmo dado servindo o jogo inteiro</p>
+            <div class="callout callout-note">
+                <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-circle-info"></use></svg>
+                <div><strong>Antes de começar</strong> Você já sabe criar Nodes, componentes e ler o teclado. Hoje entra a outra metade do Godot, que quase ninguém apresenta direito no começo: os <strong>Resources</strong> — as peças que guardam <em>dados</em> em vez de comportamento.</div>
+            </div>
+        </section>
+
+        <!-- 2: Objetivos -->
+        <section class="slide" id="slide-goals">
+            <div class="eyebrow"><span class="num">02</span> · Roteiro</div>
+            <h1 class="slide-title">O QUE VOCÊ VAI CONSTRUIR</h1>
+            <p class="slide-sub">Quatro slots, e cada item fazendo alguma coisa de verdade</p>
+            <div class="grid-2 align-start">
+                <div class="goal-list">
+                    <div class="goal-item">
+                        <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-file-lines"></use></svg>
+                        <div><strong>Criar um Resource próprio</strong><span>Um tipo de dado que você inventa: o <code>ItemData</code>, com nome, ícone e descrição.</span></div>
+                    </div>
+                    <div class="goal-item">
+                        <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-cube"></use></svg>
+                        <div><strong>Largar o item no mundo</strong><span>Um <code>Area2D</code> que se desenha sozinho a partir do dado que recebeu.</span></div>
+                    </div>
+                    <div class="goal-item">
+                        <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-layer-group"></use></svg>
+                        <div><strong>Guardar numa lista</strong><span>O <code>InventoryComponent</code> — um <code>Array</code>, exatamente como no Módulo 2.</span></div>
+                    </div>
+                </div>
+                <div class="goal-list">
+                    <div class="goal-item">
+                        <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-desktop"></use></svg>
+                        <div><strong>Abrir e fechar a mochila</strong><span>Uma interface que existe uma vez só no jogo inteiro e pausa enquanto está aberta.</span></div>
+                    </div>
+                    <div class="goal-item">
+                        <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-bolt"></use></svg>
+                        <div><strong>Usar o item</strong><span>Beber a poção e <em>ver</em> o personagem correr mais rápido. Sem isso, inventário é decoração.</span></div>
+                    </div>
+                    <div class="goal-item">
+                        <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-rotate"></use></svg>
+                        <div><strong>Largar de volta no chão</strong><span>O caminho de volta, reusando a mesma cena do item que você já criou.</span></div>
+                    </div>
+                </div>
+            </div>
+            <div class="callout callout-tip">
+                <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-lightbulb"></use></svg>
+                <div><strong>A ideia que sustenta a aula inteira</strong> Vamos escrever a definição de "item" <strong>uma única vez</strong>. O item no chão, a mochila e a interface leem o mesmo dado — e, no fim da aula, até o <em>efeito</em> do item vai virar arquivo.</div>
+            </div>
+        </section>
+
+        <!-- 3: O problema -->
+        <section class="slide" id="slide-problem">
+            <div class="eyebrow"><span class="num">03</span> · Conceito</div>
+            <h1 class="slide-title">COMO O JOGO SABE O QUE É UMA POÇÃO?</h1>
+            <p class="slide-sub">A pergunta parece boba. A resposta define a arquitetura do seu jogo.</p>
+            <div class="grid-2 align-start">
+                <div>
+                    <div class="feature-card bad">
+                        <h4>❌ O caminho que parece mais fácil</h4>
+                        <p>Escrever o item direto no código de quem precisa dele. Funciona no primeiro item. No décimo, o nome da poção está escrito em quatro arquivos diferentes, e mudar o ícone significa caçar todos.</p>
+                    </div>
+                    <div class="code-window">
+                        <div class="code-header"><span class="file-name">DontDoThis.gd</span><div class="window-dots"><span class="dot dot-blue">●</span><span class="dot dot-yellow">●</span><span class="dot dot-red">●</span></div></div>
+                        <pre class="code-content"><code><span class="k-keyword">if</span> item_id == <span class="k-string">"potion"</span>:
+    item_name = <span class="k-string">"Poção de Vida"</span>
+    icon = <span class="k-func">load</span>(<span class="k-string">"res://art/potion.png"</span>)
+<span class="k-keyword">elif</span> item_id == <span class="k-string">"key"</span>:
+    item_name = <span class="k-string">"Chave Enferrujada"</span>
+    icon = <span class="k-func">load</span>(<span class="k-string">"res://art/key.png"</span>)
+<span class="k-comment"># ...e mais 30 elif conforme o jogo cresce</span></code></pre>
+                    </div>
+                </div>
+                <div>
+                    <div class="feature-card good">
+                        <h4>✅ O que vamos fazer</h4>
+                        <p>Tratar "item" como um <strong>tipo de dado</strong> que existe por conta própria — um arquivo, com campos que você preenche no editor. Quem precisa do item recebe o dado inteiro e pergunta a ele.</p>
+                    </div>
+                    <div class="callout callout-tip">
+                        <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-graduation-cap"></use></svg>
+                        <div><strong>E tem um ganho que não é técnico</strong> Com os itens virando arquivos, quem cria conteúdo <em>não precisa saber programar</em>. Numa equipe como a de vocês, isso significa que a pessoa de arte ou de game design consegue inventar um item novo sem abrir um script.</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4: Resource -->
+        <section class="slide" id="slide-resource">
+            <div class="eyebrow"><span class="num">04</span> · Conceito</div>
+            <h1 class="slide-title">NODE GUARDA COMPORTAMENTO. RESOURCE GUARDA DADO.</h1>
+            <p class="slide-sub">A segunda família de peças do Godot</p>
+            <div class="grid-2 align-start">
+                <div>
+                    <div class="feature-card node-card accent-blue">
+                        <img src="../../../assets/icons/Node.svg" alt="Ícone Node do Godot">
+                        <div>
+                            <h4>Node</h4>
+                            <p>Existe <strong>dentro da cena</strong>. Ocupa lugar na árvore, roda <code>_process</code>, aparece na tela. É um ator do jogo.</p>
+                        </div>
+                    </div>
+                    <div class="feature-card node-card accent-purple">
+                        <img src="../../../assets/icons/Object.svg" alt="Ícone Object do Godot">
+                        <div>
+                            <h4>Resource</h4>
+                            <p>Existe <strong>como arquivo</strong>. Não tem posição, não roda a cada frame, não aparece sozinho. É uma ficha de dados que qualquer Node pode carregar.</p>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div class="callout callout-note mt-0">
+                        <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-circle-info"></use></svg>
+                        <div><strong>Você já usou Resources sem perceber</strong> A <code>Texture2D</code> que você arrastou para o Sprite2D é um Resource. O <code>RectangleShape2D</code> do CollisionShape2D também. A animação que você gravou no AnimationPlayer também. Todo esse tempo você estava preenchendo fichas de dados.</div>
+                    </div>
+                    <div class="callout callout-tip">
+                        <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-mug-hot"></use></svg>
+                        <div><strong>Uma analogia</strong> O Node é o <em>garçom</em>: anda pelo salão, faz coisas. O Resource é o <em>cardápio</em>: não faz nada sozinho, mas todo mundo consulta, e existe um só para o restaurante inteiro.</div>
+                    </div>
+                    <div class="callout callout-warn mb-0">
+                        <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-triangle-exclamation"></use></svg>
+                        <div><strong>O detalhe que pega</strong> Um Resource é <strong>compartilhado</strong>. Se dez poções no mapa apontam para o mesmo arquivo e você mudar um campo dele em tempo de execução, as dez mudam juntas. Hoje isso é o que queremos; guarde a informação para quando não for.</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5: ItemData -->
+        <section class="slide" id="slide-itemdata">
+            <div class="eyebrow"><span class="num">05</span> · Prática</div>
+            <h1 class="slide-title">CRIANDO O ITEMDATA</h1>
+            <p class="slide-sub">Sete linhas que definem o que é um item no seu jogo</p>
+            <div class="grid-2 align-start">
+                <div class="code-window">
+                    <div class="code-header"><span class="file-name">ItemData.gd</span><div class="window-dots"><span class="dot dot-blue">●</span><span class="dot dot-yellow">●</span><span class="dot dot-red">●</span></div></div>
+                    <pre class="code-content"><code><span class="k-keyword">extends</span> <span class="k-type">Resource</span>
+<span class="k-keyword">class_name</span> <span class="k-type">ItemData</span>
+
+<span class="k-annotation">@export</span> <span class="k-keyword">var</span> <span class="k-var">name</span> : <span class="k-type">String</span> = <span class="k-string">"Item"</span>
+<span class="k-annotation">@export</span> <span class="k-keyword">var</span> <span class="k-var">icon</span> : <span class="k-type">Texture2D</span>
+<span class="k-annotation">@export_multiline</span> <span class="k-keyword">var</span> <span class="k-var">description</span> : <span class="k-type">String</span> = <span class="k-string">""</span></code></pre>
+                </div>
+                <div>
+                    <div class="callout callout-tip mt-0">
+                        <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-cube"></use></svg>
+                        <div><strong><code>extends Resource</code>, não <code>Node</code></strong> É essa linha que faz a diferença. Sem ela você teria mais um Node, que só existe dentro de uma cena. Com ela, você ganha algo que vira <strong>arquivo</strong>.</div>
+                    </div>
+                    <div class="callout callout-note">
+                        <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-tag"></use></svg>
+                        <div><strong>O <code>class_name</code> de novo</strong> Mesma função dos componentes: registra <code>ItemData</code> como um tipo do projeto. É por causa dele que daqui a pouco vamos poder escrever <code>@export var data : ItemData</code> e o Godot já saber o que esperar.</div>
+                    </div>
+                    <div class="callout callout-note mb-0">
+                        <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-font"></use></svg>
+                        <div><strong><code>@export_multiline</code></strong> É o <code>@export</code> de sempre, só que o Inspector mostra uma caixa de texto de várias linhas em vez de uma linha só. Detalhe pequeno que faz diferença para quem vai escrever a descrição.</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 6: Criando os .tres -->
+        <section class="slide" id="slide-tres">
+            <div class="eyebrow"><span class="num">06</span> · Prática</div>
+            <h1 class="slide-title">CADA ITEM VIRA UM ARQUIVO</h1>
+            <p class="slide-sub">A partir daqui, criar item é preencher formulário — não é programar</p>
+            <div class="grid-2 align-start">
+                <div>
+                    <ol class="step-list">
+                        <li>No painel <strong>FileSystem</strong>, clique com o botão direito numa pasta → <em>New Resource…</em></li>
+                        <li>Na busca, digite <code>ItemData</code> — ele aparece na lista porque demos um <code>class_name</code>.</li>
+                        <li>Salve como <code>potion.tres</code>, dentro de uma pasta <code>items/</code>.</li>
+                        <li>Clique no arquivo criado: o <strong>Inspector</strong> mostra os três campos. Preencha.</li>
+                    </ol>
+                    <div class="callout callout-note mb-0">
+                        <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-file-lines"></use></svg>
+                        <div><strong>O que é um <code>.tres</code>?</strong> É o arquivo de Resource do Godot em formato de texto. Pode abrir num editor de texto e ler — e, porque é texto, funciona bem com controle de versão quando várias pessoas mexem no mesmo projeto.</div>
+                    </div>
+                </div>
+                <div>
+                    <div class="godot-editor-layout">
+                        <div class="godot-panel">
+                            <div class="godot-panel-header"><span>FileSystem</span></div>
+                            <div class="godot-tree">
+                                <div class="godot-node"><img src="../../../assets/icons/Folder.svg" class="godot-icon" alt=""><span>items</span></div>
+                                <div class="godot-tree-children">
+                                    <div class="godot-node child selected"><img src="../../../assets/icons/File.svg" class="godot-icon" alt=""><span>potion.tres</span></div>
+                                    <div class="godot-node child"><img src="../../../assets/icons/File.svg" class="godot-icon" alt=""><span>key.tres</span></div>
+                                    <div class="godot-node child"><img src="../../../assets/icons/File.svg" class="godot-icon" alt=""><span>sword.tres</span></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="godot-inspector">
+                            <div class="godot-inspector-header"><span>Inspector — potion.tres</span></div>
+                            <div class="godot-inspector-body">
+                                <div class="godot-prop-group">
+                                    <div class="godot-prop-title">ItemData</div>
+                                    <div class="godot-prop-row">
+                                        <span class="godot-prop-label">Name</span>
+                                        <span class="godot-prop-input">Poção de Vida</span>
+                                    </div>
+                                    <div class="godot-prop-row">
+                                        <span class="godot-prop-label">Icon</span>
+                                        <span class="godot-prop-input">potion.png</span>
+                                    </div>
+                                    <div class="godot-prop-row">
+                                        <span class="godot-prop-label">Description</span>
+                                        <span class="godot-prop-input">Recupera 20 de vida.</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="callout callout-tip mb-0">
+                        <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-palette"></use></svg>
+                        <div><strong>A arte vem do Módulo de Arte</strong> Use por enquanto qualquer imagem que você tenha. Quando os ícones definitivos ficarem prontos, é só trocar o campo <em>Icon</em> — nada de código muda.</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 7: Quantos slots? -->
+        <section class="slide" id="slide-few-slots">
+            <div class="eyebrow"><span class="num">07</span> · Game Design</div>
+            <h1 class="slide-title">POUCOS ITENS, CADA UM IMPORTA</h1>
+            <p class="slide-sub">Antes de programar a mochila, uma decisão que muda o jogo inteiro</p>
+            <div class="grid-2 align-start">
+                <div>
+                    <div class="feature-card bad">
+                        <h4>O inventário que você <em>gerencia</em></h4>
+                        <p>Dezenas de espaços, arrastar, empilhar, organizar. Existe em jogos que são <strong>sobre carregar carga</strong> — sobrevivência, mineração, loja. O jogador passa tempo real arrumando a bolsa, e isso é a diversão.</p>
+                    </div>
+                    <div class="feature-card good">
+                        <h4>O inventário que você <em>usa</em></h4>
+                        <p>Quatro espaços, nada de arrastar. Cada item resolve numa tecla. Existe em jogos que são <strong>sobre agir</strong> — ação, aventura, exploração. Abrir a mochila leva dois segundos e você volta a jogar.</p>
+                    </div>
+                    <div class="callout callout-tip mb-0">
+                        <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-gamepad"></use></svg>
+                        <div><strong>O jogo de vocês é do segundo tipo</strong> Um top-down de ação. Se o jogador estiver organizando bolsa, ele não está fazendo aquilo que o seu jogo faz de melhor. Escolher poucos slots não é preguiça — é escolher onde a atenção dele vai.</div>
+                    </div>
+                </div>
+                <div>
+                    <p class="lede">É esta a mochila que vamos construir. Cabe inteira na tela, sem rolagem, e o jogador entende de relance:</p>
+                    <svg viewBox="0 0 460 152" style="width: 100%; max-height: 26vh; height: auto; overflow: visible;" role="img" aria-label="Uma barra com quatro slots lado a lado: três ocupados por poção, chave e moeda, e o quarto vazio, com contorno tracejado.">
+                        <rect x="8" y="16" width="444" height="86" rx="10" fill="rgba(24,20,48,0.75)" stroke="rgba(255,255,255,0.18)" stroke-width="2" />
+                        <g stroke="rgba(255,255,255,0.28)" stroke-width="2" fill="rgba(255,255,255,0.05)">
+                            <rect x="28" y="36" width="88" height="46" rx="6" />
+                            <rect x="132" y="36" width="88" height="46" rx="6" />
+                            <rect x="236" y="36" width="88" height="46" rx="6" />
+                            <rect x="340" y="36" width="88" height="46" rx="6" stroke-dasharray="5 4" fill="none" />
+                        </g>
+                        <g font-size="14" text-anchor="middle" fill="#f8fafc">
+                            <text x="72" y="64">Poção</text>
+                            <text x="176" y="64">Chave</text>
+                            <text x="280" y="64">Moeda</text>
+                            <text x="384" y="64" fill="rgba(255,255,255,0.4)">vazio</text>
+                        </g>
+                        <g font-size="12" text-anchor="middle" fill="rgba(255,255,255,0.45)">
+                            <text x="72" y="98">1</text>
+                            <text x="176" y="98">2</text>
+                            <text x="280" y="98">3</text>
+                            <text x="384" y="98">4</text>
+                        </g>
+                        <text x="230" y="134" font-size="14" text-anchor="middle" fill="#d8b4fe">aperta o número, usa o item — acabou a interação</text>
+                    </svg>
+                    <div class="callout callout-note mb-0">
+                        <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-circle-check"></use></svg>
+                        <div><strong>E olha o que some do seu trabalho</strong> Sem arrastar e soltar, sem empilhar, sem ordenar, sem rolagem. Quatro slots fixos é a versão que você consegue terminar hoje — e que continua boa depois.</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 8: Checkpoint 1 -->
+        <section class="slide checkpoint-slide" id="slide-checkpoint-1">
+            <div class="eyebrow"><span class="num">08</span> · Mãos no código</div>
+            <h1 class="slide-title">CHECKPOINT 1 — CRIE SEUS ITENS</h1>
+            <p class="slide-sub">Uma vez o script. Depois, só formulário.</p>
+            <div class="grid-2 align-start">
+                <div>
+                    <div class="checkpoint">
+                        <h3>Faça agora</h3>
+                        <ol class="step-list">
+                            <li>Crie o script <code>ItemData.gd</code> com <code>extends Resource</code> e <code>class_name ItemData</code>.</li>
+                            <li>Adicione os três <code>@export</code>: <em>name</em>, <em>icon</em> e <em>description</em>.</li>
+                            <li>Salve o script. Ele não precisa estar preso a Node nenhum.</li>
+                            <li>Crie <strong>três</strong> arquivos <code>.tres</code>: uma poção, uma chave e um item inventado por você.</li>
+                            <li>Preencha os três no Inspector, cada um com uma imagem diferente.</li>
+                        </ol>
+                    </div>
+                    <div class="callout callout-warn mb-0">
+                        <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-triangle-exclamation"></use></svg>
+                        <div><strong><code>ItemData</code> não aparece na lista de <em>New Resource</em>?</strong> O <code>class_name</code> só é registrado depois que o script é salvo. Salve o arquivo e tente de novo.</div>
+                    </div>
+                </div>
+                <div>
+                    <div class="timer-box" data-minutes="15">
+                        <span class="timer-label">Tempo do checkpoint</span>
+                        <span class="timer-display">15:00</span>
+                        <button type="button" class="timer-btn">▶ Iniciar</button>
+                    </div>
+                    <div class="callout callout-tip mb-0">
+                        <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-trophy"></use></svg>
+                        <div><strong>Como saber que deu certo</strong> Ao clicar em cada <code>.tres</code>, o Inspector mostra os seus três campos preenchidos — e você não escreveu uma linha de código a mais para o segundo e o terceiro item.</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 9: O item no chão -->
+        <section class="slide" id="slide-worlditem">
+            <div class="eyebrow"><span class="num">09</span> · Prática</div>
+            <h1 class="slide-title">O ITEM LARGADO NO MUNDO</h1>
+            <p class="slide-sub">Uma cena só, que se transforma em qualquer item</p>
+            <div class="grid-2 align-start">
+                <div>
+                    <p class="lede">Repare no que <strong>não</strong> vamos fazer: uma cena para a poção, outra para a chave, outra para a espada. É <strong>uma cena só</strong>. O que muda é o <code>ItemData</code> que ela recebe na gaveta do Inspector.</p>
+                    <div class="godot-editor-layout">
+                        <div class="godot-panel">
+                            <div class="godot-panel-header"><span>Scene</span></div>
+                            <div class="godot-tree">
+                                <div class="godot-node"><img src="../../../assets/icons/Area2D.svg" class="godot-icon" alt=""><span>WorldItem</span><img src="../../../assets/icons/Script.svg" class="godot-script-icon" alt=""></div>
+                                <div class="godot-tree-children">
+                                    <div class="godot-node child"><img src="../../../assets/icons/Sprite2D.svg" class="godot-icon" alt=""><span>Sprite2D</span></div>
+                                    <div class="godot-node child"><img src="../../../assets/icons/CollisionShape2D.svg" class="godot-icon" alt=""><span>CollisionShape2D</span></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="godot-inspector">
+                            <div class="godot-inspector-header"><span>Inspector</span></div>
+                            <div class="godot-inspector-body">
+                                <div class="godot-prop-group">
+                                    <div class="godot-prop-title">WorldItem.gd</div>
+                                    <div class="godot-prop-row">
+                                        <span class="godot-prop-label">Data</span>
+                                        <span class="godot-prop-input">potion.tres</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div class="code-window mt-0">
+                        <div class="code-header"><span class="file-name">WorldItem.gd</span><div class="window-dots"><span class="dot dot-blue">●</span><span class="dot dot-yellow">●</span><span class="dot dot-red">●</span></div></div>
+                        <pre class="code-content"><code><span class="k-keyword">extends</span> <span class="k-type">Area2D</span>
+<span class="k-keyword">class_name</span> <span class="k-type">WorldItem</span>
+
+<span class="k-annotation">@export</span> <span class="k-keyword">var</span> <span class="k-var">data</span> : <span class="k-type">ItemData</span>
+
+<span class="k-annotation">@onready</span> <span class="k-keyword">var</span> <span class="k-var">sprite</span> : <span class="k-type">Sprite2D</span> = <span class="k-var">$Sprite2D</span>
+
+<span class="k-keyword">func</span> <span class="k-func">_ready</span>() -> <span class="k-type">void</span>:
+    <span class="k-keyword">if</span>(!data):
+        <span class="k-func">push_error</span>(<span class="k-string">"WorldItem: data wasn't set."</span>)
+        <span class="k-keyword">return</span>
+
+    <span class="k-comment"># a aparência vem do dado, não do editor</span>
+    sprite.texture = data.icon</code></pre>
+                    </div>
+                    <div class="callout callout-tip mb-0">
+                        <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-lightbulb"></use></svg>
+                        <div><strong>A linha que faz a mágica é a última</strong> Você não escolhe o sprite no editor: o item <em>lê</em> o próprio ícone do dado que recebeu. Arraste <code>key.tres</code> na gaveta e a mesma cena vira uma chave.</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 10: Área e Signal -->
+        <section class="slide" id="slide-pickup">
+            <div class="eyebrow"><span class="num">10</span> · Prática</div>
+            <h1 class="slide-title">COLETANDO AO ENCOSTAR</h1>
+            <p class="slide-sub">O Signal que você viu em Colisores, agora com um propósito</p>
+            <div class="grid-2 align-start">
+                <div>
+                    <p class="lede">O <code>Area2D</code> dispara o signal <code>body_entered</code> quando um corpo entra nele. Conectamos esse signal a uma função nossa e, dentro dela, entregamos o dado ao inventário de quem encostou.</p>
+                    <div class="callout callout-note">
+                        <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-tower-broadcast"></use></svg>
+                        <div><strong>Repare em quem conhece quem</strong> O item <strong>não</strong> guarda uma referência ao player. Ele reage a quem entrou nele, seja o player, seja outra coisa. Isso é o que mantém as peças soltas umas das outras.</div>
+                    </div>
+                    <div class="callout callout-warn mb-0">
+                        <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-bug"></use></svg>
+                        <div><strong>Por que <code>get_node_or_null</code> e não <code>get_node</code>?</strong> Porque quem encostou pode não ter inventário nenhum — um inimigo, uma caixa. O <code>get_node</code> derruba o jogo com erro nesse caso; o <code>_or_null</code> devolve <code>null</code> e a gente decide o que fazer.</div>
+                    </div>
+                </div>
+                <div class="code-window mt-0">
+                    <div class="code-header"><span class="file-name">WorldItem.gd — continuação</span><div class="window-dots"><span class="dot dot-blue">●</span><span class="dot dot-yellow">●</span><span class="dot dot-red">●</span></div></div>
+                    <pre class="code-content"><code><span class="k-comment"># conectado ao signal body_entered do Area2D</span>
+<span class="k-keyword">func</span> <span class="k-func">_on_body_entered</span>(body : <span class="k-type">Node2D</span>) -> <span class="k-type">void</span>:
+    <span class="k-keyword">var</span> <span class="k-var">inventory</span> = body.<span class="k-func">get_node_or_null</span>(<span class="k-string">"InventoryComponent"</span>)
+
+    <span class="k-keyword">if</span>(!inventory):
+        <span class="k-keyword">return</span>   <span class="k-comment"># quem encostou não coleta itens</span>
+
+    <span class="k-keyword">if</span>(inventory.<span class="k-func">add_item</span>(data)):
+        <span class="k-func">queue_free</span>()   <span class="k-comment"># só some se coube</span></code></pre>
+                </div>
+            </div>
+            <div class="callout callout-tip">
+                <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-circle-check"></use></svg>
+                <div><strong>O item só desaparece se realmente foi guardado</strong> Por isso o <code>add_item</code> devolve <code>true</code> ou <code>false</code>. Se a mochila estiver cheia, o item continua no chão em vez de sumir no nada — que é o tipo de bug que o jogador percebe e odeia.</div>
+            </div>
+        </section>
+
+        <!-- 11: InventoryComponent -->
+        <section class="slide" id="slide-inventory">
+            <div class="eyebrow"><span class="num">11</span> · Prática</div>
+            <h1 class="slide-title">O INVENTORY COMPONENT</h1>
+            <p class="slide-sub">Mais um Node vazio com um script — e por dentro, um Array</p>
+            <div class="grid-2 align-start">
+                <div class="code-window">
+                    <div class="code-header"><span class="file-name">InventoryComponent.gd</span><div class="window-dots"><span class="dot dot-blue">●</span><span class="dot dot-yellow">●</span><span class="dot dot-red">●</span></div></div>
+                    <pre class="code-content"><code><span class="k-keyword">extends</span> <span class="k-type">Node</span>
+<span class="k-keyword">class_name</span> <span class="k-type">InventoryComponent</span>
+
+<span class="k-comment"># avisa quem estiver interessado que a lista mudou</span>
+<span class="k-keyword">signal</span> <span class="k-func">changed</span>
+
+<span class="k-annotation">@export</span> <span class="k-keyword">var</span> <span class="k-var">max_slots</span> : <span class="k-type">int</span> = <span class="k-number">4</span>
+
+<span class="k-keyword">var</span> <span class="k-var">items</span> : <span class="k-type">Array</span>[<span class="k-type">ItemData</span>] = []
+
+<span class="k-keyword">func</span> <span class="k-func">add_item</span>(item : <span class="k-type">ItemData</span>) -> <span class="k-type">bool</span>:
+    <span class="k-keyword">if</span>(items.<span class="k-func">size</span>() >= max_slots):
+        <span class="k-keyword">return</span> <span class="k-keyword">false</span>
+
+    items.<span class="k-func">append</span>(item)
+    changed.<span class="k-func">emit</span>()
+    <span class="k-keyword">return</span> <span class="k-keyword">true</span>
+
+<span class="k-keyword">func</span> <span class="k-func">remove_item</span>(item : <span class="k-type">ItemData</span>) -> <span class="k-type">void</span>:
+    items.<span class="k-func">erase</span>(item)
+    changed.<span class="k-func">emit</span>()</code></pre>
+                </div>
+                <div>
+                    <div class="callout callout-note mt-0">
+                        <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-layer-group"></use></svg>
+                        <div><strong><code>Array[ItemData]</code> — um Array com tipo</strong> É o mesmo <code>Array</code> do Módulo 2, só que dizendo o que pode entrar. Se alguém tentar guardar um número aqui, o Godot avisa na hora em vez de deixar o erro aparecer só na hora de desenhar a interface.</div>
+                    </div>
+                    <div class="callout callout-tip">
+                        <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-tower-broadcast"></use></svg>
+                        <div><strong>Criando o seu próprio Signal</strong> Até agora você só <em>usou</em> signals que o Godot oferecia. <code>signal changed</code> cria um novo, e <code>changed.emit()</code> dispara. O inventário não sabe que existe uma interface — ele só grita "mudei!" e quem quiser que escute.</div>
+                    </div>
+                    <div class="callout callout-warn mb-0">
+                        <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-shield-halved"></use></svg>
+                        <div><strong>Por que <code>add_item</code> devolve <code>bool</code>?</strong> Para quem chamou saber se deu certo. Com <strong>4 slots</strong>, a mochila enche rápido — e é essa resposta que faz o item continuar no chão em vez de sumir no nada.</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 12: A árvore do player -->
+        <section class="slide" id="slide-tree">
+            <div class="eyebrow"><span class="num">12</span> · Prática</div>
+            <h1 class="slide-title">ONDE ISSO ENTRA NO PLAYER</h1>
+            <p class="slide-sub">Mais um componente na árvore que você já construiu</p>
+            <div class="grid-2 align-start">
+                <div class="godot-editor-layout">
+                    <div class="godot-panel">
+                        <div class="godot-panel-header"><span>Scene</span></div>
+                        <div class="godot-tree">
+                            <div class="godot-node"><img src="../../../assets/icons/CharacterBody2D.svg" class="godot-icon" alt=""><span>Player</span><img src="../../../assets/icons/Script.svg" class="godot-script-icon" alt=""></div>
+                            <div class="godot-tree-children">
+                                <div class="godot-node child"><img src="../../../assets/icons/CollisionShape2D.svg" class="godot-icon" alt=""><span>CollisionShape2D</span></div>
+                                <div class="godot-node child"><img src="../../../assets/icons/Sprite2D.svg" class="godot-icon" alt=""><span>Sprite2D</span></div>
+                                <div class="godot-node child"><img src="../../../assets/icons/AnimationPlayer.svg" class="godot-icon" alt=""><span>AnimationPlayer</span></div>
+                                <div class="godot-node child"><img src="../../../assets/icons/Node.svg" class="godot-icon" alt=""><span>InputComponent</span><img src="../../../assets/icons/Script.svg" class="godot-script-icon" alt=""></div>
+                                <div class="godot-node child"><img src="../../../assets/icons/Node.svg" class="godot-icon" alt=""><span>MovementComponent</span><img src="../../../assets/icons/Script.svg" class="godot-script-icon" alt=""></div>
+                                <div class="godot-node child"><img src="../../../assets/icons/Node.svg" class="godot-icon" alt=""><span>VisualComponent</span><img src="../../../assets/icons/Script.svg" class="godot-script-icon" alt=""></div>
+                                <div class="godot-node child selected"><img src="../../../assets/icons/Node.svg" class="godot-icon" alt=""><span>InventoryComponent</span><img src="../../../assets/icons/Script.svg" class="godot-script-icon" alt=""></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div class="callout callout-tip mt-0">
+                        <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-diagram-project"></use></svg>
+                        <div><strong>Nenhuma linha do Player mudou</strong> O <code>Player.gd</code> continua exatamente como estava. O inventário é uma peça nova, encaixada ao lado das outras, que não interfere em ninguém. É esse o retorno de ter separado a lógica em componentes lá atrás.</div>
+                    </div>
+                    <div class="callout callout-warn">
+                        <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-tag"></use></svg>
+                        <div><strong>O nome do Node importa aqui</strong> O <code>WorldItem</code> procura por <code>get_node_or_null("InventoryComponent")</code>. Se você renomear o Node na árvore, precisa mudar a string também — senão a coleta para de funcionar e nenhum erro aparece.</div>
+                    </div>
+                    <div class="callout callout-note mb-0">
+                        <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-shapes"></use></svg>
+                        <div><strong>E o inimigo?</strong> Se um dia quiser que um inimigo carregue itens e os derrube ao morrer, é só arrastar o mesmo <code>InventoryComponent</code> para dentro dele. A peça não sabe nem se importa com quem a carrega.</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 13: Checkpoint 2 -->
+        <section class="slide checkpoint-slide" id="slide-checkpoint-2">
+            <div class="eyebrow"><span class="num">13</span> · Mãos no código</div>
+            <h1 class="slide-title">CHECKPOINT 2 — COLETE DE VERDADE</h1>
+            <p class="slide-sub">Ainda sem interface. Vamos conferir pelo Output.</p>
+            <div class="grid-2 align-start">
+                <div>
+                    <div class="checkpoint">
+                        <h3>Faça agora</h3>
+                        <ol class="step-list">
+                            <li>Crie a cena <code>WorldItem</code>: <code>Area2D</code> na raiz, com <code>Sprite2D</code> e <code>CollisionShape2D</code> dentro.</li>
+                            <li>Anexe o <code>WorldItem.gd</code> e conecte o signal <strong>body_entered</strong> na aba <em>Node</em>, ao lado do Inspector.</li>
+                            <li>Adicione o <code>InventoryComponent</code> ao Player, com o script.</li>
+                            <li>Espalhe três cópias do WorldItem pelo mapa, cada uma com um <code>.tres</code> diferente na gaveta <em>Data</em>.</li>
+                            <li>Em <code>add_item</code>, acrescente <code>print(item.name)</code> antes do <code>return true</code>.</li>
+                            <li>Rode e ande por cima dos itens. Os nomes têm que aparecer no Output.</li>
+                        </ol>
+                    </div>
+                </div>
+                <div>
+                    <div class="timer-box" data-minutes="20">
+                        <span class="timer-label">Tempo do checkpoint</span>
+                        <span class="timer-display">20:00</span>
+                        <button type="button" class="timer-btn">▶ Iniciar</button>
+                    </div>
+                    <div class="callout callout-warn">
+                        <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-bug"></use></svg>
+                        <div><strong>Não coletou? Confira nesta ordem</strong> o signal <em>body_entered</em> foi mesmo conectado (aparece um ícone verde ao lado da função)? O Node do inventário se chama exatamente <code>InventoryComponent</code>? O <code>CollisionShape2D</code> do item tem um <em>Shape</em> escolhido?</div>
+                    </div>
+                    <div class="callout callout-tip mb-0">
+                        <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-flask"></use></svg>
+                        <div><strong>Terminou antes?</strong> Colete cinco itens. Com <code>max_slots</code> em 4, o quinto tem que continuar no chão — e nenhum erro pode aparecer no Output.</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 14: A interface mora fora da cena -->
+        <section class="slide" id="slide-ui">
+            <div class="eyebrow"><span class="num">14</span> · Prática</div>
+            <h1 class="slide-title">A MOCHILA MORA FORA DA CENA</h1>
+            <p class="slide-sub">Uma interface só para o jogo inteiro — e o jogo pausa enquanto ela está aberta</p>
+            <div class="grid-2 align-start">
+                <div>
+                    <p class="lede">Como <strong>Autoload</strong>, a mochila nasce com o jogo e é alcançável de qualquer script: <code>InventoryUI.open(inventory)</code>.</p>
+                    <div class="godot-editor-layout">
+                        <div class="godot-inspector">
+                            <div class="godot-inspector-header"><span>Project Settings — Globals ▸ Autoload</span></div>
+                            <div class="godot-inspector-body">
+                                <div class="godot-prop-group">
+                                    <div class="godot-prop-title">Autoload</div>
+                                    <div class="godot-prop-row">
+                                        <span class="godot-prop-label">Path</span>
+                                        <span class="godot-prop-input">res://ui/InventoryUI.tscn</span>
+                                    </div>
+                                    <div class="godot-prop-row">
+                                        <span class="godot-prop-label">Node Name</span>
+                                        <span class="godot-prop-input">InventoryUI</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="callout callout-warn mb-0">
+                        <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-bug"></use></svg>
+                        <div><strong>O nome em <em>Node Name</em> é o nome da variável</strong> Registre como <code>Inventory_UI</code> e o <code>InventoryUI.open(...)</code> deixa de existir.</div>
+                    </div>
+                    <div class="callout callout-note mb-0">
+                        <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-diagram-project"></use></svg>
+                        <div><strong>E some o caminho relativo</strong> Sem Autoload, o Player acharia a mochila por <code>get_node("../../CanvasLayer/HUD")</code> — que quebra ao mover a cena.</div>
+                    </div>
+                </div>
+                <div>
+                    <div class="code-window mt-0">
+                        <div class="code-header" style="padding: 0; align-items: stretch;">
+                            <div class="code-tabs">
+                                <button type="button" class="code-tab active" data-target="ui-abrir">open()</button>
+                                <button type="button" class="code-tab" data-target="ui-fechar">close()</button>
+                            </div>
+                            <div class="window-dots" style="padding: 0.75rem 1.25rem; align-items: center;">
+                                <span class="dot dot-blue">●</span>
+                                <span class="dot dot-yellow">●</span>
+                                <span class="dot dot-red">●</span>
+                            </div>
+                        </div>
+
+                        <div id="ui-abrir" class="code-content code-tab-content active-tab">
+<pre><code><span class="k-comment"># InventoryUI.gd — raiz CanvasLayer</span>
+<span class="k-keyword">extends</span> <span class="k-type">CanvasLayer</span>
+
+<span class="k-keyword">var</span> <span class="k-var">current</span> : <span class="k-type">InventoryComponent</span> = <span class="k-keyword">null</span>
+
+<span class="k-keyword">func</span> <span class="k-func">open</span>(inventory : <span class="k-type">InventoryComponent</span>) -> <span class="k-type">void</span>:
+    current = inventory
+    inventory.changed.<span class="k-func">connect</span>(redraw)
+    <span class="k-func">redraw</span>()
+    <span class="k-func">show</span>()
+    <span class="k-func">get_tree</span>().paused = <span class="k-keyword">true</span></code></pre>
+                        </div>
+
+                        <div id="ui-fechar" class="code-content code-tab-content" style="display: none;">
+<pre><code><span class="k-keyword">func</span> <span class="k-func">close</span>() -> <span class="k-type">void</span>:
+    <span class="k-comment"># a mochila é eterna, o inventário não</span>
+    <span class="k-keyword">if</span>(current):
+        current.changed.<span class="k-func">disconnect</span>(redraw)
+
+    current = <span class="k-keyword">null</span>
+    <span class="k-func">hide</span>()
+    <span class="k-func">get_tree</span>().paused = <span class="k-keyword">false</span></code></pre>
+                        </div>
+                    </div>
+                    <div class="callout callout-tip mb-0">
+                        <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-shield-halved"></use></svg>
+                        <div><strong>Marque <em>Process Mode ▸ Always</em> na raiz</strong> Senão a mochila pausa junto com o jogo e não responde a clique — igual ao menu de pausa do Módulo 7.</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 15: A grade que se redesenha -->
+        <section class="slide" id="slide-redraw">
+            <div class="eyebrow"><span class="num">15</span> · Prática</div>
+            <h1 class="slide-title">OS SLOTS SE REDESENHAM SOZINHOS</h1>
+            <p class="slide-sub">A interface se inscreve uma vez e nunca mais precisa perguntar nada</p>
+            <div class="grid-2 align-start">
+                <div class="code-window">
+                    <div class="code-header"><span class="file-name">InventoryUI.gd — continuação</span><div class="window-dots"><span class="dot dot-blue">●</span><span class="dot dot-yellow">●</span><span class="dot dot-red">●</span></div></div>
+                    <pre class="code-content"><code><span class="k-annotation">@onready</span> <span class="k-keyword">var</span> <span class="k-var">slots</span> : <span class="k-type">HBoxContainer</span> = <span class="k-var">$Panel/Slots</span>
+
+<span class="k-keyword">func</span> <span class="k-func">redraw</span>() -> <span class="k-type">void</span>:
+    <span class="k-keyword">for</span> child <span class="k-keyword">in</span> slots.<span class="k-func">get_children</span>():
+        slots.<span class="k-func">remove_child</span>(child)
+        child.<span class="k-func">queue_free</span>()
+
+    <span class="k-keyword">for</span> item <span class="k-keyword">in</span> current.items:
+        <span class="k-keyword">var</span> <span class="k-var">slot</span> = <span class="k-type">TextureButton</span>.<span class="k-func">new</span>()
+        slot.texture_normal = item.icon
+        slot.tooltip_text = item.name
+        slot.custom_minimum_size = <span class="k-type">Vector2</span>(<span class="k-number">48</span>, <span class="k-number">48</span>)
+        slot.pressed.<span class="k-func">connect</span>(current.<span class="k-func">use_item</span>.<span class="k-func">bind</span>(item))
+        slots.<span class="k-func">add_child</span>(slot)</code></pre>
+                </div>
+                <div>
+                    <div class="callout callout-tip mt-0">
+                        <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-tower-broadcast"></use></svg>
+                        <div><strong>Aqui está o pagamento do signal</strong> A interface se inscreve uma única vez, lá no <code>open()</code>. Coletou item? O inventário grita <code>changed</code> e os slots se refazem. A mochila nunca precisa ficar perguntando "mudou alguma coisa?" a cada frame.</div>
+                    </div>
+                    <div class="callout callout-note">
+                        <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-rotate"></use></svg>
+                        <div><strong>Por que <code>remove_child</code> <em>e</em> <code>queue_free</code>?</strong> O <code>queue_free</code> marca o Node para morrer <strong>no fim do frame</strong> — ele ainda está lá nas linhas seguintes. O <code>remove_child</code> tira da árvore na hora, evitando que os slots velhos apareçam junto com os novos por um instante.</div>
+                    </div>
+                    <div class="callout callout-warn mb-0">
+                        <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-bolt"></use></svg>
+                        <div><strong><code>.bind(item)</code> — a novidade da linha</strong> O signal <code>pressed</code> não carrega informação nenhuma: só diz "clicaram". O <code>bind</code> gruda um argumento na função <em>antes</em> de conectar, então cada botão já sabe qual item é o seu. Sem isso, os quatro slots chamariam a mesma função sem saber em quem clicaram. O <code>use_item</code> a gente escreve daqui a dois slides.</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 16: O if que cresce -->
+        <section class="slide" id="slide-use-if">
+            <div class="eyebrow"><span class="num">16</span> · Conceito</div>
+            <h1 class="slide-title">USAR O ITEM — E O <code>if</code> QUE CRESCE</h1>
+            <p class="slide-sub">Vamos escrever a versão óbvia primeiro, e olhar para ela com atenção</p>
+            <div class="grid-2 align-start">
+                <div>
+                    <div class="code-window mt-0">
+                        <div class="code-header"><span class="file-name">InventoryComponent.gd — primeira tentativa</span><div class="window-dots"><span class="dot dot-blue">●</span><span class="dot dot-yellow">●</span><span class="dot dot-red">●</span></div></div>
+                        <pre class="code-content"><code><span class="k-keyword">func</span> <span class="k-func">use_item</span>(item : <span class="k-type">ItemData</span>) -> <span class="k-type">void</span>:
+    <span class="k-keyword">if</span>(item.name == <span class="k-string">"Poção de Velocidade"</span>):
+        <span class="k-keyword">var</span> <span class="k-var">movement</span> = <span class="k-func">get_parent</span>().<span class="k-func">get_node</span>(<span class="k-string">"MovementComponent"</span>)
+        movement.max_speed += <span class="k-number">120</span>
+        <span class="k-func">remove_item</span>(item)
+    <span class="k-keyword">elif</span>(item.name == <span class="k-string">"Bomba"</span>):
+        <span class="k-comment"># ...outro comportamento inteiro aqui</span>
+    <span class="k-keyword">elif</span>(item.name == <span class="k-string">"Chave"</span>):
+        <span class="k-comment"># ...e mais um</span></code></pre>
+                    </div>
+                    <div class="callout callout-tip mb-0">
+                        <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-circle-check"></use></svg>
+                        <div><strong>E funciona</strong> Para o primeiro item, isso está certo. Escrever a versão simples antes é o caminho honesto — o problema só fica visível quando existe o terceiro item.</div>
+                    </div>
+                </div>
+                <div>
+                    <div class="feature-card bad">
+                        <h4>Você já viu esse <code>if</code> hoje</h4>
+                        <p>É o mesmo do slide 3, aquele que a gente riscou no começo da aula. Lá ele decidia <em>qual é o dado do item</em>. Aqui ele decide <em>qual é o comportamento</em>. Mesma forma, mesmo problema: cada item novo é uma cirurgia num arquivo que não devia mudar.</p>
+                    </div>
+                    <div class="callout callout-warn">
+                        <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-font"></use></svg>
+                        <div><strong>E tem um agravante que dói mais</strong> A decisão está pendurada no texto que o <em>jogador</em> lê. No dia em que alguém corrigir "Poção de Velocidade" para "Poção de Corrida", ou traduzir o jogo, o item para de funcionar — e nenhum erro aparece. O jogo só fica quieto.</div>
+                    </div>
+                    <div class="callout callout-note mb-0">
+                        <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-lightbulb"></use></svg>
+                        <div><strong>A pergunta é a mesma de antes</strong> Resolvemos "o que é um item" transformando o dado em arquivo. E se o <strong>efeito</strong> também virasse arquivo?</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 17: ItemEffect -->
+        <section class="slide" id="slide-effect">
+            <div class="eyebrow"><span class="num">17</span> · Prática</div>
+            <h1 class="slide-title">O EFEITO TAMBÉM É UM ARQUIVO</h1>
+            <p class="slide-sub">Um Resource que, em vez de guardar dado, guarda o que fazer</p>
+            <div class="grid-2 align-start">
+                <div class="code-window">
+                    <div class="code-header" style="padding: 0; align-items: stretch;">
+                        <div class="code-tabs">
+                            <button type="button" class="code-tab active" data-target="effect-molde">1. O molde</button>
+                            <button type="button" class="code-tab" data-target="effect-concreto">2. Um efeito</button>
+                            <button type="button" class="code-tab" data-target="effect-uso">3. O uso</button>
+                        </div>
+                        <div class="window-dots" style="padding: 0.75rem 1.25rem; align-items: center;">
+                            <span class="dot dot-blue">●</span>
+                            <span class="dot dot-yellow">●</span>
+                            <span class="dot dot-red">●</span>
+                        </div>
+                    </div>
+
+                    <div id="effect-molde" class="code-content code-tab-content active-tab">
+<pre><code><span class="k-comment"># ItemEffect.gd — não faz nada de propósito</span>
+<span class="k-keyword">extends</span> <span class="k-type">Resource</span>
+<span class="k-keyword">class_name</span> <span class="k-type">ItemEffect</span>
+
+<span class="k-keyword">func</span> <span class="k-func">apply</span>(user : <span class="k-type">Node</span>) -> <span class="k-type">void</span>:
+    <span class="k-keyword">pass</span>   <span class="k-comment"># cada efeito preenche do seu jeito</span></code></pre>
+                    </div>
+
+                    <div id="effect-concreto" class="code-content code-tab-content" style="display: none;">
+<pre><code><span class="k-comment"># SpeedEffect.gd</span>
+<span class="k-keyword">extends</span> <span class="k-type">ItemEffect</span>
+<span class="k-keyword">class_name</span> <span class="k-type">SpeedEffect</span>
+
+<span class="k-annotation">@export</span> <span class="k-keyword">var</span> <span class="k-var">bonus</span> : <span class="k-type">float</span> = <span class="k-number">120.0</span>
+<span class="k-annotation">@export</span> <span class="k-keyword">var</span> <span class="k-var">duration</span> : <span class="k-type">float</span> = <span class="k-number">5.0</span>
+
+<span class="k-keyword">func</span> <span class="k-func">apply</span>(user : <span class="k-type">Node</span>) -> <span class="k-type">void</span>:
+    <span class="k-keyword">var</span> <span class="k-var">movement</span> = user.<span class="k-func">get_node</span>(<span class="k-string">"MovementComponent"</span>)
+    movement.max_speed += bonus
+    <span class="k-keyword">await</span> user.<span class="k-func">get_tree</span>().<span class="k-func">create_timer</span>(duration).timeout
+    movement.max_speed -= bonus</code></pre>
+                    </div>
+
+                    <div id="effect-uso" class="code-content code-tab-content" style="display: none;">
+<pre><code><span class="k-comment"># ItemData.gd ganha uma linha</span>
+<span class="k-annotation">@export</span> <span class="k-keyword">var</span> <span class="k-var">effect</span> : <span class="k-type">ItemEffect</span>
+
+<span class="k-comment"># InventoryComponent.gd — o if inteiro virou isto</span>
+<span class="k-keyword">func</span> <span class="k-func">use_item</span>(item : <span class="k-type">ItemData</span>) -> <span class="k-type">void</span>:
+    <span class="k-keyword">if</span>(!item.effect):
+        <span class="k-keyword">return</span>   <span class="k-comment"># item que não faz nada, tudo bem</span>
+
+    item.effect.<span class="k-func">apply</span>(<span class="k-func">get_parent</span>())
+    <span class="k-func">remove_item</span>(item)</code></pre>
+                    </div>
+                </div>
+                <div>
+                    <div class="callout callout-tip mt-0">
+                        <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-shapes"></use></svg>
+                        <div><strong>É a mesma jogada do <code>ItemData</code>, um andar acima</strong> Lá, "o que é o item" virou arquivo. Aqui, "o que o item faz" vira arquivo. O <code>InventoryComponent</code> não precisa conhecer efeito nenhum: ele pede <code>apply()</code> e o arquivo sabe o resto.</div>
+                    </div>
+                    <div class="callout callout-note">
+                        <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-file-lines"></use></svg>
+                        <div><strong>Criar um efeito novo não toca em nada existente</strong> <code>BombEffect.gd</code> é um arquivo novo com o seu próprio <code>apply()</code>. Arraste no campo <em>Effect</em> da bomba e acabou. O <code>use_item</code> continua com as cinco linhas dele para sempre.</div>
+                    </div>
+                    <div class="callout callout-warn mb-0">
+                        <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-clock"></use></svg>
+                        <div><strong><code>await</code> — a palavra nova</strong> Ela <em>pausa esta função</em> até o cronômetro terminar, sem travar o resto do jogo. As linhas depois dela rodam 5 segundos mais tarde. É assim que o bônus vai embora sozinho, sem você guardar contador nenhum.</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 18: Largando de volta -->
+        <section class="slide" id="slide-drop">
+            <div class="eyebrow"><span class="num">18</span> · Prática</div>
+            <h1 class="slide-title">LARGANDO DE VOLTA NO CHÃO</h1>
+            <p class="slide-sub">O caminho de volta, com a mesma cena que você já construiu</p>
+            <div class="grid-2 align-start">
+                <div class="code-window">
+                    <div class="code-header"><span class="file-name">InventoryComponent.gd — continuação</span><div class="window-dots"><span class="dot dot-blue">●</span><span class="dot dot-yellow">●</span><span class="dot dot-red">●</span></div></div>
+                    <pre class="code-content"><code><span class="k-annotation">@export</span> <span class="k-keyword">var</span> <span class="k-var">world_item_scene</span> : <span class="k-type">PackedScene</span>
+
+<span class="k-keyword">func</span> <span class="k-func">drop_item</span>(item : <span class="k-type">ItemData</span>) -> <span class="k-type">void</span>:
+    <span class="k-keyword">var</span> <span class="k-var">dropped</span> = world_item_scene.<span class="k-func">instantiate</span>()
+
+    <span class="k-comment"># o dado entra ANTES de entrar na árvore</span>
+    dropped.data = item
+    dropped.global_position = <span class="k-func">get_parent</span>().global_position \
+        + <span class="k-type">Vector2</span>(<span class="k-number">0</span>, <span class="k-number">28</span>)
+
+    <span class="k-func">get_tree</span>().current_scene.<span class="k-func">add_child</span>(dropped)
+    <span class="k-func">remove_item</span>(item)</code></pre>
+                </div>
+                <div>
+                    <div class="callout callout-tip mt-0">
+                        <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-cube"></use></svg>
+                        <div><strong>Nenhuma cena nova</strong> É o mesmo <code>WorldItem</code> do começo da aula. Ele já sabe se desenhar a partir do <code>data</code> que recebe — então largar uma chave e largar uma poção é exatamente o mesmo código.</div>
+                    </div>
+                    <div class="callout callout-warn">
+                        <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-triangle-exclamation"></use></svg>
+                        <div><strong>Por que a ordem importa</strong> O <code>_ready()</code> do <code>WorldItem</code> só roda quando ele entra na árvore, no <code>add_child</code>. Se você mandar o <code>data</code> depois disso, o <code>_ready</code> já rodou sem dado, deu <code>push_error</code> e o item aparece invisível.</div>
+                    </div>
+                    <div class="callout callout-note mb-0">
+                        <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-bug"></use></svg>
+                        <div><strong>E o <code>Vector2(0, 28)</code>?</strong> Largue o item exatamente em cima do jogador e ele é coletado de novo no mesmo instante — o item pisca e volta para a mochila. Empurrar um pouco para baixo resolve, e é o tipo de bug que só aparece testando.</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 19: Checkpoint 3 -->
+        <section class="slide checkpoint-slide" id="slide-checkpoint-3">
+            <div class="eyebrow"><span class="num">19</span> · Mãos no código</div>
+            <h1 class="slide-title">CHECKPOINT 3 — A MOCHILA COMPLETA</h1>
+            <p class="slide-sub">Abrir, usar, largar. Do começo ao fim, com o jogo rodando.</p>
+            <div class="grid-2 align-start">
+                <div>
+                    <div class="checkpoint">
+                        <h3>Faça agora</h3>
+                        <ol class="step-list">
+                            <li>Monte a cena <code>InventoryUI</code>: <code>CanvasLayer</code> na raiz, com um <code>Panel</code> e um <code>HBoxContainer</code> chamado <strong>Slots</strong> dentro.</li>
+                            <li>Registre em <em>Project Settings ▸ Globals ▸ Autoload</em> com o nome <code>InventoryUI</code>, e ponha <em>Process Mode</em> em <strong>Always</strong>.</li>
+                            <li>Crie a ação <code>toggle_inventory</code> no Input Map e chame <code>open()</code> / <code>close()</code> a partir do Player.</li>
+                            <li>Crie <code>ItemEffect.gd</code> e <code>SpeedEffect.gd</code>, e arraste um <code>SpeedEffect</code> no campo <em>Effect</em> da sua poção.</li>
+                            <li>Clique no slot da poção: você tem que <strong>ver</strong> o personagem correr mais rápido, e voltar ao normal 5 segundos depois.</li>
+                        </ol>
+                    </div>
+                </div>
+                <div>
+                    <div class="timer-box" data-minutes="15">
+                        <span class="timer-label">Tempo do checkpoint</span>
+                        <span class="timer-display">15:00</span>
+                        <button type="button" class="timer-btn">▶ Iniciar</button>
+                    </div>
+                    <div class="callout callout-warn">
+                        <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-bug"></use></svg>
+                        <div><strong>Travou? Confira nesta ordem</strong> A mochila abre mas não responde ao clique → falta <em>Process Mode ▸ Always</em>. O slot aparece vazio → o <code>.tres</code> do item está sem <em>Icon</em>. Clica e nada acontece → o campo <em>Effect</em> do item está vazio.</div>
+                    </div>
+                    <div class="callout callout-tip mb-0">
+                        <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-flask"></use></svg>
+                        <div><strong>Terminou antes?</strong> Ligue o <code>drop_item</code> a um clique com o botão direito no slot, e invente um segundo efeito — sem tocar no <code>use_item</code>.</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 20: Recapitulação -->
+        <section class="slide" id="slide-recap">
+            <div class="eyebrow"><span class="num">20</span> · Fechamento</div>
+            <h1 class="slide-title">O QUE VOCÊ APRENDEU HOJE</h1>
+            <p class="slide-sub">A aula foi sobre inventário, mas o que fica é maior que isso</p>
+            <div class="grid-2 align-start">
+                <div class="goal-list">
+                    <div class="goal-item">
+                        <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-file-lines"></use></svg>
+                        <div><strong>Resource guarda dado, Node guarda comportamento</strong><span>São as duas famílias de peças do Godot. Você agora usa as duas.</span></div>
+                    </div>
+                    <div class="goal-item">
+                        <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-palette"></use></svg>
+                        <div><strong>Conteúdo vira arquivo, não código</strong><span>Item novo é um <code>.tres</code> preenchido no Inspector — e <em>efeito</em> novo também.</span></div>
+                    </div>
+                    <div class="goal-item">
+                        <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-tower-broadcast"></use></svg>
+                        <div><strong>Você criou o seu próprio Signal</strong><span><code>signal changed</code> + <code>emit()</code>: avisar sem conhecer quem escuta.</span></div>
+                    </div>
+                </div>
+                <div>
+                    <div class="callout callout-tip mt-0">
+                        <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-circle-check"></use></svg>
+                        <div><strong>Faça o teste mental</strong> Você decidiu que a poção agora chama "Elixir", tem outro ícone e dá mais velocidade. Quantos arquivos você abre? <strong>Um.</strong> O chão, a mochila e a interface mudam juntos, porque os três sempre olharam para o mesmo lugar.</div>
+                    </div>
+                    <div class="callout callout-warn">
+                        <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-bug"></use></svg>
+                        <div><strong>As armadilhas de hoje</strong> o <code>class_name</code> só é registrado depois de salvar o script; o nome do Autoload é o nome da variável; o <code>data</code> tem que ser entregue <em>antes</em> do <code>add_child</code>; e a mochila precisa de <em>Process Mode ▸ Always</em> para responder com o jogo pausado.</div>
+                    </div>
+                    <div class="callout callout-note mb-0">
+                        <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-shield-halved"></use></svg>
+                        <div><strong>No próximo módulo: Status e Perigos</strong> Hoje a poção te deixou mais rápido porque velocidade é a única coisa que o seu personagem tem. Na próxima aula ele ganha <strong>vida</strong> — e o seu primeiro exercício vai ser um <code>HealEffect</code>, que é o mesmo molde de hoje com duas linhas diferentes.</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Navigation & Controls Footer -->
+    <footer class="presentation-controls">
+        <button id="prev-btn" class="nav-btn">❮ Anterior</button>
+        <div class="slide-indicator">
+            Slide <span id="current-slide-num">1</span> / <span id="total-slides-num">20</span>
+        </div>
+        <button id="next-btn" class="nav-btn">Próximo ❯</button>
+        <button id="fullscreen-btn" class="nav-btn secondary">Fullscreen ⛶</button>
+    </footer>
+
+    <script src="../../../assets/course.js"></script>
+    <script src="../../../script.js"></script>
+</body>
+</html>

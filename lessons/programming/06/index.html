@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Módulo 6 — Física para Jogos</title>
+    <!-- Fonts -->
+    <link rel="stylesheet" href="../../../assets/fonts/fonts.css">
+    <link rel="stylesheet" href="../../../style.css">
+</head>
+<body data-module="programming/06">
+    <script src="../../../assets/icons-ui/ui-icons.js"></script>
+
+    <!-- Background Orbs & Wave Overlay -->
+    <div class="bg-gradient-container">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+        <div class="wave-bg"></div>
+    </div>
+
+    <!-- Topbar -->
+    <div class="topbar">
+        <div class="topbar-left">
+            <a href="../../../index.html" class="back-link"><svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-arrow-left"></use></svg> Índice</a>
+            <span class="lesson-tag">Módulo 6</span>
+            <span class="lesson-name">Física para Jogos</span>
+        </div>
+        <div class="progress-wrap">
+            <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
+            <span class="progress-text" id="progress-text">1 / 18</span>
+        </div>
+    </div>
+
+    <!-- ==========================================================================
+         Aula do Thales e do Giovane.
+         O conteúdo, o vocabulário (LifeComponent, KnockbackComponent,
+         external_force, o fluxo Hitbox → Hurtbox → Signal) e o arco de descoberta
+         "construa quebrado → observe o bug → entenda a solução" são deles.
+         A reestruturação de 2026-07-31 acrescentou objetivos, checkpoints
+         cronometrados, a comparação move_toward/lerp e a recapitulação — mantendo
+         a ordem original das ideias.
+         ========================================================================== -->
+    <main class="deck">
+
+        <!-- 1: Capa -->
+        <section class="slide active" id="slide-cover">
+            <div class="grid-2" style="align-items: center;">
+                <div>
+                    <div class="eyebrow"><span class="num">01</span> · Boas-vindas</div>
+                    <h1 class="slide-title">FÍSICA PARA<br>JOGOS</h1>
+                    <p class="slide-sub">Dando peso, impacto e Game Feel aos seus componentes</p>
+                    <div class="callout callout-note mb-0">
+                        <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-circle-info"></use></svg>
+                        <div><strong>Seu player já anda.</strong> A partir de hoje ele passa a ter <em>peso</em>: acelera, freia e é empurrado quando alguma coisa bate nele.</div>
+                    </div>
+                </div>
+                <div style="text-align: center;">
+                    <img src="../../../assets/lessons/06/gui 1.webp" alt="Demonstração de movimentação com física no Godot" style="max-width: 100%; max-height: 40vh; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
+                </div>
+            </div>
+        </section>
+
+        <!-- 2: Objetivos -->
+        <section class="slide" id="slide-goals">
+            <div class="eyebrow"><span class="num">02</span> · Roteiro</div>
+            <h1 class="slide-title">O QUE VOCÊ VAI CONSTRUIR</h1>
+            <p class="slide-sub">Duas peças, e a descoberta de por que elas precisam conversar direito</p>
+            <div class="grid-2 align-start">
+                <div class="goal-list">
+                    <div class="goal-item">
+                        <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-arrows-up-down-left-right"></use></svg>
+                        <div><strong>Dar aceleração e fricção ao movimento</strong><span>O <code>MovementComponent</code> deixa de ligar e desligar a velocidade no grito.</span></div>
+                    </div>
+                    <div class="goal-item">
+                        <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-percent"></use></svg>
+                        <div><strong>Conhecer <code>move_toward</code> e <code>lerp</code></strong><span>Duas formas de chegar num valor aos poucos — e quando usar cada uma.</span></div>
+                    </div>
+                    <div class="goal-item">
+                        <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-wind"></use></svg>
+                        <div><strong>Aplicar forças externas</strong><span>Empurrões que sobrepõem o comando do jogador por um instante.</span></div>
+                    </div>
+                </div>
+                <div class="goal-list">
+                    <div class="goal-item">
+                        <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-bolt"></use></svg>
+                        <div><strong>Criar o KnockbackComponent</strong><span>Uma peça reutilizável, que serve no player e no inimigo sem mudar nada.</span></div>
+                    </div>
+                    <div class="goal-item">
+                        <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-tower-broadcast"></use></svg>
+                        <div><strong>Ligar tudo com Signals</strong><span>Um aviso disparado, vários componentes reagindo — sem se conhecerem.</span></div>
+                    </div>
+                    <div class="goal-item">
+                        <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-bug"></use></svg>
+                        <div><strong>Quebrar o knockback de propósito</strong><span>E descobrir sozinho por que dois componentes brigando anulam um ao outro.</span></div>
+                    </div>
+                </div>
+            </div>
+            <div class="callout callout-warn">
+                <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-triangle-exclamation"></use></svg>
+                <div><strong>Aviso honesto: a primeira versão do knockback vai falhar</strong> — de propósito. Entender <em>por que</em> vale mais do que receber o código pronto.</div>
+            </div>
+        </section>
+
+        <!-- 3: Física Real vs. Divertida -->
+        <section class="slide" id="slide-real-vs-fun">
+            <div class="eyebrow"><span class="num">03</span> · Conceito</div>
+            <h1 class="slide-title">FÍSICA REAL VS. DIVERTIDA</h1>
+            <p class="slide-sub">O jogo não é um simulador do mundo real.</p>
+            <div class="grid-2 align-start">
+                <div style="display: flex; flex-direction: column; align-items: center; text-align: center; background: rgba(0,0,0,0.2); padding: 10px; border-radius: 12px;">
+                    <img src="../../../assets/lessons/06/slide.gif" alt="Personagem deslizando por inércia após soltar o direcional" style="max-width: 100%; max-height: 26vh; border-radius: 8px;">
+                    <p style="margin-top: 10px; font-size: 14px; color: #cbd5e1;">Inércia realista — escorrega</p>
+                </div>
+                <div style="display: flex; flex-direction: column; align-items: center; text-align: center; background: rgba(0,0,0,0.2); padding: 10px; border-radius: 12px;">
+                    <img src="../../../assets/lessons/06/mega man.gif" alt="Personagem de jogo arcade parando imediatamente ao soltar o direcional" style="max-width: 100%; max-height: 26vh; border-radius: 8px;">
+                    <p style="margin-top: 10px; font-size: 14px; color: #cbd5e1;">Física arcade — precisa</p>
+                </div>
+            </div>
+            <div class="grid-2">
+                <div class="callout callout-note mt-0">
+                    <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-circle-info"></use></svg>
+                    <div><strong>Na vida real, a inércia demora a parar.</strong> Se você corre e para, você desliza. Num jogo de ação, o jogador quer precisão — e culpa o jogo, não a física, quando erra o pulo.</div>
+                </div>
+                <div class="callout callout-tip mt-0">
+                    <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-scale-balanced"></use></svg>
+                    <div><strong>A regra da aula.</strong> A física do jogo serve ao <i>Game Feel</i>, mesmo que isso signifique quebrar as leis de Isaac Newton. A resposta ao comando deve ser imediata.</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4: Aceleração e Desaceleração -->
+        <section class="slide" id="slide-accel">
+            <div class="eyebrow"><span class="num">04</span> · Conceito</div>
+            <h1 class="slide-title">ACELERAÇÃO E DESACELERAÇÃO</h1>
+            <p class="slide-sub">O meio-termo: nem robô travado, nem patinação no gelo.</p>
+            <div class="grid-2 align-start">
+                <div>
+                    <div class="feature-card good">
+                        <p><strong>Aceleração:</strong> o tempo que leva para sair do repouso e chegar à velocidade máxima.</p>
+                    </div>
+                    <div class="feature-card bad">
+                        <p><strong>Desaceleração (fricção):</strong> o tempo que leva para voltar da velocidade máxima ao repouso, depois de soltar o direcional.</p>
+                    </div>
+                    <div class="callout callout-tip mb-0">
+                        <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-lightbulb"></use></svg>
+                        <div><strong>Repare no gráfico:</strong> a linha vermelha responde na hora, mas o movimento parece de papelão. A verde demora alguns quadros — e é essa fração de segundo que o jogador sente como <em>peso</em>.</div>
+                    </div>
+                </div>
+                <div style="display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.3); border-radius: 8px; padding: 14px;">
+                    <svg viewBox="0 0 560 300" style="width: 100%; max-height: 40vh; height: auto; overflow: visible;" role="img" aria-label="Gráfico de velocidade por tempo: a linha vermelha sobe e desce instantaneamente; a linha verde sobe e desce em curva.">
+                        <line x1="90" y1="235" x2="520" y2="235" stroke="rgba(255,255,255,0.5)" stroke-width="2" />
+                        <line x1="90" y1="235" x2="90" y2="55" stroke="rgba(255,255,255,0.5)" stroke-width="2" />
+                        <text x="90" y="38" fill="rgba(255,255,255,0.7)" font-size="14" text-anchor="middle">Velocidade</text>
+                        <text x="78" y="240" fill="rgba(255,255,255,0.7)" font-size="14" text-anchor="end">0</text>
+                        <text x="528" y="240" fill="rgba(255,255,255,0.7)" font-size="14" text-anchor="start">Tempo</text>
+                        <line x1="140" y1="55" x2="140" y2="235" stroke="rgba(255,255,255,0.2)" stroke-width="1" stroke-dasharray="4" />
+                        <text x="140" y="262" fill="rgba(255,255,255,0.9)" font-size="13" text-anchor="middle">Pressionou W</text>
+                        <line x1="400" y1="55" x2="400" y2="235" stroke="rgba(255,255,255,0.2)" stroke-width="1" stroke-dasharray="4" />
+                        <text x="400" y="262" fill="rgba(255,255,255,0.9)" font-size="13" text-anchor="middle">Soltou W</text>
+                        <path d="M 140 235 L 140 75 L 400 75 L 400 235 L 520 235" fill="none" stroke="#ef4444" stroke-width="3" stroke-dasharray="5" />
+                        <text x="270" y="66" fill="#ef4444" font-size="13" text-anchor="middle">Instantâneo (duro)</text>
+                        <path d="M 140 235 C 160 235, 172 105, 212 105 L 400 105 C 424 105, 436 235, 476 235 L 520 235" fill="none" stroke="#4ade80" stroke-width="4" />
+                        <text x="306" y="170" fill="#4ade80" font-size="15" font-weight="bold" text-anchor="middle">Com aceleração / fricção</text>
+                        <circle cx="212" cy="105" r="5" fill="#4ade80" />
+                        <text x="222" y="124" fill="#4ade80" font-size="12" text-anchor="start">Velocidade máx.</text>
+                        <circle cx="476" cy="235" r="5" fill="#4ade80" />
+                        <text x="486" y="226" fill="#4ade80" font-size="12" text-anchor="start">Parada total</text>
+                    </svg>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5: move_toward vs lerp -->
+        <section class="slide" id="slide-two-functions">
+            <div class="eyebrow"><span class="num">05</span> · Conceito</div>
+            <h1 class="slide-title">DUAS FORMAS DE CHEGAR LÁ</h1>
+            <p class="slide-sub">A Godot já traz as duas prontas. Elas não são intercambiáveis.</p>
+            <div class="grid-2 align-start">
+                <div>
+                    <div class="feature-card node-card accent-blue">
+                        <img src="../../../assets/icons/Vector2.svg" alt="Ícone de Vector2 do Godot">
+                        <div>
+                            <h4><code>move_toward(alvo, passo)</code></h4>
+                            <p>Anda sempre a mesma distância por quadro. A subida é uma reta e ela <strong>chega no alvo</strong>. Ideal para acelerar.</p>
+                        </div>
+                    </div>
+                    <div class="feature-card node-card accent-purple">
+                        <img src="../../../assets/icons/Vector2.svg" alt="Ícone de Vector2 do Godot">
+                        <div>
+                            <h4><code>lerp(alvo, peso)</code></h4>
+                            <p>Come uma fatia do que <em>falta</em>. Começa rápido e perde força perto do fim. Ideal para frear.</p>
+                        </div>
+                    </div>
+                    <div class="callout callout-warn mb-0">
+                        <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-percent"></use></svg>
+                        <div><strong>O segundo argumento não significa a mesma coisa nas duas.</strong> Em <code>move_toward</code> ele é uma <em>distância</em>; em <code>lerp</code>, uma <em>fração</em> entre 0 e 1.</div>
+                    </div>
+                </div>
+                <div style="display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.3); border-radius: 8px; padding: 14px;">
+                    <svg viewBox="0 0 480 320" style="width: 100%; max-height: 30vh; height: auto; overflow: visible;" role="img" aria-label="Comparação: move_toward sobe em linha reta e toca o alvo; lerp sobe em curva e se aproxima do alvo cada vez mais devagar.">
+                        <line x1="70" y1="250" x2="440" y2="250" stroke="rgba(255,255,255,0.5)" stroke-width="2" />
+                        <line x1="70" y1="250" x2="70" y2="60" stroke="rgba(255,255,255,0.5)" stroke-width="2" />
+                        <line x1="70" y1="80" x2="440" y2="80" stroke="#fbbf24" stroke-width="1.5" stroke-dasharray="6" />
+                        <text x="440" y="72" fill="#fbbf24" font-size="13" text-anchor="end">alvo</text>
+                        <text x="58" y="255" fill="rgba(255,255,255,0.7)" font-size="13" text-anchor="end">0</text>
+                        <text x="448" y="255" fill="rgba(255,255,255,0.7)" font-size="13" text-anchor="start">Tempo</text>
+                        <path d="M 70 250 L 260 80 L 440 80" fill="none" stroke="#60a5fa" stroke-width="4" />
+                        <circle cx="260" cy="80" r="5" fill="#60a5fa" />
+                        <text x="150" y="150" fill="#60a5fa" font-size="14" font-weight="bold" text-anchor="middle" transform="rotate(-41 150 150)">move_toward</text>
+                        <path d="M 70 250 C 130 250, 150 92, 260 86 C 330 82, 380 81, 440 80.5" fill="none" stroke="#c084fc" stroke-width="4" />
+                        <text x="300" y="120" fill="#c084fc" font-size="14" font-weight="bold" text-anchor="middle">lerp</text>
+                        <text x="255" y="292" fill="rgba(255,255,255,0.75)" font-size="12" text-anchor="middle">a reta toca o alvo; a curva se aproxima para sempre</text>
+                    </svg>
+                </div>
+            </div>
+        </section>
+
+        <!-- 6: Atualizando o MovementComponent -->
+        <section class="slide" id="slide-update-movement">
+            <div class="eyebrow"><span class="num">06</span> · Prática</div>
+            <h1 class="slide-title">O MOVEMENTCOMPONENT COM FÍSICA</h1>
+            <p class="slide-sub">Trazendo a física para dentro da arquitetura que já existe.</p>
+            <div class="grid-2 align-start">
+                <div class="code-window">
+                    <div class="code-header" style="padding: 0; align-items: stretch;">
+                        <div class="code-tabs">
+                            <button type="button" class="code-tab" data-target="code-before">Before.gd</button>
+                            <button type="button" class="code-tab active" data-target="code-after">After.gd</button>
+                        </div>
+                        <div class="window-dots" style="padding: 0.75rem 1.25rem; align-items: center;">
+                            <span class="dot dot-blue">●</span>
+                            <span class="dot dot-yellow">●</span>
+                            <span class="dot dot-red">●</span>
+                        </div>
+                    </div>
+
+                    <!-- ANTES -->
+                    <div id="code-before" class="code-content code-tab-content" style="display: none;">
+<pre><code><span class="k-keyword">extends</span> <span class="k-type">Node</span>
+<span class="k-keyword">class_name</span> <span class="k-type">MovementComponent</span>
+
+<span class="k-annotation">@export</span> <span class="k-keyword">var</span> <span class="k-var">body</span> : <span class="k-type">CharacterBody2D</span>
+<span class="k-annotation">@export</span> <span class="k-keyword">var</span> <span class="k-var">max_speed</span> : <span class="k-type">float</span>
+
+<span class="k-keyword">func</span> <span class="k-func">_ready</span>() -&gt;&nbsp;<span class="k-type">void</span>:
+    <span class="k-keyword">if</span>(!body):
+        <span class="k-func">push_error</span>(<span class="k-string">"MovementComponent: body wasn't set."</span>)
+
+<span class="k-keyword">func</span> <span class="k-func">move</span>(direction : <span class="k-type">Vector2</span>, delta : <span class="k-type">float</span>):
+    <span class="k-comment"># liga e desliga no grito</span>
+    body.velocity = direction * max_speed
+    body.<span class="k-func">move_and_slide</span>()</code></pre>
+                    </div>
+
+                    <!-- DEPOIS -->
+                    <div id="code-after" class="code-content code-tab-content active-tab">
+<pre><code><span class="k-keyword">extends</span> <span class="k-type">Node</span>
+<span class="k-keyword">class_name</span> <span class="k-type">MovementComponent</span>
+
+<span class="k-annotation">@export</span> <span class="k-keyword">var</span> <span class="k-var">body</span> : <span class="k-type">CharacterBody2D</span>
+<span class="k-annotation">@export</span> <span class="k-keyword">var</span> <span class="k-var">max_speed</span> : <span class="k-type">float</span> = <span class="k-number">200.0</span>
+<span class="k-annotation">@export</span> <span class="k-keyword">var</span> <span class="k-var">acceleration</span> : <span class="k-type">float</span> = <span class="k-number">1200.0</span>
+<span class="k-annotation">@export</span> <span class="k-keyword">var</span> <span class="k-var">deceleration</span> : <span class="k-type">float</span> = <span class="k-number">12.0</span>
+
+<span class="k-keyword">func</span> <span class="k-func">move</span>(direction : <span class="k-type">Vector2</span>, delta : <span class="k-type">float</span>):
+    <span class="k-keyword">if</span>(direction != <span class="k-type">Vector2</span>.ZERO):
+        body.velocity = body.velocity.<span class="k-func">move_toward</span>(
+            direction * max_speed, acceleration * delta)
+    <span class="k-keyword">else</span>:
+        body.velocity = body.velocity.<span class="k-func">lerp</span>(
+            <span class="k-type">Vector2</span>.ZERO, deceleration * delta)
+    body.<span class="k-func">move_and_slide</span>()</code></pre>
+                    </div>
+                </div>
+                <div>
+                    <div class="callout callout-note mt-0">
+                        <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-arrows-left-right"></use></svg>
+                        <div><strong>Leia o <code>if</code> como uma pergunta:</strong> "o jogador mandou andar?" Se sim, acelera na direção pedida. Se não, freia até parar.</div>
+                    </div>
+                    <div class="callout callout-tip">
+                        <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-clock"></use></svg>
+                        <div><strong>Por que o <code>delta</code> nas duas contas?</strong> Ele é o tempo que o último quadro levou. Multiplicar por ele faz a conta ser "por segundo" em vez de "por quadro" — e o jogo rodar igual em máquinas rápidas e lentas.</div>
+                    </div>
+                    <div class="callout callout-warn mb-0">
+                        <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-circle-check"></use></svg>
+                        <div><strong>A assinatura do <code>move()</code> não mudou.</strong> O <code>InputComponent</code> e o resto do projeto seguem funcionando sem tocar numa linha. Trocar o miolo sem mexer na porta é o objetivo de separar em componentes.</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 7: Os números -->
+        <section class="slide" id="slide-numbers">
+            <div class="eyebrow"><span class="num">07</span> · Prática</div>
+            <h1 class="slide-title">OS NÚMEROS DO INSPECTOR</h1>
+            <p class="slide-sub">Três campos, três escalas diferentes — e é aí que todo mundo tropeça.</p>
+            <div class="grid-2 align-start">
+                <div>
+                    <div class="godot-editor-layout">
+                        <div class="godot-inspector">
+                            <div class="godot-inspector-header"><span>Inspector — MovementComponent</span></div>
+                            <div class="godot-inspector-body">
+                                <div class="godot-prop-group">
+                                    <div class="godot-prop-title">Movement</div>
+                                    <div class="godot-prop-row">
+                                        <span class="godot-prop-label">Max Speed</span>
+                                        <span class="godot-prop-input">200.0</span>
+                                    </div>
+                                    <div class="godot-prop-row">
+                                        <span class="godot-prop-label">Acceleration</span>
+                                        <span class="godot-prop-input">1200.0</span>
+                                    </div>
+                                    <div class="godot-prop-row">
+                                        <span class="godot-prop-label">Deceleration</span>
+                                        <span class="godot-prop-input">12.0</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="callout callout-note mb-0">
+                        <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-circle-info"></use></svg>
+                        <div>Comece com estes valores. Eles não são sagrados — são só um ponto de partida que funciona, para você ter o que ajustar.</div>
+                    </div>
+                </div>
+                <div>
+                    <div class="pill-list compact">
+                        <div class="pill-item">
+                            <span class="pill-code blue">Max Speed</span>
+                            <span class="pill-text">Pixels por segundo. É a velocidade de cruzeiro.</span>
+                        </div>
+                        <div class="pill-item">
+                            <span class="pill-code green">Acceleration</span>
+                            <span class="pill-text">Pixels por segundo, <strong>a cada segundo</strong>. Vai na casa das centenas.</span>
+                        </div>
+                        <div class="pill-item">
+                            <span class="pill-code">Deceleration</span>
+                            <span class="pill-text">Um <strong>peso</strong> de <code>lerp</code>. Vai na casa das unidades.</span>
+                        </div>
+                    </div>
+                    <div class="callout callout-warn mb-0">
+                        <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-bug"></use></svg>
+                        <div><strong>Se o personagem começar a vibrar, é isto:</strong> <code>deceleration * delta</code> passou de 1. O <code>lerp</code> passa do alvo e volta, quadro sim quadro não. Com <code>delta</code> perto de 0,016, qualquer <em>deceleration</em> acima de ~60 treme. Coloque 500 ali e veja acontecer.</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 8: Checkpoint 1 -->
+        <section class="slide checkpoint-slide" id="slide-checkpoint-1">
+            <div class="eyebrow"><span class="num">08</span> · Mãos no código</div>
+            <h1 class="slide-title">CHECKPOINT 1 — MOVIMENTO COM PESO</h1>
+            <p class="slide-sub">A dinâmica dos extremos: sinta os números antes de escolher os seus.</p>
+            <div class="grid-2 align-start">
+                <div>
+                    <div class="checkpoint">
+                        <h3>Faça agora</h3>
+                        <ol class="step-list">
+                            <li>Acrescente <code>acceleration</code> e <code>deceleration</code> como <code>@export</code> no <code>MovementComponent.gd</code>.</li>
+                            <li>Troque a atribuição direta pelo <code>if / else</code> com <code>move_toward</code> e <code>lerp</code>.</li>
+                            <li>No Inspector, comece com <strong>200 / 1200 / 12</strong> e jogue um pouco.</li>
+                            <li>Vá aos extremos: <strong>pedra</strong> (dec. 40, acel. 4000) e depois <strong>gelo</strong> (dec. 1, acel. 300).</li>
+                            <li>Volte e ajuste até achar o <em>seu</em> ponto. Anote os três números.</li>
+                        </ol>
+                    </div>
+                </div>
+                <div>
+                    <div class="timer-box" data-minutes="20">
+                        <span class="timer-label">Tempo do checkpoint</span>
+                        <span class="timer-display">20:00</span>
+                        <button type="button" class="timer-btn">▶ Iniciar</button>
+                    </div>
+                    <div class="callout callout-tip mb-0">
+                        <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-flask"></use></svg>
+                        <div><strong>O ponto não é achar o número certo</strong> — é perceber que <em>não existe</em> número certo. Um jogo de tiro rápido e um de exploração calma querem coisas opostas. <br><strong>Tremeu?</strong> Você trocou os dois de lugar: <em>acceleration</em> é o grande, <em>deceleration</em> é o pequeno.</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 9: Força e Impacto -->
+        <section class="slide" id="slide-force">
+            <div class="eyebrow"><span class="num">09</span> · Conceito</div>
+            <h1 class="slide-title">O QUE É FORÇA E IMPACTO?</h1>
+            <p class="slide-sub">Ação e reação no mundo do jogo.</p>
+            <div class="grid-2 align-start">
+                <div>
+                    <p class="lede">Até agora, o <code>InputComponent</code> era o dono absoluto da movimentação: o personagem ia exatamente para onde o jogador mandava, e para mais lugar nenhum.</p>
+                    <div class="callout callout-tip">
+                        <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-wind"></use></svg>
+                        <div>Aplicar uma <strong>força</strong> é somar um vetor que <em>ninguém pediu</em> — vindo do mundo, não do teclado. Vento que empurra, explosão que joga longe, golpe que afasta.</div>
+                    </div>
+                    <div class="callout callout-note mb-0">
+                        <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-calculator"></use></svg>
+                        <div><strong>Vetores se somam ponta com ponta.</strong> É a mesma soma do <code>Vector2</code> que você já usou para juntar as teclas de direção — só que agora uma das parcelas não vem do jogador.</div>
+                    </div>
+                </div>
+                <div style="display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.3); border-radius: 8px; padding: 14px;">
+                    <svg viewBox="0 0 420 300" style="width: 100%; max-height: 40vh; height: auto; overflow: visible;" role="img" aria-label="Diagrama de soma de vetores: a intenção do jogador aponta para a direita, a força externa aponta para cima, e o resultado é a diagonal entre as duas.">
+                        <defs>
+                            <marker id="ah-blue" markerWidth="9" markerHeight="9" refX="7" refY="3.2" orient="auto"><path d="M0,0 L0,6.4 L7.5,3.2 z" fill="#60a5fa" /></marker>
+                            <marker id="ah-purple" markerWidth="9" markerHeight="9" refX="7" refY="3.2" orient="auto"><path d="M0,0 L0,6.4 L7.5,3.2 z" fill="#c084fc" /></marker>
+                            <marker id="ah-green" markerWidth="9" markerHeight="9" refX="7" refY="3.2" orient="auto"><path d="M0,0 L0,6.4 L7.5,3.2 z" fill="#4ade80" /></marker>
+                        </defs>
+                        <line x1="60" y1="230" x2="240" y2="230" stroke="#60a5fa" stroke-width="4" marker-end="url(#ah-blue)" />
+                        <text x="150" y="256" fill="#60a5fa" font-size="14" font-weight="bold" text-anchor="middle">intenção do jogador</text>
+                        <line x1="250" y1="228" x2="250" y2="110" stroke="#c084fc" stroke-width="4" marker-end="url(#ah-purple)" />
+                        <text x="262" y="170" fill="#c084fc" font-size="14" font-weight="bold" text-anchor="start">força externa</text>
+                        <line x1="60" y1="230" x2="248" y2="112" stroke="#4ade80" stroke-width="4" marker-end="url(#ah-green)" stroke-dasharray="7 4" />
+                        <text x="112" y="168" fill="#4ade80" font-size="14" font-weight="bold" text-anchor="start" transform="rotate(-32 112 168)">resultado</text>
+                        <circle cx="60" cy="230" r="6" fill="#e2e8f0" />
+                        <text x="60" y="282" fill="rgba(255,255,255,0.75)" font-size="12" text-anchor="middle">player</text>
+                    </svg>
+                </div>
+            </div>
+        </section>
+
+        <!-- 10: Knockback -->
+        <section class="slide" id="slide-knockback">
+            <div class="eyebrow"><span class="num">10</span> · Conceito</div>
+            <h1 class="slide-title">KNOCKBACK (O EMPURRÃO)</h1>
+            <p class="slide-sub">Feedback tátil de combate.</p>
+            <div class="grid-2 align-start">
+                <div>
+                    <p class="lede">Quando o player ou o inimigo recebe dano, ele é jogado fisicamente para trás. É um dos pilares mais fortes do <i>Game Feel</i>: sem ele, os golpes parecem atravessar papel.</p>
+                    <div class="callout callout-warn">
+                        <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-calculator"></use></svg>
+                        <div><strong>A matemática toda:</strong> posição de quem apanhou <strong>menos</strong> posição de quem bateu. A subtração devolve um vetor que aponta de quem bateu <em>para</em> quem apanhou — que é exatamente para onde a vítima deve voar.</div>
+                    </div>
+                    <div class="callout callout-tip mb-0">
+                        <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-arrows-left-right"></use></svg>
+                        <div><strong>Inverta a ordem e o bug é engraçado:</strong> a vítima é <em>sugada</em> para dentro do inimigo. Se acontecer com você no laboratório, já sabe qual linha olhar.</div>
+                    </div>
+                </div>
+                <div style="display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.3); border-radius: 8px; padding: 14px;">
+                    <svg viewBox="0 0 430 280" style="width: 100%; max-height: 38vh; height: auto; overflow: visible;" role="img" aria-label="Diagrama: o inimigo à esquerda, a vítima à direita, e uma seta apontando da vítima para longe do inimigo.">
+                        <defs>
+                            <marker id="kb-arrow" markerWidth="10" markerHeight="10" refX="8" refY="3.5" orient="auto"><path d="M0,0 L0,7 L8.5,3.5 z" fill="#f87171" /></marker>
+                        </defs>
+                        <circle cx="100" cy="150" r="26" fill="rgba(248,113,113,0.2)" stroke="#f87171" stroke-width="2" />
+                        <text x="100" y="156" font-size="22" text-anchor="middle">👹</text>
+                        <text x="100" y="204" fill="#f87171" font-size="13" font-weight="bold" text-anchor="middle">atacante</text>
+                        <text x="100" y="222" fill="rgba(255,255,255,0.6)" font-size="11" text-anchor="middle">global_position</text>
+                        <circle cx="250" cy="150" r="26" fill="rgba(96,165,250,0.2)" stroke="#60a5fa" stroke-width="2" />
+                        <text x="250" y="156" font-size="22" text-anchor="middle">🙂</text>
+                        <text x="250" y="204" fill="#60a5fa" font-size="13" font-weight="bold" text-anchor="middle">vítima</text>
+                        <text x="250" y="222" fill="rgba(255,255,255,0.6)" font-size="11" text-anchor="middle">global_position</text>
+                        <line x1="284" y1="150" x2="392" y2="150" stroke="#f87171" stroke-width="4" marker-end="url(#kb-arrow)" />
+                        <text x="336" y="136" fill="#f87171" font-size="13" font-weight="bold" text-anchor="middle">empurrão</text>
+                        <text x="215" y="64" fill="rgba(255,255,255,0.9)" font-size="14" text-anchor="middle">(vítima − atacante)<tspan fill="#4ade80">.normalized()</tspan></text>
+                        <text x="215" y="88" fill="rgba(255,255,255,0.6)" font-size="12" text-anchor="middle">direção pura, sem tamanho</text>
+                    </svg>
+                </div>
+            </div>
+        </section>
+
+        <!-- 11: Criando o KnockbackComponent -->
+        <section class="slide" id="slide-knockback-component">
+            <div class="eyebrow"><span class="num">11</span> · Prática</div>
+            <h1 class="slide-title">O KNOCKBACK COMPONENT</h1>
+            <p class="slide-sub">Isolando a responsabilidade de impacto.</p>
+            <div class="grid-2 align-start">
+                <div>
+                    <div class="feature-card highlight node-card">
+                        <img src="../../../assets/icons/Node.svg" alt="Ícone do Node no editor do Godot">
+                        <div>
+                            <h4>Mais um Node básico</h4>
+                            <p>Mesma receita dos módulos anteriores: um Node invisível e sem física, só para guardar lógica. Renomeie para <code>KnockbackComponent</code> e anexe um script.</p>
+                        </div>
+                    </div>
+                    <div class="pill-list compact">
+                        <div class="pill-item">
+                            <span class="pill-text">Precisa de uma variável de <strong>força</strong> — quanto empurra.</span>
+                        </div>
+                        <div class="pill-item">
+                            <span class="pill-text">Vai no player <strong>e</strong> no inimigo, sem uma linha de diferença.</span>
+                        </div>
+                    </div>
+                    <div class="callout callout-note mb-0">
+                        <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-shapes"></use></svg>
+                        <div><strong>Repare na árvore ao lado:</strong> o mesmo componente aparece duas vezes — é o que acontece quando a peça não sabe quem a carrega.</div>
+                    </div>
+                </div>
+                <div class="godot-editor-layout">
+                    <div class="godot-panel">
+                        <div class="godot-panel-header">
+                            <span>Scene</span>
+                            <div style="display:flex;gap:5px;">
+                                <div style="width:10px;height:10px;background:#478cbf;border-radius:50%;"></div>
+                            </div>
+                        </div>
+                        <div class="godot-tree">
+                            <div class="godot-node"><img alt="" src="../../../assets/icons/Node2D.svg" class="godot-icon"> <span>Level</span></div>
+                            <div class="godot-tree-children">
+                                <div class="godot-node child"><img alt="" src="../../../assets/icons/CharacterBody2D.svg" class="godot-icon"> <span>Player</span></div>
+                                <div class="godot-tree-children">
+                                    <div class="godot-node child"><img alt="" src="../../../assets/icons/Sprite2D.svg" class="godot-icon"> <span>Sprite2D</span></div>
+                                    <div class="godot-node child"><img alt="" src="../../../assets/icons/Node.svg" class="godot-icon"> <span>InputComponent</span></div>
+                                    <div class="godot-node child"><img alt="" src="../../../assets/icons/Node.svg" class="godot-icon"> <span>MovementComponent</span></div>
+                                    <div class="godot-node child selected"><img alt="" src="../../../assets/icons/Node.svg" class="godot-icon"> <span>KnockbackComponent</span><img alt="" src="../../../assets/icons/Script.svg" class="godot-script-icon"></div>
+                                    <div class="godot-node child"><img alt="" src="../../../assets/icons/Area2D.svg" class="godot-icon"> <span>Hurtbox</span></div>
+                                </div>
+                                <div class="godot-node child"><img alt="" src="../../../assets/icons/CharacterBody2D.svg" class="godot-icon"> <span>Enemy</span></div>
+                                <div class="godot-tree-children">
+                                    <div class="godot-node child"><img alt="" src="../../../assets/icons/Sprite2D.svg" class="godot-icon"> <span>Sprite2D</span></div>
+                                    <div class="godot-node child"><img alt="" src="../../../assets/icons/Node.svg" class="godot-icon"> <span>MovementComponent</span></div>
+                                    <div class="godot-node child selected"><img alt="" src="../../../assets/icons/Node.svg" class="godot-icon"> <span>KnockbackComponent</span><img alt="" src="../../../assets/icons/Script.svg" class="godot-script-icon"></div>
+                                    <div class="godot-node child"><img alt="" src="../../../assets/icons/Area2D.svg" class="godot-icon"> <span>Hurtbox</span></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 12: A Comunicação (Signals) -->
+        <section class="slide" id="slide-signals">
+            <div class="eyebrow"><span class="num">12</span> · Conceito</div>
+            <h1 class="slide-title">A COMUNICAÇÃO (SIGNALS)</h1>
+            <p class="slide-sub">Fazendo os sistemas conversarem sem se conhecerem.</p>
+            <div class="grid-2 align-start">
+                <div>
+                    <div class="callout callout-note mt-0">
+                        <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-tower-broadcast"></use></svg>
+                        <div><strong>O que é um Signal?</strong> Um aviso que um Node dispara quando algo acontece. Qualquer outro Node pode escutar e reagir — sem que os dois se conheçam. É assim que a Godot mantém componentes desacoplados.</div>
+                    </div>
+                    <div class="card">
+                        <ul>
+                            <li>A <strong>Hitbox</strong> entra na <strong>Hurtbox</strong>.</li>
+                            <li>A Hurtbox dispara o signal <code>area_entered</code>.</li>
+                            <li>O <code>LifeComponent</code> escuta e reduz a vida.</li>
+                            <li>O <code>KnockbackComponent</code> escuta <em>o mesmo signal</em> e manda uma força para o <code>MovementComponent</code>.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div>
+                <div class="godot-editor-layout">
+                    <div class="godot-inspector">
+                        <div class="godot-inspector-header">Node (Signals) — Hurtbox</div>
+                        <div class="godot-inspector-body">
+                            <div class="godot-prop-group">
+                                <div class="godot-prop-title"><img alt="Ícone Area2D do Godot" src="../../../assets/icons/Area2D.svg" style="width:14px; margin-right:5px;"> Area2D</div>
+                                <div class="godot-tree">
+                                    <div class="godot-node selected" style="color: #a5d6ff;"><img alt="" src="../../../assets/icons/Signal.svg" class="godot-icon"> <span>area_entered(area: Area2D)</span></div>
+                                    <div class="godot-tree-children">
+                                        <div class="godot-node child"><img alt="" src="../../../assets/icons/Slot.svg" class="godot-icon"> <span>_on_trigger_area_entered() <span style="color:#6e7681; margin-left:5px;">..in LifeComponent</span></span></div>
+                                        <div class="godot-node child"><img alt="" src="../../../assets/icons/Slot.svg" class="godot-icon"> <span>_on_trigger_area_entered() <span style="color:#6e7681; margin-left:5px;">..in KnockbackComponent</span></span></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="callout callout-tip mb-0">
+                        <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-circle-info"></use></svg>
+                        <div><strong>O <code>LifeComponent</code> ainda não existe.</strong> Ele é construído no <a href="../10/">Módulo 10</a>. Hoje ele entra só como o segundo ouvinte do desenho — o que interessa é que <em>um</em> aviso alimenta <em>dois</em> componentes que não se conhecem.</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 13: Checkpoint 2 -->
+        <section class="slide checkpoint-slide" id="slide-checkpoint-2">
+            <div class="eyebrow"><span class="num">13</span> · Mãos no código</div>
+            <h1 class="slide-title">CHECKPOINT 2 — O EMPURRÃO</h1>
+            <p class="slide-sub">Escreva exatamente o que está aqui. Vai ficar estranho — e é para ficar.</p>
+            <div class="grid-2 align-start">
+                <div>
+                    <div class="checkpoint">
+                        <h3>Faça agora</h3>
+                        <ol class="step-list">
+                            <li>Crie o <code>KnockbackComponent</code> (um <code>Node</code>) no Player, com o script ao lado.</li>
+                            <li>Adicione um <code>Area2D</code> chamado <strong>Hurtbox</strong>, com um <code>CollisionShape2D</code> dentro.</li>
+                            <li>Faça um obstáculo perigoso: outro <code>Area2D</code>, numa camada que a Hurtbox veja.</li>
+                            <li>Conecte o <code>area_entered</code> da Hurtbox ao <code>_on_trigger_area_entered</code>.</li>
+                            <li>Encoste no obstáculo, <strong>observe</strong>, e anote numa frase o que aconteceu.</li>
+                        </ol>
+                    </div>
+                </div>
+                <div>
+                    <div class="code-window mt-0">
+                        <div class="code-header"><span class="file-name">KnockbackComponent.gd</span><div class="window-dots"><span class="dot dot-blue">●</span><span class="dot dot-yellow">●</span><span class="dot dot-red">●</span></div></div>
+                        <pre class="code-content"><code><span class="k-keyword">extends</span> <span class="k-type">Node</span>
+<span class="k-keyword">class_name</span> <span class="k-type">KnockbackComponent</span>
+<span class="k-annotation">@export</span> <span class="k-keyword">var</span> <span class="k-var">body</span> : <span class="k-type">CharacterBody2D</span>
+<span class="k-annotation">@export</span> <span class="k-keyword">var</span> <span class="k-var">force</span> : <span class="k-type">float</span> = <span class="k-number">500.0</span>
+
+<span class="k-comment"># conectado ao area_entered da Hurtbox</span>
+<span class="k-keyword">func</span> <span class="k-func">_on_trigger_area_entered</span>(area : <span class="k-type">Area2D</span>):
+    <span class="k-keyword">var</span> <span class="k-var">victim</span> = body.global_position
+    <span class="k-keyword">var</span> <span class="k-var">direction</span> = (victim - area.global_position).<span class="k-func">normalized</span>()
+    body.velocity = direction * force</code></pre>
+                    </div>
+                    <div class="timer-box" data-minutes="25">
+                        <span class="timer-label">Tempo do checkpoint</span>
+                        <span class="timer-display">25:00</span>
+                        <button type="button" class="timer-btn">▶ Iniciar</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 14: O bug -->
+        <section class="slide" id="slide-bug">
+            <div class="eyebrow"><span class="num">14</span> · Conceito</div>
+            <h1 class="slide-title">POR QUE O EMPURRÃO NÃO ACONTECEU?</h1>
+            <p class="slide-sub">O código está certo. O problema é que ele não está sozinho.</p>
+            <div class="grid-2 align-start">
+                <div>
+                    <div class="feature-card bad">
+                        <h4>❌ Dois componentes escrevendo no mesmo lugar</h4>
+                        <p>O <code>KnockbackComponent</code> escreve em <code>body.velocity</code> uma vez, no instante da colisão. O <code>MovementComponent</code> escreve na <em>mesma</em> <code>body.velocity</code> <strong>a cada quadro</strong> — sessenta vezes por segundo.</p>
+                    </div>
+                    <div class="callout callout-note mb-0">
+                        <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-circle-question"></use></svg>
+                        <div><strong>Nenhum dos dois está errado sozinho.</strong> Cada um faz exatamente o que foi escrito. O erro está em <em>onde</em> os dois foram falar — arquitetura, não sintaxe. Por isso a Godot não acusa nada.</div>
+                    </div>
+                </div>
+                <div style="display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.3); border-radius: 8px; padding: 14px;">
+                    <svg viewBox="0 0 440 300" style="width: 100%; max-height: 30vh; height: auto; overflow: visible;" role="img" aria-label="Linha do tempo em quadros: no quadro da colisão a velocidade sobe muito, e já no quadro seguinte volta para perto de zero.">
+                        <line x1="60" y1="240" x2="410" y2="240" stroke="rgba(255,255,255,0.5)" stroke-width="2" />
+                        <line x1="60" y1="240" x2="60" y2="60" stroke="rgba(255,255,255,0.5)" stroke-width="2" />
+                        <text x="60" y="46" fill="rgba(255,255,255,0.7)" font-size="13" text-anchor="middle">velocity</text>
+                        <text x="418" y="245" fill="rgba(255,255,255,0.7)" font-size="13" text-anchor="start">quadros</text>
+                        <line x1="140" y1="240" x2="140" y2="80" stroke="#f87171" stroke-width="3" />
+                        <circle cx="140" cy="80" r="6" fill="#f87171" />
+                        <text x="140" y="68" fill="#f87171" font-size="12" font-weight="bold" text-anchor="middle">knockback!</text>
+                        <path d="M 140 80 L 200 226 L 260 236 L 320 239 L 380 240" fill="none" stroke="#94a3b8" stroke-width="3" stroke-dasharray="5" />
+                        <circle cx="200" cy="226" r="5" fill="#94a3b8" />
+                        <text x="288" y="212" fill="#94a3b8" font-size="12" text-anchor="middle">o Movement já apagou</text>
+                        <g fill="rgba(255,255,255,0.55)" font-size="11" text-anchor="middle">
+                            <text x="140" y="262">n</text>
+                            <text x="200" y="262">n+1</text>
+                            <text x="260" y="262">n+2</text>
+                            <text x="320" y="262">n+3</text>
+                            <text x="380" y="262">n+4</text>
+                        </g>
+                        <text x="235" y="288" fill="rgba(255,255,255,0.75)" font-size="12" text-anchor="middle">o empurrão existiu por 1 quadro — ninguém viu</text>
+                    </svg>
+                </div>
+            </div>
+        </section>
+
+        <!-- 15: A Solução -->
+        <section class="slide" id="slide-solution">
+            <div class="eyebrow"><span class="num">15</span> · Conceito</div>
+            <h1 class="slide-title">A SOLUÇÃO DA EPIFANIA</h1>
+            <p class="slide-sub">Desacoplando as forças externas.</p>
+            <div class="grid-2 align-start">
+                <div>
+                    <div class="callout callout-tip mt-0">
+                        <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-lightbulb"></use></svg>
+                        <div><strong>Se dois donos brigam por uma variável, dê uma variável a cada um.</strong> O <code>MovementComponent</code> ganha um campo separado: <code>external_force</code>.</div>
+                    </div>
+                    <div class="feature-card good">
+                        <p>O Knockback nunca mais toca em <code>velocity</code>: ele só <strong>deposita</strong> a força em <code>external_force</code>. O Movement continua dono absoluto da velocidade — soma a força externa e vai reduzindo ela até zero.</p>
+                    </div>
+                    <div class="callout callout-note mb-0">
+                        <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-diagram-project"></use></svg>
+                        <div><strong>O padrão tem nome fora daqui:</strong> um só lugar responsável por escrever cada dado. Vale para vida, munição, pontuação.</div>
+                    </div>
+                </div>
+                <div class="code-window mt-0">
+                    <div class="code-header"><span class="file-name">MovementComponent.gd</span><div class="window-dots"><span class="dot dot-blue">●</span><span class="dot dot-yellow">●</span><span class="dot dot-red">●</span></div></div>
+                    <pre class="code-content"><code><span class="k-comment"># ...variáveis anteriores...</span>
+<span class="k-keyword">var</span> <span class="k-var">external_force</span> : <span class="k-type">Vector2</span> = <span class="k-type">Vector2</span>.ZERO <span class="k-comment"># NOVA</span>
+
+<span class="k-keyword">func</span> <span class="k-func">move</span>(direction : <span class="k-type">Vector2</span>, delta : <span class="k-type">float</span>):
+    <span class="k-comment"># ...aceleração e fricção, exatamente como antes...</span>
+
+    <span class="k-comment"># soma a força externa</span>
+    body.velocity += external_force
+
+    <span class="k-comment"># e vai gastando ela até sobrar zero</span>
+    external_force = external_force.<span class="k-func">lerp</span>(
+        <span class="k-type">Vector2</span>.ZERO,
+        deceleration * delta
+    )
+
+    body.<span class="k-func">move_and_slide</span>()</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- 16: O KnockbackComponent corrigido -->
+        <section class="slide" id="slide-knockback-final">
+            <div class="eyebrow"><span class="num">16</span> · Prática</div>
+            <h1 class="slide-title">O KNOCKBACK, AGORA FUNCIONANDO</h1>
+            <p class="slide-sub">Uma linha muda de endereço. Só isso.</p>
+            <div class="grid-2 align-start">
+                <div class="code-window">
+                    <div class="code-header"><span class="file-name">KnockbackComponent.gd</span><div class="window-dots"><span class="dot dot-blue">●</span><span class="dot dot-yellow">●</span><span class="dot dot-red">●</span></div></div>
+                    <pre class="code-content"><code><span class="k-keyword">extends</span> <span class="k-type">Node</span>
+<span class="k-keyword">class_name</span> <span class="k-type">KnockbackComponent</span>
+
+<span class="k-annotation">@export</span> <span class="k-keyword">var</span> <span class="k-var">movement_component</span> : <span class="k-type">MovementComponent</span>
+<span class="k-annotation">@export</span> <span class="k-keyword">var</span> <span class="k-var">force</span> : <span class="k-type">float</span> = <span class="k-number">500.0</span>
+
+<span class="k-keyword">func</span> <span class="k-func">_ready</span>() -&gt;&nbsp;<span class="k-type">void</span>:
+    <span class="k-keyword">if</span>(!movement_component):
+        <span class="k-func">push_error</span>(<span class="k-string">"Knockback: movement_component wasn't set."</span>)
+
+<span class="k-comment"># conectado ao area_entered da Hurtbox</span>
+<span class="k-keyword">func</span> <span class="k-func">_on_trigger_area_entered</span>(area : <span class="k-type">Area2D</span>):
+    <span class="k-keyword">var</span> <span class="k-var">victim</span> = movement_component.body.global_position
+    <span class="k-keyword">var</span> <span class="k-var">direction</span> = (victim - area.global_position).<span class="k-func">normalized</span>()
+    movement_component.external_force = direction * force</code></pre>
+                </div>
+                <div>
+                    <div class="callout callout-tip mt-0">
+                        <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-arrows-left-right"></use></svg>
+                        <div><strong>O que é <code>normalized()</code>?</strong> Um vetor guarda direção <em>e</em> tamanho. <code>normalized()</code> devolve o mesmo vetor com tamanho 1 — só a direção. Por isso dá para multiplicar por <code>force</code> livremente: quem decide a intensidade é a força.</div>
+                    </div>
+                    <div class="callout callout-note mb-0">
+                        <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-circle-check"></use></svg>
+                        <div><strong>Compare com o Checkpoint 2.</strong> A última linha era <code>body.velocity = ...</code> e virou <code>movement_component.external_force = ...</code>. Todo o resto é igual — um bug de arquitetura exige saber <em>onde</em> escrever, não reescrever muito.</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 17: Ajuste Fino e Playtest -->
+        <section class="slide checkpoint-slide" id="slide-playtest">
+            <div class="eyebrow"><span class="num">17</span> · Mãos no código</div>
+            <h1 class="slide-title">AJUSTE FINO E PLAYTEST</h1>
+            <p class="slide-sub">O segredo está nos números — e em jogar o próprio jogo.</p>
+            <div class="grid-2 align-start">
+                <div>
+                    <div class="checkpoint">
+                        <h3>Faça agora</h3>
+                        <ol class="step-list">
+                            <li>Corrija o <code>KnockbackComponent</code> para usar <code>external_force</code>.</li>
+                            <li>Encoste no obstáculo de novo. Agora dá para ver o empurrão.</li>
+                            <li>Ajuste a <em>force</em> entre 200 e 1500 até o impacto parecer justo.</li>
+                            <li>Ponha o <code>KnockbackComponent</code> também no inimigo, sem mudar o script.</li>
+                            <li>Troque de lugar com o colega ao lado e jogue o jogo dele.</li>
+                        </ol>
+                    </div>
+                </div>
+                <div>
+                    <div class="timer-box" data-minutes="15">
+                        <span class="timer-label">Tempo de laboratório</span>
+                        <span class="timer-display">15:00</span>
+                        <button type="button" class="timer-btn">▶ Iniciar</button>
+                    </div>
+                    <div class="callout callout-note">
+                        <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-scale-balanced"></use></svg>
+                        <div><strong>Um detalhe que você vai sentir:</strong> segurando o direcional contra o empurrão, o personagem se recupera mais rápido — é o <code>move_toward</code> puxando a velocidade de volta.</div>
+                    </div>
+                    <div class="callout callout-tip mb-0">
+                        <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-flask"></use></svg>
+                        <div><strong>Jogar o jogo do colega vale mais que dez ajustes seus.</strong> Você já se acostumou com os seus números; outra pessoa sente na hora o que está errado.</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 18: Recapitulação -->
+        <section class="slide" id="slide-recap">
+            <div class="eyebrow"><span class="num">18</span> · Fechamento</div>
+            <h1 class="slide-title">O QUE VOCÊ CONSTRUIU HOJE</h1>
+            <p class="slide-sub">Movimento com peso, impacto que se sente, e um bug que valeu a aula</p>
+            <div class="grid-2 align-start">
+                <div class="goal-list">
+                    <div class="goal-item">
+                        <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-arrows-up-down-left-right"></use></svg>
+                        <div><strong>Aceleração e fricção</strong><span><code>move_toward</code> para ganhar velocidade, <code>lerp</code> para perder.</span></div>
+                    </div>
+                    <div class="goal-item">
+                        <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-bolt"></use></svg>
+                        <div><strong>O KnockbackComponent</strong><span>Direção pela subtração de posições, intensidade pela <code>force</code>.</span></div>
+                    </div>
+                    <div class="goal-item">
+                        <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-tower-broadcast"></use></svg>
+                        <div><strong>Um signal, vários ouvintes</strong><span>A Hurtbox avisa; quem quiser reagir se conecta.</span></div>
+                    </div>
+                </div>
+                <div>
+                    <div class="callout callout-tip mt-0">
+                        <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-lightbulb"></use></svg>
+                        <div><strong>A lição que sobrevive à aula</strong> Quando dois sistemas disputam o mesmo dado, não escolha um vencedor: dê um espaço próprio a cada um e some no fim.</div>
+                    </div>
+                    <div class="callout callout-note">
+                        <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-circle-info"></use></svg>
+                        <div><strong>Ficou uma promessa em aberto</strong> O <code>LifeComponent</code> apareceu no desenho mas não foi construído. Ele é o assunto do <a href="../10/">Módulo 10 — Status e Perigos</a>.</div>
+                    </div>
+                    <div class="callout callout-warn mb-0">
+                        <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-shield-halved"></use></svg>
+                        <div><strong>Guarde os seus números</strong> <em>max_speed</em>, <em>acceleration</em>, <em>deceleration</em> e <em>force</em> acompanham o seu jogo até o fim do curso — são parte da identidade dele tanto quanto a arte.</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Navigation & Controls Footer -->
+    <footer class="presentation-controls">
+        <button id="prev-btn" class="nav-btn">❮ Anterior</button>
+        <div class="slide-indicator">
+            Slide <span id="current-slide-num">1</span> / <span id="total-slides-num">18</span>
+        </div>
+        <button id="next-btn" class="nav-btn">Próximo ❯</button>
+        <button id="fullscreen-btn" class="nav-btn secondary">Fullscreen ⛶</button>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="../../../assets/course.js"></script>
+    <script src="../../../script.js"></script>
+</body>
+</html>

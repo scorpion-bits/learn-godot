@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Módulo 10 — Status e Perigos</title>
+    <!-- Fonts -->
+    <link rel="stylesheet" href="../../../assets/fonts/fonts.css">
+    <link rel="stylesheet" href="../../../style.css">
+</head>
+<body data-module="programming/10">
+    <script src="../../../assets/icons-ui/ui-icons.js"></script>
+
+    <!-- Background Orbs & Wave Overlay -->
+    <div class="bg-gradient-container">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+        <div class="wave-bg"></div>
+    </div>
+
+    <!-- Topbar -->
+    <div class="topbar">
+        <div class="topbar-left">
+            <a href="../../../index.html" class="back-link"><svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-arrow-left"></use></svg> Índice</a>
+            <span class="lesson-tag">Módulo 10</span>
+            <span class="lesson-name">Status e Perigos</span>
+        </div>
+        <div class="progress-wrap">
+            <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
+            <span class="progress-text" id="progress-text">1 / 16</span>
+        </div>
+    </div>
+
+    <main class="deck">
+
+        <!-- 1: Capa -->
+        <section class="slide active" id="slide-cover">
+            <div class="eyebrow"><span class="num">01</span> · Boas-vindas</div>
+            <h1 class="slide-title">STATUS E PERIGOS</h1>
+            <p class="slide-sub">Fazendo o mundo conseguir machucar o seu personagem</p>
+            <div class="callout callout-note">
+                <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-circle-info"></use></svg>
+                <div><strong>Antes de começar</strong> Na aula de <strong>Física para Jogos</strong> apareceu um nome que ficou sem construção: o <code>LifeComponent</code>, que "reduz a vida quando a Hitbox entra na Hurtbox". Hoje é o dia dele.</div>
+            </div>
+        </section>
+
+        <!-- 2: Objetivos -->
+        <section class="slide" id="slide-goals">
+            <div class="eyebrow"><span class="num">02</span> · Roteiro</div>
+            <h1 class="slide-title">O QUE VOCÊ VAI CONSTRUIR</h1>
+            <p class="slide-sub">Um sistema de dano que serve espinho, inimigo e buraco — sem repetir código</p>
+            <div class="grid-2 align-start">
+                <div class="goal-list">
+                    <div class="goal-item">
+                        <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-bolt"></use></svg>
+                        <div><strong>Separar quem machuca de quem apanha</strong><span>Duas peças pequenas: <code>HitboxComponent</code> e a área que recebe o golpe.</span></div>
+                    </div>
+                    <div class="goal-item">
+                        <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-shield-halved"></use></svg>
+                        <div><strong>Criar o LifeComponent</strong><span>Vida atual, vida máxima, e a regra de nunca passar de zero.</span></div>
+                    </div>
+                    <div class="goal-item">
+                        <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-layer-group"></use></svg>
+                        <div><strong>Usar camadas de colisão</strong><span>Para o espinho machucar o player sem machucar outro espinho.</span></div>
+                    </div>
+                </div>
+                <div class="goal-list">
+                    <div class="goal-item">
+                        <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-desktop"></use></svg>
+                        <div><strong>Mostrar a vida na tela</strong><span>Uma barra que escuta o componente e se atualiza sozinha.</span></div>
+                    </div>
+                    <div class="goal-item">
+                        <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-flask"></use></svg>
+                        <div><strong>Montar três perigos diferentes</strong><span>Espinho, inimigo e buraco — os três reaproveitando a mesma peça.</span></div>
+                    </div>
+                    <div class="goal-item">
+                        <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-stop"></use></svg>
+                        <div><strong>Tratar a morte</strong><span>Um signal <code>died</code> que o resto do jogo pode escutar.</span></div>
+                    </div>
+                </div>
+            </div>
+            <div class="callout callout-tip">
+                <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-diagram-project"></use></svg>
+                <div><strong>O mesmo molde do inventário</strong> Você vai reconhecer a receita: um componente isolado, um <code>signal</code> avisando que algo mudou, e uma interface que escuta sem conhecer os detalhes. É a terceira vez que ela aparece — e a partir de agora ela é sua ferramenta padrão.</div>
+            </div>
+        </section>
+
+        <!-- 3: O problema -->
+        <section class="slide" id="slide-problem">
+            <div class="eyebrow"><span class="num">03</span> · Conceito</div>
+            <h1 class="slide-title">QUEM DECIDE QUANTO DÓI?</h1>
+            <p class="slide-sub">Parece detalhe. É a decisão que separa um sistema de dano de uma gambiarra.</p>
+            <div class="grid-2 align-start">
+                <div>
+                    <div class="feature-card bad">
+                        <h4>❌ Cada perigo mexendo na vida do player</h4>
+                        <p>O espinho procura o player e subtrai 1. O inimigo procura o player e subtrai 2. O buraco procura o player e subtrai 3. Três scripts que precisam saber onde mora a vida do personagem — e que quebram juntos no dia em que ela mudar de lugar.</p>
+                    </div>
+                    <div class="code-window">
+                        <div class="code-header"><span class="file-name">DontDoThis.gd</span><div class="window-dots"><span class="dot dot-blue">●</span><span class="dot dot-yellow">●</span><span class="dot dot-red">●</span></div></div>
+                        <pre class="code-content"><code><span class="k-comment"># no script do espinho</span>
+<span class="k-keyword">func</span> <span class="k-func">_on_body_entered</span>(body):
+    body.health -= <span class="k-number">1</span>
+    <span class="k-comment"># e se o inimigo não tiver "health"?</span>
+    <span class="k-comment"># e se um dia ela virar "life"?</span></code></pre>
+                    </div>
+                </div>
+                <div>
+                    <div class="feature-card good">
+                        <h4>✅ O perigo só declara o quanto ele dói</h4>
+                        <p>O espinho não sabe o que é vida, nem quem é o player. Ele diz apenas <em>"eu causo 1 de dano"</em>. Quem tem vida é que decide o que fazer com essa informação — e quem não tem, simplesmente ignora.</p>
+                    </div>
+                    <div class="callout callout-tip">
+                        <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-shapes"></use></svg>
+                        <div><strong>O teste que revela um bom sistema</strong> Pergunte: <em>"consigo usar esta peça num inimigo sem mudar nada?"</em> No modelo da esquerda, não. No da direita, sim — e é por isso que ele vai sustentar as batalhas do próximo módulo.</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4: Hitbox e Hurtbox -->
+        <section class="slide" id="slide-boxes">
+            <div class="eyebrow"><span class="num">04</span> · Conceito</div>
+            <h1 class="slide-title">HITBOX E HURTBOX</h1>
+            <p class="slide-sub">Dois nomes que todo jogo de ação usa — e que significam coisas opostas</p>
+            <div class="grid-2 align-start">
+                <div class="feature-card node-card accent-blue">
+                    <img src="../../../assets/icons/Area2D.svg" alt="Ícone Area2D do Godot">
+                    <div>
+                        <h4>Hitbox — a área que MACHUCA</h4>
+                        <p>O espinho do chão, a lâmina do inimigo, a explosão. Carrega um número: quanto de dano causa. Não tem vida, não apanha.</p>
+                    </div>
+                </div>
+                <div class="feature-card node-card accent-purple">
+                    <img src="../../../assets/icons/Area2D.svg" alt="Ícone Area2D do Godot">
+                    <div>
+                        <h4>Hurtbox — a área que APANHA</h4>
+                        <p>O corpo do player, o corpo do inimigo. É o alvo válido. Quando uma Hitbox entra aqui, alguém toma dano.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="grid-2">
+                <div class="callout callout-note mt-0">
+                    <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-circle-info"></use></svg>
+                    <div><strong>As duas são <code>Area2D</code></strong> A diferença não está no tipo de Node: está no <em>papel</em> que cada uma cumpre e nas camadas de colisão que a gente configura. Por isso o nome importa tanto — é ele que diz para que serve.</div>
+                </div>
+                <div class="callout callout-tip mt-0">
+                    <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-arrows-left-right"></use></svg>
+                    <div><strong>Por que separar, se poderia ser uma só?</strong> Porque as duas têm tamanhos diferentes. A Hurtbox costuma ser <em>menor</em> que o desenho do personagem — dá ao jogador a sensação de ter escapado por pouco. A Hitbox de um golpe costuma ser <em>maior</em>, para o ataque parecer generoso.</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5: HitboxComponent -->
+        <section class="slide" id="slide-hitbox">
+            <div class="eyebrow"><span class="num">05</span> · Prática</div>
+            <h1 class="slide-title">O HITBOX COMPONENT</h1>
+            <p class="slide-sub">Quatro linhas. É tudo que um perigo precisa saber sobre si mesmo.</p>
+            <div class="grid-2 align-start">
+                <div class="code-window">
+                    <div class="code-header"><span class="file-name">HitboxComponent.gd</span><div class="window-dots"><span class="dot dot-blue">●</span><span class="dot dot-yellow">●</span><span class="dot dot-red">●</span></div></div>
+                    <pre class="code-content"><code><span class="k-keyword">extends</span> <span class="k-type">Area2D</span>
+<span class="k-keyword">class_name</span> <span class="k-type">HitboxComponent</span>
+
+<span class="k-annotation">@export</span> <span class="k-keyword">var</span> <span class="k-var">damage</span> : <span class="k-type">int</span> = <span class="k-number">1</span></code></pre>
+                </div>
+                <div>
+                    <div class="callout callout-tip mt-0">
+                        <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-lightbulb"></use></svg>
+                        <div><strong>Não é pouco código: é pouco código de propósito</strong> Esta peça não tem nenhuma lógica porque ela não precisa de nenhuma. Ela é um <em>crachá</em>: "sou algo que machuca, e machuco tanto". Quem faz o trabalho é do outro lado.</div>
+                    </div>
+                    <div class="callout callout-note">
+                        <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-tag"></use></svg>
+                        <div><strong>O <code>class_name</code> aqui é essencial</strong> Daqui a pouco o LifeComponent vai perguntar <code>if area is HitboxComponent</code>. Sem <code>class_name</code>, essa pergunta não existiria e não haveria como distinguir uma área perigosa de uma área qualquer.</div>
+                    </div>
+                    <div class="callout callout-warn mb-0">
+                        <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-shapes"></use></svg>
+                        <div><strong>Ela precisa de um filho</strong> Como todo Area2D, um <code>CollisionShape2D</code> com um <em>Shape</em> escolhido — senão a área não tem formato e nunca detecta nada. É o mesmo aviso amarelo do CharacterBody2D lá do começo do curso.</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 6: LifeComponent -->
+        <section class="slide" id="slide-life">
+            <div class="eyebrow"><span class="num">06</span> · Prática</div>
+            <h1 class="slide-title">O LIFE COMPONENT</h1>
+            <p class="slide-sub">Guarda a vida, aplica a regra, e avisa o mundo</p>
+            <div class="grid-2 align-start">
+                <div class="code-window">
+                    <div class="code-header"><span class="file-name">LifeComponent.gd</span><div class="window-dots"><span class="dot dot-blue">●</span><span class="dot dot-yellow">●</span><span class="dot dot-red">●</span></div></div>
+                    <pre class="code-content"><code><span class="k-keyword">extends</span> <span class="k-type">Node</span>
+<span class="k-keyword">class_name</span> <span class="k-type">LifeComponent</span>
+
+<span class="k-keyword">signal</span> <span class="k-func">life_changed</span>(current : <span class="k-type">int</span>, maximum : <span class="k-type">int</span>)
+<span class="k-keyword">signal</span> <span class="k-func">died</span>
+
+<span class="k-annotation">@export</span> <span class="k-keyword">var</span> <span class="k-var">max_life</span> : <span class="k-type">int</span> = <span class="k-number">5</span>
+<span class="k-keyword">var</span> <span class="k-var">life</span> : <span class="k-type">int</span>
+
+<span class="k-keyword">func</span> <span class="k-func">_ready</span>() -> <span class="k-type">void</span>:
+    life = max_life
+
+<span class="k-keyword">func</span> <span class="k-func">take_damage</span>(amount : <span class="k-type">int</span>) -> <span class="k-type">void</span>:
+    <span class="k-keyword">if</span>(life <= <span class="k-number">0</span>):
+        <span class="k-keyword">return</span>   <span class="k-comment"># já morreu; não morre de novo</span>
+
+    life -= amount
+    <span class="k-keyword">if</span>(life < <span class="k-number">0</span>):
+        life = <span class="k-number">0</span>
+
+    life_changed.<span class="k-func">emit</span>(life, max_life)
+    <span class="k-keyword">if</span>(life == <span class="k-number">0</span>):
+        died.<span class="k-func">emit</span>()</code></pre>
+                </div>
+                <div>
+                    <div class="callout callout-tip mt-0">
+                        <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-tower-broadcast"></use></svg>
+                        <div><strong>Um signal que carrega informação</strong> No inventário, o <code>changed</code> não levava nada. Aqui, <code>life_changed(current, maximum)</code> entrega os dois números. Quem escuta não precisa ir buscar nada — recebe pronto.</div>
+                    </div>
+                    <div class="callout callout-warn">
+                        <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-shield-halved"></use></svg>
+                        <div><strong>O <code>return</code> logo no começo evita um bug clássico</strong> Sem ele, um personagem já morto continuaria "tomando dano" e o <code>died</code> dispararia várias vezes — três telas de morte, ou três recompensas.</div>
+                    </div>
+                    <div class="callout callout-note mb-0">
+                        <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-circle-question"></use></svg>
+                        <div><strong>Por que <code>life</code> não é <code>@export</code>?</strong> Porque ela não é uma configuração, é um <em>estado</em>: muda durante o jogo. Quem se configura no Inspector é a <code>max_life</code>. Essa distinção — o que se ajusta e o que acontece — vale para todo componente que você criar.</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 7: Conectando -->
+        <section class="slide" id="slide-wiring">
+            <div class="eyebrow"><span class="num">07</span> · Prática</div>
+            <h1 class="slide-title">LIGANDO OS DOIS LADOS</h1>
+            <p class="slide-sub">A Hurtbox do player avisa; o LifeComponent decide</p>
+            <div class="grid-2 align-start">
+                <div>
+                    <p class="lede">A Hurtbox é um <code>Area2D</code> filho do Player. Conectamos o signal <code>area_entered</code> dela a uma função do <code>LifeComponent</code>. Quando qualquer área entra, ele checa se é perigosa.</p>
+                    <div class="code-window">
+                        <div class="code-header"><span class="file-name">LifeComponent.gd — continuação</span><div class="window-dots"><span class="dot dot-blue">●</span><span class="dot dot-yellow">●</span><span class="dot dot-red">●</span></div></div>
+                        <pre class="code-content"><code><span class="k-comment"># conectado ao area_entered da Hurtbox</span>
+<span class="k-keyword">func</span> <span class="k-func">_on_trigger_area_entered</span>(area : <span class="k-type">Area2D</span>) -> <span class="k-type">void</span>:
+    <span class="k-keyword">if</span>(area <span class="k-keyword">is</span> <span class="k-type">HitboxComponent</span>):
+        <span class="k-func">take_damage</span>(area.damage)</code></pre>
+                    </div>
+                </div>
+                <div>
+                    <div class="callout callout-tip mt-0">
+                        <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-circle-check"></use></svg>
+                        <div><strong>A palavra <code>is</code></strong> Ela pergunta "esta coisa é do tipo tal?". Como demos <code>class_name HitboxComponent</code> à área que machuca, o LifeComponent consegue distinguir um espinho de uma área de gatilho qualquer — a de uma porta, por exemplo.</div>
+                    </div>
+                    <div class="callout callout-note">
+                        <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-tower-broadcast"></use></svg>
+                        <div><strong>Um signal, vários ouvintes</strong> O mesmo <code>area_entered</code> da Hurtbox pode ser conectado também ao <code>KnockbackComponent</code> da aula de Física. Um dispara, dois reagem: um tira vida, o outro empurra. Nenhum dos dois sabe da existência do outro.</div>
+                    </div>
+                    <div class="callout callout-warn mb-0">
+                        <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-clock"></use></svg>
+                        <div><strong>Por que <code>area_entered</code> e não "está encostando"?</strong> Porque <code>entered</code> dispara <strong>uma vez</strong>, no momento em que entra. Se usássemos uma checagem contínua, parar em cima de um espinho drenaria a vida inteira em menos de um segundo.</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 8: A árvore -->
+        <section class="slide" id="slide-tree">
+            <div class="eyebrow"><span class="num">08</span> · Prática</div>
+            <h1 class="slide-title">COMO FICA NA ÁRVORE</h1>
+            <p class="slide-sub">Duas árvores, as mesmas peças</p>
+            <div class="grid-2 align-start">
+                <div>
+                    <div class="godot-editor-layout">
+                        <div class="godot-panel">
+                            <div class="godot-panel-header"><span>Scene — Player</span></div>
+                            <div class="godot-tree">
+                                <div class="godot-node"><img src="../../../assets/icons/CharacterBody2D.svg" class="godot-icon" alt=""><span>Player</span><img src="../../../assets/icons/Script.svg" class="godot-script-icon" alt=""></div>
+                                <div class="godot-tree-children">
+                                    <div class="godot-node child"><img src="../../../assets/icons/Sprite2D.svg" class="godot-icon" alt=""><span>Sprite2D</span></div>
+                                    <div class="godot-node child"><img src="../../../assets/icons/Node.svg" class="godot-icon" alt=""><span>InputComponent</span></div>
+                                    <div class="godot-node child"><img src="../../../assets/icons/Node.svg" class="godot-icon" alt=""><span>MovementComponent</span></div>
+                                    <div class="godot-node child"><img src="../../../assets/icons/Node.svg" class="godot-icon" alt=""><span>InventoryComponent</span></div>
+                                    <div class="godot-node child selected"><img src="../../../assets/icons/Node.svg" class="godot-icon" alt=""><span>LifeComponent</span><img src="../../../assets/icons/Script.svg" class="godot-script-icon" alt=""></div>
+                                    <div class="godot-node child selected"><img src="../../../assets/icons/Area2D.svg" class="godot-icon" alt=""><span>Hurtbox</span></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="lede mb-0">O player <strong>tem vida</strong> e <strong>apanha</strong>: LifeComponent + Hurtbox.</p>
+                </div>
+                <div>
+                    <div class="godot-editor-layout">
+                        <div class="godot-panel">
+                            <div class="godot-panel-header"><span>Scene — Espinho</span></div>
+                            <div class="godot-tree">
+                                <div class="godot-node"><img src="../../../assets/icons/Node2D.svg" class="godot-icon" alt=""><span>Espinho</span></div>
+                                <div class="godot-tree-children">
+                                    <div class="godot-node child"><img src="../../../assets/icons/Sprite2D.svg" class="godot-icon" alt=""><span>Sprite2D</span></div>
+                                    <div class="godot-node child selected"><img src="../../../assets/icons/Area2D.svg" class="godot-icon" alt=""><span>HitboxComponent</span><img src="../../../assets/icons/Script.svg" class="godot-script-icon" alt=""></div>
+                                    <div class="godot-tree-children">
+                                        <div class="godot-node child"><img src="../../../assets/icons/CollisionShape2D.svg" class="godot-icon" alt=""><span>CollisionShape2D</span></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="lede mb-0">O espinho <strong>só machuca</strong>: HitboxComponent e nada mais. Sem vida, sem script próprio.</p>
+                </div>
+            </div>
+            <div class="callout callout-tip">
+                <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-shapes"></use></svg>
+                <div><strong>E o inimigo?</strong> É a soma dos dois: ele <em>tem</em> LifeComponent e Hurtbox (para poder apanhar) <strong>e</strong> um HitboxComponent (para machucar quem encostar). As mesmas três peças, combinadas de outro jeito.</div>
+            </div>
+        </section>
+
+        <!-- 9: Camadas -->
+        <section class="slide" id="slide-layers">
+            <div class="eyebrow"><span class="num">09</span> · Prática</div>
+            <h1 class="slide-title">POR QUE O ESPINHO NÃO MACHUCA O ESPINHO</h1>
+            <p class="slide-sub">Camadas e máscaras: quem eu sou e com quem eu me importo</p>
+            <div class="grid-2 align-start">
+                <div>
+                    <div class="pill-list compact">
+                        <div class="pill-item">
+                            <span class="pill-code blue">Layer</span>
+                            <span class="pill-text"><strong>Em que camada eu estou.</strong> "Eu sou um perigo."</span>
+                        </div>
+                        <div class="pill-item">
+                            <span class="pill-code green">Mask</span>
+                            <span class="pill-text"><strong>Quais camadas eu enxergo.</strong> "Eu me importo com perigos."</span>
+                        </div>
+                    </div>
+                    <div class="callout callout-note">
+                        <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-circle-info"></use></svg>
+                        <div><strong>Uma detecção só acontece quando as duas coisas batem</strong> A Hurtbox precisa ter na <em>máscara</em> a camada em que a Hitbox <em>está</em>. Se você configurar só um dos lados, nada acontece — e é o erro nº 1 desta aula.</div>
+                    </div>
+                    <div class="callout callout-tip mb-0">
+                        <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-lightbulb"></use></svg>
+                        <div><strong>Dê nome às camadas</strong> Em <em>Project Settings → Layer Names → 2D Physics</em> você troca "Layer 3" por "perigo". Seis semanas depois, você vai agradecer.</div>
+                    </div>
+                </div>
+                <div>
+                    <div class="godot-editor-layout">
+                        <div class="godot-inspector">
+                            <div class="godot-inspector-header"><span>Inspector — HitboxComponent (espinho)</span></div>
+                            <div class="godot-inspector-body">
+                                <div class="godot-prop-group">
+                                    <div class="godot-prop-title">Collision</div>
+                                    <div class="godot-prop-row">
+                                        <span class="godot-prop-label">Layer</span>
+                                        <span class="godot-prop-input">perigo</span>
+                                    </div>
+                                    <div class="godot-prop-row">
+                                        <span class="godot-prop-label">Mask</span>
+                                        <span class="godot-prop-input" style="color:#94a3b8;">(nenhuma)</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="godot-editor-layout">
+                        <div class="godot-inspector">
+                            <div class="godot-inspector-header"><span>Inspector — Hurtbox (player)</span></div>
+                            <div class="godot-inspector-body">
+                                <div class="godot-prop-group">
+                                    <div class="godot-prop-title">Collision</div>
+                                    <div class="godot-prop-row">
+                                        <span class="godot-prop-label">Layer</span>
+                                        <span class="godot-prop-input" style="color:#94a3b8;">(nenhuma)</span>
+                                    </div>
+                                    <div class="godot-prop-row">
+                                        <span class="godot-prop-label">Mask</span>
+                                        <span class="godot-prop-input">perigo</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="callout callout-warn mb-0">
+                        <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-circle-check"></use></svg>
+                        <div><strong>Repare no desenho</strong> A Hitbox só <em>está</em> numa camada; a Hurtbox só <em>olha</em> para ela. Um espinho não olha para nada, então não detecta outro espinho. O problema se resolve sozinho.</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 10: Checkpoint 1 -->
+        <section class="slide checkpoint-slide" id="slide-checkpoint-1">
+            <div class="eyebrow"><span class="num">10</span> · Mãos no código</div>
+            <h1 class="slide-title">CHECKPOINT 1 — O ESPINHO QUE MACHUCA</h1>
+            <p class="slide-sub">Sem interface ainda. Vamos ver a vida caindo pelo Output.</p>
+            <div class="grid-2 align-start">
+                <div>
+                    <div class="checkpoint">
+                        <h3>Faça agora</h3>
+                        <ol class="step-list">
+                            <li>Crie <code>HitboxComponent.gd</code> (<code>extends Area2D</code>) e <code>LifeComponent.gd</code> (<code>extends Node</code>), ambos com <code>class_name</code>.</li>
+                            <li>No Player, adicione o <code>LifeComponent</code> e um <code>Area2D</code> chamado <strong>Hurtbox</strong>, com CollisionShape2D.</li>
+                            <li>Em <em>Project Settings</em>, nomeie a camada 3 como <strong>perigo</strong>.</li>
+                            <li>Ponha a Hitbox na camada <em>perigo</em>, sem máscara. Ponha a Hurtbox sem camada, com máscara <em>perigo</em>.</li>
+                            <li>Conecte o <strong>area_entered</strong> da Hurtbox ao <code>_on_trigger_area_entered</code> do LifeComponent.</li>
+                            <li>Em <code>take_damage</code>, acrescente <code>print(life)</code>. Faça uma cena de espinho e ande por cima.</li>
+                        </ol>
+                    </div>
+                </div>
+                <div>
+                    <div class="timer-box" data-minutes="20">
+                        <span class="timer-label">Tempo do checkpoint</span>
+                        <span class="timer-display">20:00</span>
+                        <button type="button" class="timer-btn">▶ Iniciar</button>
+                    </div>
+                    <div class="callout callout-warn">
+                        <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-bug"></use></svg>
+                        <div><strong>Não tomou dano? Confira nesta ordem</strong> as duas áreas têm <em>Shape</em>? A máscara da Hurtbox aponta para a camada da Hitbox? O signal foi mesmo conectado (o ícone verde aparece ao lado da função)? Ligue <em>Debug → Visible Collision Shapes</em> para ver as áreas no jogo rodando.</div>
+                    </div>
+                    <div class="callout callout-tip mb-0">
+                        <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-flask"></use></svg>
+                        <div><strong>Terminou antes?</strong> Mude o <em>Damage</em> do espinho no Inspector para 3 e confira que a vida cai de três em três — sem tocar no código.</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 11: A barra de vida -->
+        <section class="slide" id="slide-lifebar">
+            <div class="eyebrow"><span class="num">11</span> · Prática</div>
+            <h1 class="slide-title">A BARRA DE VIDA</h1>
+            <p class="slide-sub">A interface escuta o componente — nunca o contrário</p>
+            <div class="grid-2 align-start">
+                <div class="code-window">
+                    <div class="code-header"><span class="file-name">LifeBar.gd</span><div class="window-dots"><span class="dot dot-blue">●</span><span class="dot dot-yellow">●</span><span class="dot dot-red">●</span></div></div>
+                    <pre class="code-content"><code><span class="k-keyword">extends</span> <span class="k-type">ProgressBar</span>
+
+<span class="k-annotation">@export</span> <span class="k-keyword">var</span> <span class="k-var">life_component</span> : <span class="k-type">LifeComponent</span>
+
+<span class="k-keyword">func</span> <span class="k-func">_ready</span>() -> <span class="k-type">void</span>:
+    <span class="k-keyword">if</span>(!life_component):
+        <span class="k-func">push_error</span>(<span class="k-string">"LifeBar: life_component wasn't set."</span>)
+        <span class="k-keyword">return</span>
+
+    life_component.life_changed.<span class="k-func">connect</span>(<span class="k-func">_on_life_changed</span>)
+    <span class="k-func">_on_life_changed</span>(life_component.life, life_component.max_life)
+
+<span class="k-keyword">func</span> <span class="k-func">_on_life_changed</span>(current : <span class="k-type">int</span>, maximum : <span class="k-type">int</span>) -> <span class="k-type">void</span>:
+    max_value = maximum
+    value = current</code></pre>
+                </div>
+                <div>
+                    <div class="callout callout-tip mt-0">
+                        <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-desktop"></use></svg>
+                        <div><strong><code>ProgressBar</code> já existe pronto</strong> É um Control Node, da família que você viu na aula de Interface. Ele sozinho já sabe desenhar a barra: nós só dizemos o <code>max_value</code> e o <code>value</code>.</div>
+                    </div>
+                    <div class="callout callout-note">
+                        <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-play"></use></svg>
+                        <div><strong>Por que chamar <code>_on_life_changed</code> à mão no <code>_ready</code>?</strong> Porque o signal só dispara quando a vida <em>muda</em>. Sem essa chamada inicial, a barra começaria vazia até o primeiro dano. Conectar e depois sincronizar uma vez é o padrão para qualquer interface que escuta estado.</div>
+                    </div>
+                    <div class="callout callout-warn mb-0">
+                        <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-diagram-project"></use></svg>
+                        <div><strong>A seta aponta num sentido só</strong> A barra conhece o LifeComponent; o LifeComponent não faz ideia de que existe uma barra. Se amanhã você quiser trocar por corações em vez de barra, nada muda do lado da vida.</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 12: Morrer -->
+        <section class="slide" id="slide-death">
+            <div class="eyebrow"><span class="num">12</span> · Prática</div>
+            <h1 class="slide-title">QUANDO A VIDA CHEGA A ZERO</h1>
+            <p class="slide-sub">O mesmo signal, respostas diferentes</p>
+            <div class="grid-2 align-start">
+                <div>
+                    <p class="lede">O <code>LifeComponent</code> não decide o que acontece na morte — ele só avisa. Quem escuta é que responde, e cada personagem responde à sua maneira.</p>
+                    <div class="code-window">
+                        <div class="code-header"><span class="file-name">Enemy.gd</span><div class="window-dots"><span class="dot dot-blue">●</span><span class="dot dot-yellow">●</span><span class="dot dot-red">●</span></div></div>
+                        <pre class="code-content"><code><span class="k-keyword">extends</span> <span class="k-type">CharacterBody2D</span>
+
+<span class="k-annotation">@onready</span> <span class="k-keyword">var</span> <span class="k-var">life</span> : <span class="k-type">LifeComponent</span> = <span class="k-var">$LifeComponent</span>
+
+<span class="k-keyword">func</span> <span class="k-func">_ready</span>() -> <span class="k-type">void</span>:
+    life.died.<span class="k-func">connect</span>(<span class="k-func">_on_died</span>)
+
+<span class="k-keyword">func</span> <span class="k-func">_on_died</span>() -> <span class="k-type">void</span>:
+    <span class="k-func">queue_free</span>()   <span class="k-comment"># o inimigo some do mapa</span></code></pre>
+                    </div>
+                </div>
+                <div>
+                    <div class="callout callout-tip mt-0">
+                        <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-shapes"></use></svg>
+                        <div><strong>O player escuta o mesmo signal e faz outra coisa</strong> Em vez de sumir, ele pode voltar ao último ponto seguro, ou mostrar uma tela de fim de jogo. <strong>Mesmo componente, mesma emissão, respostas diferentes</strong> — é exatamente o ponto de separar quem avisa de quem reage.</div>
+                    </div>
+                    <div class="callout callout-note">
+                        <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-circle-question"></use></svg>
+                        <div><strong>Por que não pôr o <code>queue_free()</code> dentro do LifeComponent?</strong> Porque aí toda coisa que tem vida sumiria ao morrer — inclusive o player, que não deveria. O componente cuida do <em>número</em>; a consequência é de quem o carrega.</div>
+                    </div>
+                    <div class="callout callout-warn mb-0">
+                        <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-lightbulb"></use></svg>
+                        <div><strong>Uma ponte para o inventário</strong> Como o inimigo tem <code>InventoryComponent</code> se você quiser, o <code>_on_died</code> é o lugar natural para ele largar os itens no chão — instanciando aquelas cenas de <code>WorldItem</code> do módulo passado.</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 13: Buraco -->
+        <section class="slide" id="slide-pit">
+            <div class="eyebrow"><span class="num">13</span> · Prática</div>
+            <h1 class="slide-title">O BURACO</h1>
+            <p class="slide-sub">Um perigo que faz mais do que tirar vida</p>
+            <div class="grid-2 align-start">
+                <div>
+                    <p class="lede">Espinho e inimigo cabem inteiros no <code>HitboxComponent</code>. O buraco não: além de machucar, ele precisa <strong>devolver o player para um lugar seguro</strong>. Aqui a Hitbox continua fazendo a parte dela, e um script pequeno cuida do resto.</p>
+                    <div class="callout callout-tip mb-0">
+                        <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-diagram-project"></use></svg>
+                        <div><strong>Repare no que não mudou</strong> Não precisamos alterar o LifeComponent, nem a Hitbox, nem a barra de vida. O comportamento novo entrou <em>ao lado</em>, sem mexer no que já funcionava. Esse é o retorno concreto da arquitetura de componentes.</div>
+                    </div>
+                </div>
+                <div class="code-window mt-0">
+                    <div class="code-header"><span class="file-name">Pit.gd</span><div class="window-dots"><span class="dot dot-blue">●</span><span class="dot dot-yellow">●</span><span class="dot dot-red">●</span></div></div>
+                    <pre class="code-content"><code><span class="k-keyword">extends</span> <span class="k-type">HitboxComponent</span>
+
+<span class="k-comment"># para onde o player volta ao cair</span>
+<span class="k-annotation">@export</span> <span class="k-keyword">var</span> <span class="k-var">respawn_point</span> : <span class="k-type">Marker2D</span>
+
+<span class="k-keyword">func</span> <span class="k-func">_on_area_entered</span>(area : <span class="k-type">Area2D</span>) -> <span class="k-type">void</span>:
+    <span class="k-keyword">if</span>(!respawn_point):
+        <span class="k-keyword">return</span>
+
+    <span class="k-comment"># area é a Hurtbox; o dono dela é o personagem</span>
+    <span class="k-keyword">var</span> <span class="k-var">body</span> = area.<span class="k-func">get_parent</span>()
+    body.global_position = respawn_point.global_position</code></pre>
+                </div>
+            </div>
+            <div class="callout callout-note">
+                <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-cube"></use></svg>
+                <div><strong>Duas coisas novas aqui</strong> <code>extends HitboxComponent</code> — o buraco <em>é</em> uma Hitbox e ganha o campo <code>damage</code> de graça, só acrescentando comportamento. E <code>Marker2D</code>, um Node que serve só para marcar uma posição no mapa: invisível no jogo, visível no editor.</div>
+            </div>
+        </section>
+
+        <!-- 14: Checkpoint 2 -->
+        <section class="slide checkpoint-slide" id="slide-checkpoint-2">
+            <div class="eyebrow"><span class="num">14</span> · Mãos no código</div>
+            <h1 class="slide-title">CHECKPOINT 2 — TRÊS PERIGOS</h1>
+            <p class="slide-sub">Agora com a barra na tela, dá para sentir o jogo funcionando</p>
+            <div class="grid-2 align-start">
+                <div>
+                    <div class="checkpoint">
+                        <h3>Faça agora</h3>
+                        <ol class="step-list">
+                            <li>Adicione uma <code>ProgressBar</code> dentro de um <code>CanvasLayer</code> e anexe o <code>LifeBar.gd</code>.</li>
+                            <li>Arraste o <code>LifeComponent</code> do Player para a gaveta do Inspector da barra.</li>
+                            <li>Crie um <strong>inimigo</strong>: CharacterBody2D com LifeComponent, Hurtbox <em>e</em> HitboxComponent.</li>
+                            <li>Faça o inimigo sumir ao morrer, conectando o signal <code>died</code>.</li>
+                            <li>Crie um <strong>buraco</strong> com o <code>Pit.gd</code> e um <code>Marker2D</code> como ponto de retorno.</li>
+                            <li>Teste os três perigos seguidos e confira a barra acompanhando.</li>
+                        </ol>
+                    </div>
+                </div>
+                <div>
+                    <div class="timer-box" data-minutes="25">
+                        <span class="timer-label">Tempo do checkpoint</span>
+                        <span class="timer-display">25:00</span>
+                        <button type="button" class="timer-btn">▶ Iniciar</button>
+                    </div>
+                    <div class="callout callout-warn">
+                        <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-triangle-exclamation"></use></svg>
+                        <div><strong>O inimigo se machuca sozinho?</strong> É porque a Hurtbox dele está enxergando a própria Hitbox. Ponha a Hitbox do inimigo numa camada diferente da que a Hurtbox dele observa — por exemplo, uma camada <em>perigo_inimigo</em> que só a Hurtbox do player enxerga.</div>
+                    </div>
+                    <div class="callout callout-tip mb-0">
+                        <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-flask"></use></svg>
+                        <div><strong>Terminou antes?</strong> Faça o inimigo largar uma poção ao morrer, instanciando a cena <code>WorldItem</code> no <code>_on_died</code>. É o inventário e o dano se encontrando.</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 15: Balanceamento -->
+        <section class="slide" id="slide-tuning">
+            <div class="eyebrow"><span class="num">15</span> · Prática</div>
+            <h1 class="slide-title">AGORA VOCÊ TEM NÚMEROS PARA AJUSTAR</h1>
+            <p class="slide-sub">E é aqui que dano deixa de ser código e vira game design</p>
+            <div class="grid-3">
+                <div class="card">
+                    <h3>Max Life</h3>
+                    <p class="lede mb-0">Vida 3 faz cada erro pesar. Vida 20 faz o jogador experimentar sem medo. Não existe número certo — existe a experiência que você quer.</p>
+                </div>
+                <div class="card">
+                    <h3>Damage</h3>
+                    <p class="lede mb-0">Um espinho que tira metade da vida ensina a desviar. Um que tira 1 de 20 vira paisagem que o jogador ignora.</p>
+                </div>
+                <div class="card">
+                    <h3>Tamanho da Hurtbox</h3>
+                    <p class="lede mb-0">Menor que o desenho = o jogador sente que escapou por pouco. Maior = ele se sente roubado. Este é o ajuste mais invisível e mais decisivo.</p>
+                </div>
+            </div>
+            <div class="grid-2">
+                <div class="callout callout-tip mt-0">
+                    <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-flask"></use></svg>
+                    <div><strong>Teste os extremos</strong> Mesma dinâmica da aula de Física: ponha a vida em 1 e depois em 50, jogue os dois, e repare em como o <em>seu jeito de jogar</em> muda. Você não está mexendo em números — está mexendo em comportamento.</div>
+                </div>
+                <div class="callout callout-note mt-0">
+                    <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-arrow-right-to-bracket"></use></svg>
+                    <div><strong>Tudo isso está no Inspector</strong> Nenhum desses ajustes exige abrir um script. É o <code>@export</code> trabalhando: quem faz o balanceamento do jogo não precisa ser quem programou.</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 16: Recapitulação -->
+        <section class="slide" id="slide-recap">
+            <div class="eyebrow"><span class="num">16</span> · Fechamento</div>
+            <h1 class="slide-title">O QUE VOCÊ CONSTRUIU HOJE</h1>
+            <p class="slide-sub">Três perigos completamente diferentes, com três peças pequenas</p>
+            <div class="grid-2 align-start">
+                <div class="goal-list">
+                    <div class="goal-item">
+                        <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-bolt"></use></svg>
+                        <div><strong>Hitbox machuca, Hurtbox apanha</strong><span>Duas Area2D com papéis opostos, distinguidas por camada de colisão.</span></div>
+                    </div>
+                    <div class="goal-item">
+                        <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-shield-halved"></use></svg>
+                        <div><strong>O LifeComponent guarda e avisa</strong><span>Aplica a regra, emite <code>life_changed</code> e <code>died</code>, e não decide as consequências.</span></div>
+                    </div>
+                    <div class="goal-item">
+                        <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-layer-group"></use></svg>
+                        <div><strong>Layer é quem eu sou, Mask é quem eu vejo</strong><span>Os dois precisam bater. Configurar só um lado é o erro mais comum.</span></div>
+                    </div>
+                </div>
+                <div>
+                    <div class="callout callout-tip mt-0">
+                        <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-circle-check"></use></svg>
+                        <div><strong>A peça que mais vai render</strong> O <code>LifeComponent</code> não foi feito para o player: foi feito para <em>qualquer coisa que tenha vida</em>. Ele já está no inimigo. No próximo módulo, ele vai ser a base da batalha — sem uma linha de mudança.</div>
+                    </div>
+                    <div class="callout callout-note">
+                        <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-tower-broadcast"></use></svg>
+                        <div><strong>Terceira vez que o padrão aparece</strong> Componente isolado + signal + quem escuta reage. Inventário, vida, e agora dano. Quando você precisar de algo novo — energia, fome, munição — já sabe o formato.</div>
+                    </div>
+                    <div class="callout callout-warn mb-0">
+                        <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-bolt"></use></svg>
+                        <div><strong>No próximo módulo: Batalhas por Turno</strong> Player e inimigo já têm vida e já sabem causar dano. Falta combinar isso num confronto organizado: quem age primeiro, o que cada um pode escolher, e como o jogo espera a decisão do jogador.</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Navigation & Controls Footer -->
+    <footer class="presentation-controls">
+        <button id="prev-btn" class="nav-btn">❮ Anterior</button>
+        <div class="slide-indicator">
+            Slide <span id="current-slide-num">1</span> / <span id="total-slides-num">16</span>
+        </div>
+        <button id="next-btn" class="nav-btn">Próximo ❯</button>
+        <button id="fullscreen-btn" class="nav-btn secondary">Fullscreen ⛶</button>
+    </footer>
+
+    <script src="../../../assets/course.js"></script>
+    <script src="../../../script.js"></script>
+</body>
+</html>

@@ -16,8 +16,78 @@ não são documentação sobre as aulas. Cada `<section class="slide">` é um sl
 **Objetivo do curso:** que os alunos construam seu próprio jogo 2D Top-Down.
 A maioria **nunca programou na vida**. Cada encontro dura ~3 horas.
 
-**Início das aulas: 04/08/2026.** Cronograma completo no documento de
-planejamento (`Módulos.docx.pdf`, fora do versionamento — peça ao usuário).
+**Início das aulas: 04/08/2026.** O documento de planejamento **está no disco**,
+na raiz: `Módulos.docx.pdf`. Ele é gitignored (material interno da equipe), mas
+não precisa ser pedido ao usuário — leia. O texto é hexadecimal com fontes
+embutidas; extraia decodificando os `ToUnicode` CMap por fonte
+(`/F4`, `/F5` → `/ToUnicode N 0 R`), não com regex de `(texto) Tj`.
+
+### O cronograma não dá 3 horas por módulo
+
+A turma é a **GameLab**, 15 encontros, 04/08 a 22/09/2026. Um encontro **não é**
+um módulo. Para os módulos do Milan:
+
+| Aula | Data | Conteúdo | Orçamento real do módulo |
+|---|---|---|---|
+| 4 | QUI 13/08 | Módulos 2 e 3 — programação | Módulo 2 divide o encontro |
+| 5 | TER 18/08 | Módulos 4, 5 e 6 — programação | três módulos num encontro |
+| 10 | QUI 03/09 | Módulo 9 + **Módulo 6 de Game Design** | ~1h30 para o Módulo 9 |
+| 11 | TER 08/09 | **Módulos 10 e 11 juntos** | ~1h25 para cada um |
+
+Consequência prática: **acrescentar slides a 10 e 11 estoura o encontro.**
+Somados, os dois decks já pedem ~197 min num encontro de 180. Melhorar esses
+módulos significa aumentar a qualidade *por slide* — mockups, ícones,
+apresentação de Nodes novos — e não a quantidade.
+
+O PDF original diz que a Aula 10 faz "puzzles com inventário". **Não faz** —
+em 01/08/2026 o Milan definiu que o puzzle é de empurrar caixas e acontece no
+Módulo 5 de Game Design. O inventário não precisa de item-chave.
+
+`Módulos-atualizado.md` (na raiz, também gitignored) é a versão revisada do
+programa. Só os módulos do Milan foram mexidos; o resto está reproduzido
+literalmente. Ao mudar o conteúdo de um deck dele, atualize os dois: o deck e
+essa entrada do documento.
+
+### Tópicos oficiais que os decks ainda não cobrem
+
+Confrontando o programa com os decks (01/08/2026):
+
+- **Módulo 9** — ✅ refeito em 01/08/2026, 16 → 20 slides. O inventário virou
+  **4 slots fixos** no espírito de um top-down de ação (decisão do Milan,
+  inspirada no Hyper Light Drifter): sem arrastar, sem empilhar, sem
+  organizar. *Equipamentos* **foi cortado** — no dia da aula não existe número
+  nenhum para equipar; ficou a sugestão de levar para o Módulo 12. Entraram
+  *itens dropados*, a `InventoryUI` como autoload e o `ItemEffect`.
+- **Módulo 10** — falta *Inimigos* (o deck só tem espinho e buraco).
+  *Feedback de perigo* está fraco. **Efeitos negativos foram cortados** pelo
+  Milan em 01/08/2026 — não reintroduza.
+- **Módulo 11** — falta *Habilidades*. É o **único** dos seis decks com zero
+  ícone de Node, zero mockup do editor e zero card de apresentação de Node,
+  e ainda assim é o que apresenta mais coisa nova (`enum`, `await`, `Button`,
+  `get_tree().create_timer()`). É a maior lacuna de qualidade do repositório.
+
+### Armadilhas de encadeamento entre módulos
+
+- **O `LifeComponent` nasce no Módulo 10, não antes.** O Módulo 9 acontece
+  cinco dias antes (03/09 vs 08/09), então **no dia do Módulo 9 o personagem
+  não tem vida** — poção de cura não tem o que curar. O único número já
+  existente e visível na hora é o `max_speed` do `MovementComponent`
+  (Módulo 3-4). Por isso o primeiro consumível é poção de velocidade.
+- **Godot não serializa `Callable`.** `@export var on_use : Callable` não
+  aparece no Inspector nem sobrevive no `.tres`. Para "o item chama a função
+  da sua escolha", o efeito precisa ser um `Resource` com um método
+  (`ItemEffect.apply(user)`).
+- **`damage` e `defense` não existem até os Módulos 10 e 11.** Equipamento com
+  stats no Módulo 9 seria interface sem consequência. Lá fica só a ideia de
+  "valor base + bônus".
+- **Módulo 5 (Giovane) vai ter um componente de interação** — `Area2D` que,
+  ao jogador entrar e apertar interagir, chama uma função escolhida na cena.
+  O deck ainda não existe; **não construa nada em cima dele sem a assinatura
+  real**, do mesmo jeito que o contrato dos componentes do player está fixado.
+- **Os assets de batalha chegam depois das aulas de batalha** (Aula 13, 15/09,
+  contra Aulas 11 e 12, em 08/09 e 10/09). Os assets são produzidos nas aulas
+  de Arte; pedidos precisam entrar numa aula de arte *anterior* ao módulo que
+  vai usá-los.
 
 ## Quem é o usuário e o que é dele
 
@@ -32,7 +102,7 @@ Programação 1, 5, 7, 8, 12 · Game Design 1–7 · Arte 1–2 · Música 1.
 
 **Exceção — Módulo 6 (Física para Jogos), do Thales e Giovane:** em 31/07/2026
 o Thales autorizou reestruturar o deck livremente, incluindo conteúdo, ordem e
-didática. `lessons/programacao/06/` deixou de ser somente-forma. Continue
+didática. `lessons/programming/06/` deixou de ser somente-forma. Continue
 tratando o material como dele: mudanças grandes merecem ser comunicadas, e o
 vocabulário que ele criou (`LifeComponent`, `KnockbackComponent`,
 `external_force`, o fluxo Hitbox→Hurtbox→Signal) deve ser preservado, porque é
@@ -73,8 +143,10 @@ assets/fonts/           Fontes auto-hospedadas (offline)
 assets/icons-ui/        Sprite SVG de ícones de interface (offline)
 assets/icons/           951 ícones oficiais do Godot
 assets/player.png       Spritesheet do curso
-lessons/<area>/<mod>/   Aulas — programacao, game-design, arte, musica
-lessons/01|02|06|07/    Redirects dos caminhos antigos (podem sumir um dia)
+lessons/<area>/<mod>/   Aulas — programming, game-design, art, music
+lessons/01|02|06|07/    Redirects da organização antiga (podem sumir um dia)
+lessons/programacao/    Redirects dos caminhos em português (idem)
+lessons/arte/02/        Redirect do caminho em português (idem)
 tools/check_course.py   Verifica index.html contra assets/course.js
 ```
 
@@ -102,7 +174,14 @@ Não há Node.js instalado nesta máquina — não escreva ferramentas em `node`
 - **Não improvise assets.** Se um recurso visual melhoraria a aula e não
   existe, **pare e peça** ao usuário, explicando por que ajuda.
 - **Clean URLs:** links entre aulas apontam para o diretório
-  (`href="../programacao/06/"`), nunca para o `index.html` final.
+  (`href="../programming/06/"`), nunca para o `index.html` final.
+- **Os caminhos das áreas são em inglês** (`programming`, `game-design`,
+  `art`, `music`), decidido em 01/08/2026 para casar com `/lessons/` e
+  `/assets/`. Só o caminho: título, texto e conteúdo seguem em português.
+  Os três lugares precisam concordar — a pasta em `lessons/`, o `slug` e o
+  `path` em `assets/course.js`, e o `data-module` no `<body>` do deck. Se o
+  `data-module` divergir do `slug`, a navegação entre módulos **some sem erro
+  nenhum**; `python tools/check_course.py` é quem pega isso.
 - Toda alteração importante precisa de justificativa pedagógica, técnica ou
   de usabilidade.
 
@@ -172,7 +251,7 @@ plantava `Array` e `Dictionary` pensando no Inventário.
   (48 trocas). Textos que o jogador lê seguem em português; o Módulo 2 ganhou
   um slide próprio ("Como nomear as coisas") ensinando a regra.
 - Módulos 7 e Arte 2 viraram páginas-invólucro com a moldura do site
-  (`lessons/programacao/07/`, `lessons/arte/02/`), embutindo o PDF original
+  (`lessons/programming/07/`, `lessons/art/02/`), embutindo o PDF original
   sem alterar o conteúdo de ninguém. `script.js` passou a tolerar página sem
   deck (antes quebrava na primeira linha e derrubava a navegação junto).
 - Módulo 6 reestruturado com a permissão do Thales: 11 → 18 slides, com
@@ -191,7 +270,7 @@ plantava `Array` e `Dictionary` pensando no Inventário.
 - Notion diz "Introdução ao LibreSprite"; o PDF entregue é "Pixel Art no
   Aseprite" — e o Aseprite é pago.
 - `assets/lessons/06/` manteve o nome antigo enquanto as aulas viraram
-  `programacao/06`.
+  `programming/06`.
 - O cenário `file://` (pendrive) foi projetado mas nunca verificado de fato.
 - O PDF embutido nas páginas-invólucro carrega (200, sem erro), mas nunca foi
   visto renderizando de fato — confira num navegador comum.

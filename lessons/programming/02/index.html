@@ -28,7 +28,7 @@
         </div>
         <div class="progress-wrap">
             <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
-            <span class="progress-text" id="progress-text">1 / 26</span>
+            <span class="progress-text" id="progress-text">1 / 27</span>
         </div>
     </div>
 
@@ -46,7 +46,7 @@
             </div>
         </section>
 
-        <!-- 2: Objetivos da aula -->
+        <!-- 2: Objetivos -->
         <section class="slide" id="slide-goals">
             <div class="eyebrow"><span class="num">02</span> · Roteiro</div>
             <h1 class="slide-title">O QUE VOCÊ VAI SABER FAZER HOJE</h1>
@@ -81,15 +81,21 @@
                     </div>
                 </div>
             </div>
-            <div class="callout callout-tip">
-                <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-graduation-cap"></use></svg>
-                <div><strong>Como a aula funciona</strong> Ela não é só de assistir. A cada bloco de conteúdo nós paramos num <strong>checkpoint</strong>: você abre o Godot e escreve o código junto. Programação não entra na cabeça olhando — entra digitando, errando e consertando.</div>
+            <div class="grid-2">
+                <div class="callout callout-tip">
+                    <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-graduation-cap"></use></svg>
+                    <div><strong>Como a aula funciona</strong> Ela não é só de assistir. A cada bloco nós paramos num <strong>checkpoint</strong>: você abre o Godot e escreve o código junto. Programação não entra na cabeça olhando — entra digitando, errando e consertando.</div>
+                </div>
+                <div class="callout callout-note">
+                    <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-play"></use></svg>
+                    <div><strong>Estes slides ficam com você</strong> Vários deles têm um botão <strong>▶ Executar</strong> que roda o código passo a passo, mostrando a linha da vez e o que sai no Output. Se algo não fizer sentido durante a aula, volte aqui em casa e aperte o botão quantas vezes quiser.</div>
+                </div>
             </div>
         </section>
 
-        <!-- 3: O que é um Programa -->
+        <!-- 3: O que e um programa -->
         <section class="slide" id="slide-program">
-            <div class="eyebrow"><span class="num">02</span> · Conceito</div>
+            <div class="eyebrow"><span class="num">03</span> · Conceito</div>
             <h1 class="slide-title">O QUE É UM PROGRAMA?</h1>
             <p class="slide-sub">Instruções simples → tarefas complexas</p>
             <div class="grid-2">
@@ -108,9 +114,9 @@
             </div>
         </section>
 
-        <!-- 3: A Linguagem de Programação -->
+        <!-- 4: A linguagem de programacao -->
         <section class="slide" id="slide-language">
-            <div class="eyebrow"><span class="num">03</span> · Conceito</div>
+            <div class="eyebrow"><span class="num">04</span> · Conceito</div>
             <h1 class="slide-title">A LINGUAGEM DE PROGRAMAÇÃO</h1>
             <p class="slide-sub">Como conversar com o computador</p>
             <div class="grid-2">
@@ -133,9 +139,9 @@
             </div>
         </section>
 
-        <!-- 4: Sintaxe — Comentários -->
+        <!-- 5: Sintaxe: comentarios -->
         <section class="slide" id="slide-syntax-comments">
-            <div class="eyebrow"><span class="num">04</span> · Fundamentos</div>
+            <div class="eyebrow"><span class="num">05</span> · Fundamentos</div>
             <h1 class="slide-title">SINTAXE: COMENTÁRIOS</h1>
             <p class="slide-sub">A primeira das duas regras que valem para <strong>todo</strong> código daqui pra frente</p>
             <div class="grid-2">
@@ -145,18 +151,24 @@
                         <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-lightbulb"></use></svg>
                         <div><strong>Para que serve, na prática</strong> Use comentários para explicar <em>o quê</em> ou <em>por quê</em> um trecho faz algo — principalmente quando você (ou outra pessoa) for reler o script daqui a duas semanas.</div>
                     </div>
+                    <div class="callout callout-note mb-0">
+                        <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-circle-question"></use></svg>
+                        <div><strong>E aquele <code>func</code> ali do lado?</strong> Ainda não é a hora dele — chega daqui a dois slides. Por enquanto repare só no <code>#</code> e no que vem depois dele.</div>
+                    </div>
                 </div>
                 <div class="code-window">
                     <div class="code-header"><span class="file-name">Comments.gd</span><div class="window-dots"><span class="dot dot-blue">●</span><span class="dot dot-yellow">●</span><span class="dot dot-red">●</span></div></div>
-                    <pre class="code-content"><code><span class="k-comment"># Isso é um comentário: o Godot pula essa linha</span>
-<span class="k-keyword">var</span> <span class="k-var">health</span> = <span class="k-number">10</span>  <span class="k-comment"># também pode vir depois de código</span></code></pre>
+                    <pre class="code-content"><code><span class="k-comment"># Isto é um comentário: o Godot pula a linha inteira</span>
+<span class="k-comment"># Escreva quantos quiser, eles nunca atrapalham</span>
+
+<span class="k-keyword">func</span> <span class="k-func">fazer_cafe</span>():  <span class="k-comment"># também pode vir depois de código</span></code></pre>
                 </div>
             </div>
         </section>
 
-        <!-- 5: Sintaxe — Indentação -->
+        <!-- 6: Sintaxe: indentacao -->
         <section class="slide" id="slide-syntax-indent">
-            <div class="eyebrow"><span class="num">05</span> · Fundamentos</div>
+            <div class="eyebrow"><span class="num">06</span> · Fundamentos</div>
             <h1 class="slide-title">SINTAXE: INDENTAÇÃO</h1>
             <p class="slide-sub">O recuo não é enfeite — é ele que define o que pertence a quê</p>
             <div class="grid-2">
@@ -173,11 +185,12 @@
                 </div>
                 <div class="code-window">
                     <div class="code-header"><span class="file-name">Indentation.gd</span><div class="window-dots"><span class="dot dot-blue">●</span><span class="dot dot-yellow">●</span><span class="dot dot-red">●</span></div></div>
-                    <pre class="code-content"><code><span class="k-keyword">func</span> <span class="k-func">check_health</span>() -> <span class="k-type">void</span>:
-    <span class="k-comment"># tudo recuado aqui "pertence" à função</span>
-    <span class="k-keyword">if</span> health <= <span class="k-number">0</span>:
-        <span class="k-comment"># e isso "pertence" ao if, dentro da função</span>
-        print(<span class="k-string">"Game Over"</span>)</code></pre>
+                    <pre class="code-content"><code><span class="k-keyword">func</span> <span class="k-func">acordar</span>():
+    <span class="k-comment"># estas duas linhas estão recuadas,</span>
+    <span class="k-comment"># então pertencem a acordar</span>
+
+<span class="k-keyword">func</span> <span class="k-func">tomar_banho</span>():
+    <span class="k-comment"># e esta pertence a tomar_banho</span></code></pre>
                 </div>
             </div>
             <div class="grid-2">
@@ -186,126 +199,140 @@
                     <div><strong>É a causa nº1 de erro de quem está começando</strong> Se o recuo estiver errado, o Godot não entende o código e acusa erro de sintaxe. Quando der um erro que parece não fazer sentido, <strong>confira a indentação primeiro</strong>. Use sempre a tecla <kbd>Tab</kbd> para recuar — misturar Tab e espaços é o jeito mais fácil de criar um erro invisível.</div>
                 </div>
                 <div class="callout callout-note">
-                    <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-circle-info"></use></svg>
-                    <div><strong>Se você já viu outra linguagem</strong> Muitas usam chaves <code>{ }</code> para marcar onde um bloco começa e termina, e aí o recuo é só estética. GDScript não: aqui o recuo <em>é</em> a marcação. É o mesmo comportamento do Python, se você conhece.</div>
-                </div>
-            </div>
-        </section>
-
-        <!-- 6: Anatomia de uma Função -->
-        <section class="slide" id="slide-functions">
-            <div class="eyebrow"><span class="num">06</span> · Fundamentos</div>
-            <h1 class="slide-title">ANATOMIA DE UMA FUNÇÃO</h1>
-            <p class="slide-sub">Dividindo código em blocos organizados</p>
-            <p class="lede">O computador lê o código linha por linha, dentro de blocos chamados <strong>funções</strong>. Toda função, sem exceção, segue este formato:</p>
-
-            <div class="anno-line">
-                <div class="anno"><code><span class="k-keyword">func</span></code><span class="cap">palavra-chave: começa a função</span></div>
-                <div class="anno"><code>&nbsp;<span class="k-func">nome</span></code><span class="cap">nome que você escolhe</span></div>
-                <div class="anno"><code>(args)</code><span class="cap">valores que ela recebe</span></div>
-                <div class="anno"><code>-&gt;&nbsp; <span class="k-type">tipo</span></code><span class="cap">o que ela devolve</span></div>
-                <div class="anno"><code>:</code><span class="cap">início do bloco (indentado)</span></div>
-            </div>
-
-            <div class="grid-2">
-                <div class="callout callout-note">
-                    <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-indent"></use></svg>
-                    <div><strong>Repare nos dois-pontos</strong> Depois do <code>:</code> vem o bloco indentado — exatamente a regra que acabamos de ver. Tudo que estiver recuado abaixo da linha do <code>func</code> pertence àquela função.</div>
-                </div>
-                <div class="callout callout-tip">
                     <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-circle-question"></use></svg>
-                    <div><strong>Ainda não entendi "args" e "-&gt; tipo"</strong> Tudo bem — cada uma dessas partes tem um slide só pra ela mais à frente. Por enquanto guarde só o formato geral.</div>
+                    <div><strong>Não sabe o que é <code>func</code>? Tudo bem — é o próximo slide.</strong> Aqui olhe só para o <strong>recuo</strong>: as linhas empurradas para a direita pertencem à linha que está acima delas. É só isso que importa agora. (E <code>#</code> você já conhece: comentário.)</div>
                 </div>
             </div>
         </section>
 
-        <!-- 7: Funções Nativas da Engine -->
-        <section class="slide" id="slide-native-funcs">
+        <!-- 7: O que e uma funcao -->
+        <section class="slide" id="slide-functions">
             <div class="eyebrow"><span class="num">07</span> · Fundamentos</div>
-            <h1 class="slide-title">FUNÇÕES NATIVAS DA ENGINE</h1>
-            <p class="slide-sub">As funções que o Godot chama sozinho, sem você pedir</p>
+            <h1 class="slide-title">O QUE É UMA FUNÇÃO</h1>
+            <p class="slide-sub">Um bloco de instruções com um nome</p>
+            <p class="lede">Uma <strong>função</strong> é um pedaço de código que você separa e <strong>dá um nome</strong>. Só isso. Em vez de deixar cinquenta instruções soltas, você junta as que fazem parte da mesma tarefa e batiza o grupo — igual a "fazer café" numa receita, que por dentro é ferver a água, passar o pó e servir.</p>
 
-            <div class="callout callout-tip">
-                <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-underline"></use></svg>
-                <div><strong>Funções nativas (o "_" no início)</strong> Sempre que ver uma função começando com <code>_</code> (ex: <code>_ready</code> ou <code>_process</code>), significa que é uma <strong>função nativa da Engine Godot</strong> — ela roda automaticamente em momentos específicos do jogo, você não precisa chamá-la.</div>
-            </div>
-
-            <div class="grid-2">
-                <div class="code-window">
-                    <div class="code-header"><span class="file-name">GameManager.gd</span><div class="window-dots"><span class="dot dot-blue">●</span><span class="dot dot-yellow">●</span><span class="dot dot-red">●</span></div></div>
-                    <pre class="code-content"><code><span class="k-keyword">extends</span> <span class="k-type">Node</span>
-
-<span class="k-comment"># Roda 1 vez, quando o Node entra na cena</span>
-<span class="k-keyword">func</span> <span class="k-func">_ready</span>() -> <span class="k-type">void</span>:
-    setup_level()
-
-<span class="k-comment"># Roda a cada frame, sem parar, enquanto o jogo estiver aberto</span>
-<span class="k-keyword">func</span> <span class="k-func">_process</span>(delta) -> <span class="k-type">void</span>:
-    <span class="k-comment"># instruções que se repetem sem parar...</span></code></pre>
-                </div>
-                <div>
-                    <div class="callout callout-note" style="margin:0 0 var(--space-3);">
-                        <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-play"></use></svg>
-                        <div><strong>_ready()</strong> Roda <strong>uma única vez</strong>, assim que o Node "nasce" na cena. Ideal para preparar/configurar algo.</div>
-                    </div>
-                    <div class="callout callout-note">
-                        <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-rotate"></use></svg>
-                        <div><strong>_process()</strong> Roda <strong>a cada frame</strong>, continuamente. Ideal para checar coisas o tempo todo, como teclas pressionadas.</div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="callout callout-tip">
-                <img src="../../../assets/icons/Node.svg" alt="" style="width:20px;height:20px;margin-top:2px;flex-shrink:0;">
-                <div><strong>E "extends Node"?</strong> Significa que este script herda as características básicas de um <strong>Node</strong> — o tipo de objeto mais fundamental do Godot, e este é o ícone dele no editor. Não se preocupe em entender Node e Scene a fundo agora: vamos explorar isso com calma no próximo módulo. Por enquanto, pense num Node como "uma peça do seu jogo" e um Script como "o comportamento" que você dá a ela.</div>
-            </div>
-        </section>
-
-        <!-- 6: Exemplo Prático -->
-        <section class="slide" id="slide-example">
-            <div class="eyebrow"><span class="num">06</span> · Prática</div>
-            <h1 class="slide-title">CHAMANDO UMA FUNÇÃO</h1>
-            <p class="slide-sub">Escrever a função não faz nada. Ela só roda quando alguém a <strong>chama</strong>.</p>
             <div class="grid-2 align-start">
                 <div>
-                    <p class="lede">Escrever <code>boil_water()</code>, com os parênteses no fim, é <strong>chamar</strong> (ou "invocar") a função: é isso que manda o computador ir até aquele bloco, executar tudo lá dentro, e voltar para continuar de onde parou.</p>
-                    <div class="callout callout-tip">
-                        <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-diagram-project"></use></svg>
-                        <div><strong>Funções chamam outras funções — e é assim que um programa cresce</strong> Repare que <code>make_coffee()</code> não faz nada sozinha: ela só chama outras três. Cada uma dessas, por sua vez, pode chamar outras. Um jogo inteiro é isso — funções pequenas chamando funções pequenas.</div>
+                    <div class="anno-line">
+                        <div class="anno"><code><span class="k-keyword">func</span></code><span class="cap">palavra-chave: começa uma função</span></div>
+                        <div class="anno"><code>&nbsp;<span class="k-func">fazer_cafe</span></code><span class="cap">o nome que você escolhe</span></div>
+                        <div class="anno"><code>()</code><span class="cap">obrigatórios, mesmo vazios</span></div>
+                        <div class="anno"><code>-&gt;&nbsp;<span class="k-type">void</span></code><span class="cap">"não devolve nada"</span></div>
+                        <div class="anno"><code>:</code><span class="cap">abre o bloco indentado</span></div>
                     </div>
-                    <div class="callout callout-note">
-                        <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-play"></use></svg>
-                        <div><strong>Quem chama a primeira?</strong> A Engine. Lembra do <code>_ready()</code>? Ele é chamado pelo Godot automaticamente. Daí em diante, a corrente de chamadas é toda sua.</div>
+                    <div class="callout callout-note mb-0">
+                        <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-indent"></use></svg>
+                        <div><strong>Os dois-pontos e o recuo, de novo</strong> Depois do <code>:</code> vem o bloco indentado — a regra do slide anterior. É o <strong>recuo</strong> que diz onde a função começa e onde ela termina. Não existe nada marcando o fim: a função acaba quando o recuo acaba.</div>
                     </div>
                 </div>
                 <div>
-                    <div class="code-window">
-                        <div class="code-header"><span class="file-name">Example.gd</span><div class="window-dots"><span class="dot dot-blue">●</span><span class="dot dot-yellow">●</span><span class="dot dot-red">●</span></div></div>
-                        <pre class="code-content"><code><span class="k-keyword">func</span> <span class="k-func">_ready</span>() -> <span class="k-type">void</span>:
-    make_coffee()   <span class="k-comment"># chama ↓</span>
-
-<span class="k-keyword">func</span> <span class="k-func">make_coffee</span>() -> <span class="k-type">void</span>:
-    <span class="k-comment"># não sabe fazer nada sozinha —</span>
-    <span class="k-comment"># só organiza o passo a passo:</span>
-    boil_water()
-    add_coffee(<span class="k-number">2</span>)
-    pour_into_filter()</code></pre>
+                    <div class="code-window mt-0">
+                        <div class="code-header"><span class="file-name">Coffee.gd</span><div class="window-dots"><span class="dot dot-blue">●</span><span class="dot dot-yellow">●</span><span class="dot dot-red">●</span></div></div>
+                        <pre class="code-content"><code><span class="k-keyword">func</span> <span class="k-func">fazer_cafe</span>() -> <span class="k-type">void</span>:
+    <span class="k-comment"># ferver a água</span>
+    <span class="k-comment"># passar o pó</span>
+    <span class="k-comment"># servir na xícara</span></code></pre>
                     </div>
-                    <div class="card">
-                        <h3>Por que usar funções?</h3>
-                        <ul>
-                            <li><strong>Agrupam comandos:</strong> juntam instruções simples numa tarefa complexa.</li>
-                            <li><strong>Evitam repetição:</strong> escreveu uma vez, chama quantas vezes quiser.</li>
-                            <li><strong>Organizam:</strong> deixam o projeto muito mais fácil de ler.</li>
-                        </ul>
+                    <div class="callout callout-tip">
+                        <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-circle-question"></use></svg>
+                        <div><strong>E esse <code>-&gt; void</code>?</strong> É a promessa do que a função devolve para quem a usou. <code>void</code> quer dizer <strong>"não devolve nada"</strong> — ela faz o serviço e pronto. Funções que devolvem alguma coisa existem, e têm um slide só pra elas mais à frente.</div>
+                    </div>
+                    <div class="callout callout-warn mb-0">
+                        <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-triangle-exclamation"></use></svg>
+                        <div><strong>Escrever a função não faz nada acontecer</strong> Este código sozinho não ferve água nenhuma — ele só <em>ensina</em> ao Godot o que "fazer café" significa. Alguém ainda precisa pedir. E a próxima pergunta é essa: <strong>quem pede primeiro?</strong></div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Como nomear as coisas -->
+        <!-- 8: Por onde o programa comeca -->
+        <section class="slide" id="slide-native-funcs">
+            <div class="eyebrow"><span class="num">08</span> · Fundamentos</div>
+            <h1 class="slide-title">POR ONDE O PROGRAMA COMEÇA?</h1>
+            <p class="slide-sub">Um script com cinco funções. Qual delas roda primeiro?</p>
+            <p class="lede">Você já sabe que uma função é um bloco de código com um nome. Mas imagine um script com cinco funções, uma embaixo da outra. Quando o jogo começa, <strong>por qual bloco o computador começa?</strong> Por nenhum — um bloco só roda se alguém pedir. E quem pede primeiro é o próprio Godot: ele procura no seu script uma função chamada <code>_ready</code> e executa <em>ela</em>. <strong>É de dentro dela que todo o resto do seu código vai sair.</strong></p>
+
+            <div class="grid-2 align-start">
+                <div>
+                    <div class="code-window mt-0">
+                        <div class="code-header"><span class="file-name">GameManager.gd</span><div class="window-dots"><span class="dot dot-blue">●</span><span class="dot dot-yellow">●</span><span class="dot dot-red">●</span></div></div>
+                        <pre class="code-content"><code><span class="k-keyword">extends</span> <span class="k-type">Node</span>
+
+<span class="k-comment"># o Godot executa este bloco sozinho,</span>
+<span class="k-comment"># assim que a peça entra no jogo</span>
+<span class="k-keyword">func</span> <span class="k-func">_ready</span>() -> <span class="k-type">void</span>:
+    <span class="k-comment"># tudo que tem que acontecer</span>
+    <span class="k-comment"># no começo vai aqui dentro</span></code></pre>
+                    </div>
+                    <div class="callout callout-warn mb-0">
+                        <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-tag"></use></svg>
+                        <div><strong>O nome tem que ser exatamente esse</strong> O Godot procura por <code>_ready</code>, com o underline na frente. Escreveu <code>ready</code> ou <code>_Ready</code>? A engine não acha, seu bloco nunca roda — e <strong>nenhum erro aparece</strong>. O jogo só fica parado.</div>
+                    </div>
+                </div>
+                <div>
+                    <div class="callout callout-tip mt-0">
+                        <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-underline"></use></svg>
+                        <div><strong>O <code>_</code> no começo é o aviso</strong> Toda função que começa com underline é da engine, não sua: o Godot já sabe o nome dela e a chama na hora certa. Existem várias — <code>_ready</code> é a única que você precisa agora.</div>
+                    </div>
+                    <div class="callout callout-note">
+                        <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-play"></use></svg>
+                        <div><strong>Quando exatamente ela roda?</strong> Uma única vez, no instante em que a peça "nasce" dentro do jogo — antes de o jogador ver qualquer coisa. Por isso ela é o lugar de preparar as coisas: definir valores iniciais, montar o cenário, começar a música.</div>
+                    </div>
+                    <div class="callout callout-note mb-0">
+                        <img src="../../../assets/icons/Node.svg" alt="Ícone Node do Godot" style="width:20px;height:20px;margin-top:2px;flex-shrink:0;">
+                        <div><strong>E o <code>extends Node</code> na primeira linha?</strong> Diz a que <em>tipo de peça</em> este script está preso — aqui, um <strong>Node</strong>, a peça mais básica do Godot. Não precisa entender a fundo agora; isso é o assunto do próximo módulo. Por ora: Node é uma peça do jogo, e o script é o comportamento que você dá a ela.</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 9: Chamando uma funcao -->
+        <section class="slide" id="slide-example">
+            <div class="eyebrow"><span class="num">09</span> · Prática</div>
+            <h1 class="slide-title">CHAMANDO UMA FUNÇÃO</h1>
+            <p class="slide-sub">São duas coisas diferentes: <strong>escrever</strong> a função e <strong>mandar ela rodar</strong></p>
+            <div class="grid-2 align-start">
+                <div>
+                    <div class="feature-card good mt-0">
+                        <h4>Declarar — <em>ensinar</em> o que a função faz</h4>
+                        <p style="font-family: var(--font-code); font-size: 0.95rem;"><span class="k-keyword">func</span> <span class="k-func">fazer_cafe</span>() -&gt; <span class="k-type">void</span><strong>:</strong></p>
+                        <p>Começa com <code>func</code> e termina com <code>:</code>. Acontece <strong>uma vez só</strong> no arquivo. Sozinha, não faz nada — é uma receita guardada na gaveta.</p>
+                    </div>
+                    <div class="feature-card highlight">
+                        <h4>Chamar — <em>mandar fazer agora</em></h4>
+                        <p style="font-family: var(--font-code); font-size: 0.95rem;"><span class="k-func">fazer_cafe</span>()</p>
+                        <p><strong>Sem <code>func</code>, sem <code>:</code></strong> — só o nome e os parênteses. Pode aparecer quantas vezes você quiser. É isto que faz a coisa acontecer.</p>
+                    </div>
+                    <div class="callout callout-warn mb-0">
+                        <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-ban"></use></svg>
+                        <div><strong>O <code>_ready</code> é a exceção</strong> Ele é a única função do arquivo que você <em>declara</em> e <strong>nunca chama</strong> — quem chama é a engine, uma vez só. Daí em diante a corrente de chamadas é toda sua.</div>
+                    </div>
+                </div>
+                <div>
+                    <p class="lede mt-0">Aperte <strong>Executar</strong> e acompanhe a linha acesa. Repare que a execução <strong>salta</strong> para dentro da função e depois <strong>volta</strong> exatamente para onde parou:</p>
+                    <div class="code-window">
+                        <div class="code-header"><span class="file-name">Coffee.gd</span><button class="play-sim-btn" id="btn-play-call" data-sim="1@500; 2@900; 5@1000; 6@700; 7@700; 8@700; 3@1000">▶ Executar</button><div class="window-dots"><span class="dot dot-blue">●</span><span class="dot dot-yellow">●</span><span class="dot dot-red">●</span></div></div>
+                        <pre class="code-content"><code><span class="k-keyword">func</span> <span class="k-func">_ready</span>() -> <span class="k-type">void</span>:
+    fazer_cafe()   <span class="k-comment"># salta para a linha 5 ↓</span>
+    lavar_a_xicara()  <span class="k-comment"># ↑ e volta para cá</span>
+
+<span class="k-keyword">func</span> <span class="k-func">fazer_cafe</span>() -> <span class="k-type">void</span>:
+    ferver_agua()
+    colocar_po()
+    servir_na_xicara()</code></pre>
+                    </div>
+                    <div class="callout callout-tip mb-0">
+                        <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-diagram-project"></use></svg>
+                        <div><strong>Os comentários do slide anterior viraram código</strong> "ferver a água" virou <code>ferver_agua()</code>. Cada uma dessas três é outra função, escrita em outro lugar do arquivo — e cada uma pode chamar outras. Um jogo inteiro é isso: funções pequenas chamando funções pequenas.</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 10: Como nomear as coisas -->
         <section class="slide" id="slide-naming">
-            <div class="eyebrow"><span class="num">07</span> · Boas práticas</div>
+            <div class="eyebrow"><span class="num">10</span> · Boas práticas</div>
             <h1 class="slide-title">COMO NOMEAR AS COISAS</h1>
             <p class="slide-sub">Duas regras que valem para todo nome que você escrever no curso</p>
             <div class="grid-2 align-start">
@@ -316,54 +343,61 @@
                     </div>
                     <div class="callout callout-tip mb-0">
                         <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-font"></use></svg>
-                        <div><strong>2. Nome em inglês, texto em português</strong> Neste curso <strong>todo nome vai em inglês</strong> — variáveis, funções, componentes, arquivos. Já os <strong>textos que o jogador lê</strong> continuam em português. As duas coisas convivem na mesma linha sem problema nenhum.</div>
+                        <div><strong>2. Escreva em português, sem acento</strong> Nesta aula os nomes vão em <strong>português</strong> — o que você está aprendendo já é difícil o bastante sem ter que traduzir cada palavra. Só lembre: <code>fazer_cafe</code>, não <code>fazer_café</code>. O acento fica de fora do nome, mas pode aparecer à vontade nos <strong>textos que o jogador lê</strong>.</div>
                     </div>
                 </div>
                 <div>
                     <div class="code-window mt-0">
                         <div class="code-header"><span class="file-name">Naming.gd</span><div class="window-dots"><span class="dot dot-blue">●</span><span class="dot dot-yellow">●</span><span class="dot dot-red">●</span></div></div>
-                        <pre class="code-content"><code><span class="k-comment"># ✅ nome em inglês, mensagem em português</span>
-<span class="k-keyword">var</span> <span class="k-var">player_health</span> = <span class="k-number">10</span>
-print(<span class="k-string">"Vida cheia!"</span>)
+                        <pre class="code-content"><code><span class="k-comment"># ✅ minúsculo, com underline, sem acento</span>
+<span class="k-keyword">func</span> <span class="k-func">fazer_cafe</span>() -> <span class="k-type">void</span>:
 
-<span class="k-comment"># ❌ acento no nome quebra</span>
-<span class="k-keyword">var</span> <span class="k-var">vida_máxima</span> = <span class="k-number">10</span>
+<span class="k-comment"># ❌ o acento quebra</span>
+<span class="k-keyword">func</span> <span class="k-func">fazer_café</span>() -> <span class="k-type">void</span>:
 
 <span class="k-comment"># ❌ espaço não existe em nome</span>
-<span class="k-keyword">var</span> <span class="k-var">player health</span> = <span class="k-number">10</span></code></pre>
+<span class="k-keyword">func</span> <span class="k-func">fazer cafe</span>() -> <span class="k-type">void</span>:
+
+<span class="k-comment"># ❌ "func" já é do GDScript</span>
+<span class="k-keyword">func</span> <span class="k-func">func</span>() -> <span class="k-type">void</span>:</code></pre>
                     </div>
                     <div class="callout callout-note mb-0">
                         <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-graduation-cap"></use></svg>
-                        <div><strong>Por que inglês, se a aula é em português?</strong> Porque é onde o resto do mundo está: a documentação do Godot, os tutoriais que você vai procurar quando travar, e o código de qualquer equipe. Acostumar desde a primeira linha custa nada agora e economiza muito depois.</div>
+                        <div><strong>Mas o Godot fala inglês</strong> As palavras da própria linguagem (<code>func</code>, <code>var</code>, <code>if</code>, <code>print</code>) e os nomes de Node (<code>Sprite2D</code>, <code>AnimationPlayer</code>) você <em>não escolhe</em> — vêm assim e assim ficam. O que você batiza é que vai em português. Mais para a frente, quando procurar tutorial na internet, vai ser tudo em inglês: por isso vale ir guardando as palavras que aparecem.</div>
                     </div>
                 </div>
             </div>
-            </div>
         </section>
 
-        <!-- 7: print() -->
+        <!-- 11: A funcao print -->
         <section class="slide" id="slide-print">
-            <div class="eyebrow"><span class="num">07</span> · Prática</div>
+            <div class="eyebrow"><span class="num">11</span> · Prática</div>
             <h1 class="slide-title">A FUNÇÃO PRINT()</h1>
             <p class="slide-sub">Exibindo mensagens no console</p>
-            <p class="lede">O GDScript oferece algumas funções utilitárias já prontas. Uma das mais usadas é o <code>print()</code>. Esta função recebe um texto ou valor — chamado de <strong>argumento</strong>, vamos formalizar esse termo já já — e o exibe no painel <strong>Output (Saída)</strong> do Godot. É essencial para debugar (testar) nosso jogo!</p>
+            <p class="lede">Repare no que está acontecendo aqui: <code>print(...)</code> é <strong>uma chamada de função</strong> — exatamente o que você acabou de aprender. A diferença é que essa função <strong>você não precisou escrever</strong>: ela já vem pronta no GDScript. Ela mostra no painel <strong>Output</strong> o que você colocar entre os parênteses, e é a sua principal ferramenta para descobrir o que o código está fazendo.</p>
 
             <div class="code-window">
-                <div class="code-header"><span class="file-name">Script.gd</span><button class="play-sim-btn" id="btn-play-print" data-sim="1@400; 2@700 > Hello, Godot!; 3@700 > Meu primeiro script!">▶ Executar</button><div class="window-dots"><span class="dot dot-blue">●</span><span class="dot dot-yellow">●</span><span class="dot dot-red">●</span></div></div>
+                <div class="code-header"><span class="file-name">Script.gd</span><button class="play-sim-btn" id="btn-play-print" data-sim="1@400; 2@700 > Olá, Godot!; 3@700 > Meu primeiro script!">▶ Executar</button><div class="window-dots"><span class="dot dot-blue">●</span><span class="dot dot-yellow">●</span><span class="dot dot-red">●</span></div></div>
                 <pre class="code-content"><code><span class="k-keyword">func</span> <span class="k-func">_ready</span>() -> <span class="k-type">void</span>:
-    print(<span class="k-string">"Hello, Godot!"</span>)
+    print(<span class="k-string">"Olá, Godot!"</span>)
     print(<span class="k-string">"Meu primeiro script!"</span>)</code></pre>
                 <div class="output-panel"><div class="out-label">Output</div><div class="output-content"></div></div>
             </div>
-            <div class="callout callout-note">
-                <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-location-dot"></use></svg>
-                <div><strong>Onde fica o Output?</strong> Dentro do editor do Godot, é o painel na parte de baixo da tela chamado "Output" — ele aparece automaticamente quando você roda o projeto (tecla F5).</div>
+            <div class="grid-2">
+                <div class="callout callout-note">
+                    <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-location-dot"></use></svg>
+                    <div><strong>Onde fica o Output?</strong> Dentro do editor do Godot, é o painel na parte de baixo da tela chamado "Output" — ele aparece automaticamente quando você roda o projeto (tecla <kbd>F5</kbd>).</div>
+                </div>
+                <div class="callout callout-tip">
+                    <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-font"></use></svg>
+                    <div><strong>Repare nas aspas</strong> Texto vai <strong>sempre entre aspas</strong> — sem elas, o Godot acha que você escreveu o nome de alguma coisa e reclama que não conhece. E dentro das aspas vale tudo: acento, cedilha, ponto de exclamação. A restrição de acento é só para <em>nomes</em>.</div>
+                </div>
             </div>
         </section>
 
-        <!-- Checkpoint 1 -->
+        <!-- 12: Checkpoint 1 -->
         <section class="slide checkpoint-slide" id="slide-checkpoint-1">
-            <div class="eyebrow"><span class="num">10</span> · Mãos no código</div>
+            <div class="eyebrow"><span class="num">12</span> · Mãos no código</div>
             <h1 class="slide-title">CHECKPOINT 1 — SEU PRIMEIRO SCRIPT</h1>
             <p class="slide-sub">Chega de slide. Abra o Godot.</p>
             <div class="grid-2 align-start">
@@ -391,9 +425,9 @@ print(<span class="k-string">"Vida cheia!"</span>)
             </div>
         </section>
 
-        <!-- Variáveis & Tipos -->
+        <!-- 13: Variaveis e tipos -->
         <section class="slide" id="slide-vars">
-            <div class="eyebrow"><span class="num">08</span> · Fundamentos</div>
+            <div class="eyebrow"><span class="num">13</span> · Fundamentos</div>
             <h1 class="slide-title">VARIÁVEIS & TIPOS</h1>
             <p class="slide-sub">Caixinhas para guardar nossos valores</p>
             <p class="lede">Pensem em variáveis como "caixinhas" na memória. A palavra-chave <code>var</code> <strong>cria</strong> a caixinha; damos um nome e um tipo para guardar um valor específico.</p>
@@ -407,59 +441,33 @@ print(<span class="k-string">"Vida cheia!"</span>)
 
             <div class="grid-2 align-start">
             <div class="code-window">
-                <div class="code-header"><span class="file-name">Variables.gd</span><div class="window-dots"><span class="dot dot-blue">●</span><span class="dot dot-yellow">●</span><span class="dot dot-red">●</span></div></div>
+                <div class="code-header"><span class="file-name">Variables.gd</span><button class="play-sim-btn" id="btn-play-vars" data-sim="1@400; 2@500; 3@500; 4@500; 5@500; 7@800 > Herói; 8@800 > 3">▶ Executar</button><div class="window-dots"><span class="dot dot-blue">●</span><span class="dot dot-yellow">●</span><span class="dot dot-red">●</span></div></div>
                 <pre class="code-content"><code><span class="k-keyword">func</span> <span class="k-func">_ready</span>() -> <span class="k-type">void</span>:
-    <span class="k-comment"># 1. Com tipo e valor (recomendado)</span>
-    <span class="k-keyword">var</span> <span class="k-var">level</span> : <span class="k-type">int</span> = <span class="k-number">3</span>
+    <span class="k-keyword">var</span> <span class="k-var">nome_do_jogador</span> : <span class="k-type">String</span> = <span class="k-string">"Herói"</span>
+    <span class="k-keyword">var</span> <span class="k-var">nivel</span> : <span class="k-type">int</span> = <span class="k-number">3</span>
+    <span class="k-keyword">var</span> <span class="k-var">velocidade</span> : <span class="k-type">float</span> = <span class="k-number">220.5</span>
+    <span class="k-keyword">var</span> <span class="k-var">esta_pulando</span> : <span class="k-type">bool</span> = <span class="k-keyword">false</span>
 
-    <span class="k-comment"># 2. Apenas o tipo (valor padrão atribuído)</span>
-    <span class="k-keyword">var</span> <span class="k-var">speed</span> : <span class="k-type">float</span>
-
-    <span class="k-comment"># 3. Inferência (a Engine adivinha o tipo)</span>
-    <span class="k-keyword">var</span> <span class="k-var">player_name</span> = <span class="k-string">"Hero"</span>
-
-    <span class="k-keyword">var</span> <span class="k-var">is_jumping</span> : <span class="k-type">bool</span> = <span class="k-keyword">false</span></code></pre>
-            </div>
-            <div class="callout callout-tip">
-                <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-star"></use></svg>
-                <div><strong>Qual forma usar?</strong> Prefira sempre declarar com o tipo (<code>var level : int = 3</code>) — isso ajuda o Godot a avisar sobre erros antes mesmo de rodar o jogo. Repare também que texto sempre precisa de aspas (<code>"Hero"</code>), mas número não. Por convenção, nomes de variáveis também usam <code>tudo_minusculo_com_underline</code>, sem espaços ou acentos.</div>
-            </div>
-            </div>
-        </section>
-
-        <!-- 9: Argumentos -->
-        <section class="slide" id="slide-args">
-            <div class="eyebrow"><span class="num">09</span> · Fundamentos</div>
-            <h1 class="slide-title">ARGUMENTOS</h1>
-            <p class="slide-sub">Enviando valores para funções</p>
-            <p class="lede">Quando uma variável é declarada dentro de uma função, ela só existe <strong>dentro daquele bloco</strong> — isso se chama <strong>escopo</strong>: o "território" onde uma variável existe. Para que outras funções saibam os valores da variável, precisamos enviar o valor (argumento) da função que chama para a que recebe. A função receptora precisa especificar o nome e o tipo de dado que espera receber, igual a uma variável!</p>
-
-            <div class="code-window">
-                <div class="code-header"><span class="file-name">Arguments.gd</span><button class="play-sim-btn" id="btn-play-args" data-sim="1@300; 2@500; 3@500; 6@500; 7 > 4">▶ Executar</button><div class="window-dots"><span class="dot dot-blue">●</span><span class="dot dot-yellow">●</span><span class="dot dot-red">●</span></div></div>
-                <pre class="code-content"><code><span class="k-keyword">func</span> <span class="k-func">_ready</span>() -> <span class="k-type">void</span>:
-    <span class="k-keyword">var</span> <span class="k-var">num</span> = <span class="k-number">4</span>
-    print_number(num) <span class="k-comment"># chamando e enviando</span>
-
-<span class="k-comment"># função que recebe um (num) do tipo inteiro</span>
-<span class="k-keyword">func</span> <span class="k-func">print_number</span>(num: <span class="k-type">int</span>) -> <span class="k-type">void</span>:
-    print(num)</code></pre>
+    print(nome_do_jogador)
+    print(nivel)</code></pre>
                 <div class="output-panel"><div class="out-label">Output</div><div class="output-content"></div></div>
             </div>
-            <div class="grid-2">
-                <div class="callout callout-warn">
-                    <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-bug"></use></svg>
-                    <div><strong>Erro clássico de escopo</strong> Se você tentar usar a variável <code>num</code> de dentro de <code>_ready()</code> em outra função sem passá-la como argumento, o Godot vai acusar algo como <em>"Identifier not found"</em>. Guarde essa mensagem — você vai encontrá-la de novo!</div>
+            <div>
+                <div class="callout callout-tip mt-0">
+                    <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-star"></use></svg>
+                    <div><strong>Leia a linha da esquerda para a direita</strong> <code>var</code> cria a caixinha · <code>nome_do_jogador</code> é o nome dela · <code>: String</code> é o que cabe dentro · <code>= "Herói"</code> é o que você põe agora. As mesmas regras de nome do slide anterior valem aqui: inglês, minúsculo, com underline.</div>
                 </div>
-                <div class="callout callout-note">
-                    <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-font"></use></svg>
-                    <div><strong>Argumento ou parâmetro?</strong> Os dois nomes aparecem por aí e a diferença é simples: o <strong>parâmetro</strong> é o nome declarado na função (<code>num: int</code> ali na linha 6); o <strong>argumento</strong> é o valor que você realmente manda na hora de chamar (o <code>4</code>). Se alguém usar um pelo outro, ninguém morre — mas agora você sabe.</div>
+                <div class="callout callout-note mb-0">
+                    <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-desktop"></use></svg>
+                    <div><strong>O <code>print</code> serve pra isso o tempo todo</strong> Repare que <code>print(nome_do_jogador)</code> vai <strong>sem aspas</strong>: você não quer ver o texto "nome_do_jogador" na tela, quer ver <em>o que está guardado dentro</em> dela. Com aspas você imprime o nome da caixinha; sem aspas, o conteúdo.</div>
                 </div>
+            </div>
             </div>
         </section>
 
-        <!-- 10: Operações Aritméticas -->
+        <!-- 14: Operacoes aritmeticas -->
         <section class="slide" id="slide-math">
-            <div class="eyebrow"><span class="num">10</span> · Fundamentos</div>
+            <div class="eyebrow"><span class="num">14</span> · Fundamentos</div>
             <h1 class="slide-title">OPERAÇÕES ARITMÉTICAS</h1>
             <p class="slide-sub">Matemática simples no código</p>
             <div class="op-grid">
@@ -473,38 +481,134 @@ print(<span class="k-string">"Vida cheia!"</span>)
             <div>
                 <div class="callout callout-tip">
                     <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-bolt"></use></svg>
-                    <div><strong>Atalhos matemáticos</strong> Podemos usar atalhos como <code>+=</code>, <code>-=</code>, <code>*=</code> para atualizar uma variável com ela mesma! ❌ Longo: <code>health = health + 10</code> — ✅ Curto: <code>health += 10</code></div>
+                    <div><strong>Atalhos matemáticos</strong> Podemos usar atalhos como <code>+=</code>, <code>-=</code>, <code>*=</code> para atualizar uma variável com ela mesma! ❌ Longo: <code>vida = vida + 10</code> — ✅ Curto: <code>vida += 10</code></div>
                 </div>
                 <div class="callout callout-warn">
                     <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-triangle-exclamation"></use></svg>
-                    <div><strong>Cuidado com a divisão inteira!</strong> Em GDScript, dividir <code>int</code> por <code>int</code> descarta a parte decimal: <code>5 / 2</code> dá <code>2</code>, não <code>2.5</code>. Para ter o resultado decimal, pelo menos um dos números precisa ser <code>float</code>: <code>5.0 / 2</code> dá <code>2.5</code>.</div>
+                    <div><strong>A divisão tem uma armadilha</strong> Dessas cinco, a <code>/</code> é a única que pode devolver um resultado errado <em>sem dar erro nenhum</em> — e isso depende do <strong>tipo</strong> das variáveis. É o próximo slide, e vale a pena não perder.</div>
                 </div>
             </div>
             <div class="code-window">
                 <div class="code-header"><span class="file-name">Math.gd</span><button class="play-sim-btn" id="btn-play-math" data-sim="1@300; 2@500; 3@500; 5@500; 6@500; 8 > 6; 9 > 25">▶ Executar</button><div class="window-dots"><span class="dot dot-blue">●</span><span class="dot dot-yellow">●</span><span class="dot dot-red">●</span></div></div>
                 <pre class="code-content"><code><span class="k-keyword">func</span> <span class="k-func">_ready</span>() -> <span class="k-type">void</span>:
-    <span class="k-keyword">var</span> <span class="k-var">x</span> = <span class="k-number">3</span>
-    x = x + <span class="k-number">3</span>
+    <span class="k-keyword">var</span> <span class="k-var">vida</span> : <span class="k-type">int</span> = <span class="k-number">3</span>
+    vida = vida + <span class="k-number">3</span>
 
-    <span class="k-keyword">var</span> <span class="k-var">y</span> = <span class="k-number">5</span>
-    y *= <span class="k-number">5</span>
+    <span class="k-keyword">var</span> <span class="k-var">pontos</span> : <span class="k-type">int</span> = <span class="k-number">5</span>
+    pontos *= <span class="k-number">5</span>
 
-    print(x) <span class="k-comment"># Saída: 6</span>
-    print(y) <span class="k-comment"># Saída: 25</span></code></pre>
+    print(vida) <span class="k-comment"># Saída: 6</span>
+    print(pontos)  <span class="k-comment"># Saída: 25</span></code></pre>
                 <div class="output-panel"><div class="out-label">Output</div><div class="output-content"></div></div>
             </div>
             </div>
         </section>
 
-        <!-- 11: Operações Lógicas -->
+        <!-- 15: O tipo decide a conta -->
+        <section class="slide" id="slide-typing">
+            <div class="eyebrow"><span class="num">15</span> · Fundamentos</div>
+            <h1 class="slide-title">O TIPO DECIDE A CONTA</h1>
+            <p class="slide-sub">Lá atrás você escolheu um tipo para cada variável. Agora essa escolha cobra o preço.</p>
+            <div class="grid-2 align-start">
+                <div>
+                    <div class="feature-card good mt-0">
+                        <h4>Com tipo — você decide</h4>
+                        <p style="font-family: var(--font-code); font-size: 0.95rem;"><span class="k-keyword">var</span> <span class="k-var">level</span> : <span class="k-type">int</span> = <span class="k-number">3</span></p>
+                        <p>Você escreve <code>: int</code> e cravou: só cabe número inteiro ali. Se alguém tentar guardar texto, <strong>o Godot avisa na hora de escrever</strong> — antes de rodar o jogo.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>Sem tipo — o Godot adivinha</h4>
+                        <p style="font-family: var(--font-code); font-size: 0.95rem;"><span class="k-keyword">var</span> <span class="k-var">level</span> = <span class="k-number">3</span></p>
+                        <p>Sem o <code>: int</code>, o Godot olha o valor, vê um <code>3</code> e <strong>decide sozinho</strong> que é um <code>int</code>. Funciona — mas quem escolheu o tipo foi ele, não você. E é aí que mora a pegadinha ao lado.</p>
+                    </div>
+                    <div class="callout callout-tip mb-0">
+                        <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-star"></use></svg>
+                        <div><strong>Neste curso, escreva sempre o tipo</strong> Custa quatro caracteres e transforma erro de execução em erro de digitação — que é infinitamente mais fácil de achar.</div>
+                    </div>
+                </div>
+                <div>
+                    <p class="lede mt-0">Você quer metade de 7. O resultado deveria ser 3.5. Aperte <strong>Executar</strong>:</p>
+                    <div class="code-window">
+                        <div class="code-header"><span class="file-name">Division.gd</span><button class="play-sim-btn" id="btn-play-div" data-sim="1@400; 2@600; 3@1000 > 3; 5@900; 6@1000 > 3.5">▶ Executar</button><div class="window-dots"><span class="dot dot-blue">●</span><span class="dot dot-yellow">●</span><span class="dot dot-red">●</span></div></div>
+                        <pre class="code-content"><code><span class="k-keyword">func</span> <span class="k-func">_ready</span>() -> <span class="k-type">void</span>:
+    <span class="k-keyword">var</span> <span class="k-var">total</span> : <span class="k-type">int</span> = <span class="k-number">7</span>
+    print(total / <span class="k-number">2</span>)   <span class="k-comment"># cadê o 0.5?</span>
+
+    <span class="k-keyword">var</span> <span class="k-var">exato</span> : <span class="k-type">float</span> = <span class="k-number">7</span>
+    print(exato / <span class="k-number">2</span>)   <span class="k-comment"># agora sim</span></code></pre>
+                        <div class="output-panel"><div class="out-label">Output</div><div class="output-content"></div></div>
+                    </div>
+                    <div class="callout callout-warn mb-0">
+                        <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-triangle-exclamation"></use></svg>
+                        <div><strong>Por que o 3 e não o 3.5?</strong> Um <code>int</code> é a caixinha de números <em>inteiros</em>: o 0.5 simplesmente não cabe e é jogado fora. Dividir <code>int</code> por <code>int</code> sempre devolve <code>int</code>. Para ter o decimal, <strong>um dos dois lados precisa ser <code>float</code></strong> — ou a variável, ou o número (<code>total / 2.0</code>). E nenhum erro aparece: o jogo roda feliz com a conta errada. Guarde este, ele volta.</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 16: Argumentos -->
+        <section class="slide" id="slide-args">
+            <div class="eyebrow"><span class="num">16</span> · Fundamentos</div>
+            <h1 class="slide-title">ARGUMENTOS</h1>
+            <p class="slide-sub">Enviando valores para funções</p>
+            <p class="lede">Uma variável criada dentro de uma função <strong>só existe ali dentro</strong> — isso se chama <strong>escopo</strong>. Quando outra função precisa daquele valor, ele tem que ser <strong>entregue na mão</strong>: é para isso que servem os parênteses que até agora estavam vazios.</p>
+
+            <div class="code-window">
+                <div class="code-header"><span class="file-name">Arguments.gd</span><button class="play-sim-btn" id="btn-play-args" data-sim="1@400; 2@600; 3@900; 6@900; 7@800 > 4">▶ Executar</button><div class="window-dots"><span class="dot dot-blue">●</span><span class="dot dot-yellow">●</span><span class="dot dot-red">●</span></div></div>
+                <pre class="code-content"><code><span class="k-keyword">func</span> <span class="k-func">_ready</span>() -> <span class="k-type">void</span>:
+    <span class="k-keyword">var</span> <span class="k-var">pontos_do_jogador</span> : <span class="k-type">int</span> = <span class="k-number">4</span>
+    mostrar_pontos(pontos_do_jogador)  <span class="k-comment"># entrega o valor ↓</span>
+
+<span class="k-comment"># recebe um int e chama ele de "valor" aqui dentro</span>
+<span class="k-keyword">func</span> <span class="k-func">mostrar_pontos</span>(valor : <span class="k-type">int</span>) -> <span class="k-type">void</span>:
+    print(valor)</code></pre>
+                <div class="output-panel"><div class="out-label">Output</div><div class="output-content"></div></div>
+            </div>
+            <div class="grid-2">
+                <div class="callout callout-warn">
+                    <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-bug"></use></svg>
+                    <div><strong>Erro clássico de escopo</strong> Se você tentar usar <code>pontos_do_jogador</code> lá dentro de <code>mostrar_pontos</code> sem ter passado como argumento, o Godot acusa <em>"Identifier not found"</em> — "não achei ninguém com esse nome". Guarde essa mensagem, ela volta no próximo checkpoint.</div>
+                </div>
+                <div class="callout callout-note">
+                    <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-tag"></use></svg>
+                    <div><strong>Os dois nomes são diferentes de propósito</strong> Lá fora é <code>pontos_do_jogador</code>; aqui dentro, <code>valor</code>. O que viaja é o <strong>valor</strong> (o <code>4</code>), não o nome — quem recebe escolhe como chamar.</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 17: Retorno de valores -->
+        <section class="slide" id="slide-return">
+            <div class="eyebrow"><span class="num">17</span> · Fundamentos</div>
+            <h1 class="slide-title">RETORNO DE VALORES</h1>
+            <p class="slide-sub">Funções que processam e devolvem um resultado</p>
+            <p class="lede">Agora que sabemos como processar variáveis, podemos criar uma função que processa um valor e <strong>retorna</strong> um resultado para quem a chamou. Lembra do <code>-> void</code> que vimos lá no início? Significa "não retorna nada". Agora vamos ver o oposto: na declaração, especificamos o tipo do valor retornado usando a seta <code>-> tipo:</code>.</p>
+
+            <div class="code-window">
+                <div class="code-header"><span class="file-name">Return.gd</span><button class="play-sim-btn" id="btn-play-return" data-sim="1@300; 2@500; 6@500; 7@500; 3 > 15">▶ Executar</button><div class="window-dots"><span class="dot dot-blue">●</span><span class="dot dot-yellow">●</span><span class="dot dot-red">●</span></div></div>
+                <pre class="code-content"><code><span class="k-keyword">func</span> <span class="k-func">_ready</span>() -> <span class="k-type">void</span>:
+    <span class="k-keyword">var</span> <span class="k-var">resultado</span> = somar(<span class="k-number">8</span>, <span class="k-number">7</span>)
+    print(resultado) <span class="k-comment"># Saída: 15</span>
+
+<span class="k-comment"># Função que recebe inteiros e retorna um inteiro</span>
+<span class="k-keyword">func</span> <span class="k-func">somar</span>(primeiro: <span class="k-type">int</span>, segundo: <span class="k-type">int</span>) -> <span class="k-type">int</span>:
+    <span class="k-keyword">return</span> primeiro + segundo</code></pre>
+                <div class="output-panel"><div class="out-label">Output</div><div class="output-content"></div></div>
+            </div>
+            <div class="callout callout-note">
+                <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-stop"></use></svg>
+                <div><strong>Lembrete</strong> Quando uma função encontra a palavra <code>return</code>, ela termina seu processo imediatamente — qualquer código escrito depois do <code>return</code>, dentro daquela função, nunca é executado.</div>
+            </div>
+        </section>
+
+        <!-- 18: Operacoes logicas -->
         <section class="slide" id="slide-logic">
-            <div class="eyebrow"><span class="num">11</span> · Fundamentos</div>
+            <div class="eyebrow"><span class="num">18</span> · Fundamentos</div>
             <h1 class="slide-title">OPERAÇÕES LÓGICAS</h1>
             <p class="slide-sub">Perguntas que retornam Verdadeiro (true) ou Falso (false)</p>
 
             <div class="callout callout-warn">
                 <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-triangle-exclamation"></use></svg>
-                <div><strong>A pegadinha nº1 de quem está começando</strong> Um único <code>=</code> <strong>atribui</strong> um valor (<code>idade = 10</code> → guarda 10 na variável). Dois sinais <code>==</code> <strong>comparam</strong> se dois valores são iguais e devolvem <code>true</code>/<code>false</code> (<code>idade == 10</code> → pergunta "idade é igual a 10?"). Se seu código não fizer o esperado, esse é sempre um bom primeiro lugar pra checar.</div>
+                <div><strong>A pegadinha nº1 de quem está começando</strong> Um <code>=</code> <strong>guarda</strong> um valor (<code>pontos = 10</code> → põe 10 na variável). Dois <code>==</code> <strong>perguntam</strong> se são iguais e devolvem <code>true</code>/<code>false</code> (<code>pontos == 10</code> → "score é igual a 10?").</div>
             </div>
 
             <div class="op-grid">
@@ -522,90 +626,21 @@ print(<span class="k-string">"Vida cheia!"</span>)
             <div class="code-window">
                 <div class="code-header"><span class="file-name">Logic.gd</span><div class="window-dots"><span class="dot dot-blue">●</span><span class="dot dot-yellow">●</span><span class="dot dot-red">●</span></div></div>
                 <pre class="code-content"><code><span class="k-keyword">func</span> <span class="k-func">_ready</span>() -> <span class="k-type">void</span>:
-    <span class="k-keyword">var</span> <span class="k-var">x</span> = <span class="k-keyword">true</span>
-    <span class="k-keyword">var</span> <span class="k-var">y</span> = <span class="k-keyword">false</span>
-    <span class="k-keyword">var</span> <span class="k-var">z</span> = <span class="k-number">83</span>
+    <span class="k-keyword">var</span> <span class="k-var">tem_chave</span> : <span class="k-type">bool</span> = <span class="k-keyword">true</span>
+    <span class="k-keyword">var</span> <span class="k-var">porta_aberta</span> : <span class="k-type">bool</span> = <span class="k-keyword">false</span>
+    <span class="k-keyword">var</span> <span class="k-var">pontos</span> : <span class="k-type">int</span> = <span class="k-number">83</span>
 
-    <span class="k-keyword">var</span> <span class="k-var">a</span> = x <span class="k-keyword">and</span> y   <span class="k-comment"># a = false (pois y é false)</span>
-    <span class="k-keyword">var</span> <span class="k-var">b</span> = x <span class="k-keyword">or</span> y    <span class="k-comment"># b = true (pois x é true)</span>
-    <span class="k-keyword">var</span> <span class="k-var">c</span> = <span class="k-keyword">not</span> x     <span class="k-comment"># c = false (oposto de true)</span>
-    <span class="k-keyword">var</span> <span class="k-var">d</span> = z == <span class="k-number">30</span> + <span class="k-number">53</span>  <span class="k-comment"># d = true (83 é igual a 83)</span>
-    <span class="k-keyword">var</span> <span class="k-var">e</span> = z > <span class="k-number">100</span>    <span class="k-comment"># e = false (83 não é maior que 100)</span></code></pre>
-            </div>
-            <p style="font-size:0.85rem;color:var(--text-muted)">Repare: toda operação lógica sempre devolve um valor <code>bool</code> — <code>true</code> ou <code>false</code>.</p>
-        </section>
-
-        <!-- 12: Retorno de Valores -->
-        <section class="slide" id="slide-return">
-            <div class="eyebrow"><span class="num">12</span> · Fundamentos</div>
-            <h1 class="slide-title">RETORNO DE VALORES</h1>
-            <p class="slide-sub">Funções que processam e devolvem um resultado</p>
-            <p class="lede">Agora que sabemos como processar variáveis, podemos criar uma função que processa um valor e <strong>retorna</strong> um resultado para quem a chamou. Lembra do <code>-> void</code> que vimos lá no início? Significa "não retorna nada". Agora vamos ver o oposto: na declaração, especificamos o tipo do valor retornado usando a seta <code>-> tipo:</code>.</p>
-
-            <div class="code-window">
-                <div class="code-header"><span class="file-name">Return.gd</span><button class="play-sim-btn" id="btn-play-return" data-sim="1@300; 2@500; 6@500; 7@500; 3 > 15">▶ Executar</button><div class="window-dots"><span class="dot dot-blue">●</span><span class="dot dot-yellow">●</span><span class="dot dot-red">●</span></div></div>
-                <pre class="code-content"><code><span class="k-keyword">func</span> <span class="k-func">_ready</span>() -> <span class="k-type">void</span>:
-    <span class="k-keyword">var</span> <span class="k-var">result</span> = add(<span class="k-number">8</span>, <span class="k-number">7</span>)
-    print(result) <span class="k-comment"># Saída: 15</span>
-
-<span class="k-comment"># Função que recebe inteiros e retorna um inteiro</span>
-<span class="k-keyword">func</span> <span class="k-func">add</span>(a: <span class="k-type">int</span>, b: <span class="k-type">int</span>) -> <span class="k-type">int</span>:
-    <span class="k-keyword">return</span> a + b</code></pre>
-                <div class="output-panel"><div class="out-label">Output</div><div class="output-content"></div></div>
-            </div>
-            <div class="callout callout-note">
-                <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-stop"></use></svg>
-                <div><strong>Lembrete</strong> Quando uma função encontra a palavra <code>return</code>, ela termina seu processo imediatamente — qualquer código escrito depois do <code>return</code>, dentro daquela função, nunca é executado.</div>
+    <span class="k-keyword">var</span> <span class="k-var">pode_entrar</span> = tem_chave <span class="k-keyword">and</span> porta_aberta  <span class="k-comment"># false</span>
+    <span class="k-keyword">var</span> <span class="k-var">pode_ver</span> = tem_chave <span class="k-keyword">or</span> porta_aberta    <span class="k-comment"># true</span>
+    <span class="k-keyword">var</span> <span class="k-var">esta_trancada</span> = <span class="k-keyword">not</span> porta_aberta        <span class="k-comment"># true</span>
+    <span class="k-keyword">var</span> <span class="k-var">e_exato</span> = pontos == <span class="k-number">83</span>            <span class="k-comment"># true</span>
+    <span class="k-keyword">var</span> <span class="k-var">e_recorde</span> = pontos > <span class="k-number">100</span>           <span class="k-comment"># false</span></code></pre>
             </div>
         </section>
 
-        <!-- Checkpoint 2 -->
-        <section class="slide checkpoint-slide" id="slide-checkpoint-2">
-            <div class="eyebrow"><span class="num">15</span> · Mãos no código</div>
-            <h1 class="slide-title">CHECKPOINT 2 — CONSERTE OS BUGS</h1>
-            <p class="slide-sub">Este script tem <strong>três</strong> erros. Todos já apareceram nos slides anteriores.</p>
-            <div class="grid-2 align-start">
-                <div class="code-window">
-                    <div class="code-header"><span class="file-name">Buggy.gd</span><div class="window-dots"><span class="dot dot-blue">●</span><span class="dot dot-yellow">●</span><span class="dot dot-red">●</span></div></div>
-                    <pre class="code-content"><code><span class="k-keyword">func</span> <span class="k-func">_ready</span>() -> <span class="k-type">void</span>:
-    <span class="k-keyword">var</span> <span class="k-var">total_health</span> = <span class="k-number">7</span>
-    <span class="k-keyword">var</span> <span class="k-var">half</span> = total_health / <span class="k-number">2</span>
-    print(half)            <span class="k-comment"># queríamos 3.5</span>
-
-    <span class="k-keyword">if</span> total_health = <span class="k-number">7</span>:
-        print(<span class="k-string">"Vida cheia!"</span>)
-
-    show_health()
-
-<span class="k-keyword">func</span> <span class="k-func">show_health</span>() -> <span class="k-type">void</span>:
-    print(total_health)</code></pre>
-                </div>
-                <div>
-                    <div class="checkpoint">
-                        <h3>Sua missão</h3>
-                        <ol class="step-list">
-                            <li>Copie o código para o Godot e rode. Leia a mensagem de erro <em>antes</em> de mexer.</li>
-                            <li>Conserte um erro de cada vez e rode de novo a cada correção.</li>
-                            <li>No fim, o Output tem que mostrar <code>3.5</code> e <code>Vida cheia!</code> e <code>7</code>.</li>
-                        </ol>
-                    </div>
-                    <details class="hint">
-                        <summary>💡 Dica — o que procurar</summary>
-                        <p>Linha 3: dividir <code>int</code> por <code>int</code> descarta o decimal.<br>
-                           Linha 6: um <code>=</code> guarda um valor, dois <code>==</code> comparam.<br>
-                           Linha 11: <code>total_health</code> nasceu dentro de <code>_ready()</code> — quem está fora não enxerga.</p>
-                    </details>
-                    <div class="callout callout-tip">
-                        <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-bug"></use></svg>
-                        <div><strong>Por que exercício de bug?</strong> Programar é 20% escrever e 80% descobrir por que não funcionou. Ler a mensagem de erro e saber por onde começar é a habilidade que mais vai te servir daqui pra frente.</div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Estruturas Condicionais -->
+        <!-- 19: Estruturas condicionais -->
         <section class="slide" id="slide-cond">
-            <div class="eyebrow"><span class="num">13</span> · Fundamentos</div>
+            <div class="eyebrow"><span class="num">19</span> · Fundamentos</div>
             <h1 class="slide-title">ESTRUTURAS CONDICIONAIS</h1>
             <p class="slide-sub">O poder de decisão do seu código (if, else e elif)</p>
             <p class="lede">Para criar uma estrutura condicional usamos a palavra <code>if</code> (se) seguida de uma condição booleana. O código só entra naquele bloco se a condição for verdadeira.</p>
@@ -633,10 +668,10 @@ print(<span class="k-string">"Vida cheia!"</span>)
                 <div id="code-com-else" class="code-content code-tab-content active-tab" style="padding: 0;">
                     <div style="padding: 1.5rem; position: relative;">
                         <button class="play-sim-btn" id="btn-play-else" data-sim="2@400; 4; 6; 7 > Reprovado" style="position: absolute; right: 15px; top: 15px;">▶ Executar</button>
-                        <pre><code><span class="k-keyword">func</span> <span class="k-func">check_score</span>():
-    <span class="k-keyword">var</span> <span class="k-var">score</span> = <span class="k-number">50</span>
+                        <pre><code><span class="k-keyword">func</span> <span class="k-func">ver_nota</span>():
+    <span class="k-keyword">var</span> <span class="k-var">pontos</span> = <span class="k-number">50</span>
 
-    <span class="k-keyword">if</span> score >= <span class="k-number">70</span>:
+    <span class="k-keyword">if</span> pontos >= <span class="k-number">70</span>:
         print(<span class="k-string">"Aprovado"</span>)
     <span class="k-keyword">else</span>:
         print(<span class="k-string">"Reprovado"</span>)</code></pre>
@@ -648,14 +683,14 @@ print(<span class="k-string">"Vida cheia!"</span>)
                 <div id="code-sem-elif" class="code-content code-tab-content" style="padding: 0; display: none;">
                     <div style="padding: 1.5rem; position: relative;">
                         <button class="play-sim-btn" id="btn-play-sem" data-sim="2@400; 4; 6; 7 > Nota B; 8; 9 > Nota C" style="position: absolute; right: 15px; top: 15px;">▶ Executar</button>
-                        <pre><code><span class="k-keyword">func</span> <span class="k-func">check_score</span>():
-    <span class="k-keyword">var</span> <span class="k-var">score</span> = <span class="k-number">85</span>
+                        <pre><code><span class="k-keyword">func</span> <span class="k-func">ver_nota</span>():
+    <span class="k-keyword">var</span> <span class="k-var">pontos</span> = <span class="k-number">85</span>
 
-    <span class="k-keyword">if</span> score >= <span class="k-number">90</span>:
+    <span class="k-keyword">if</span> pontos >= <span class="k-number">90</span>:
         print(<span class="k-string">"Nota A"</span>)
-    <span class="k-keyword">if</span> score >= <span class="k-number">80</span>:
+    <span class="k-keyword">if</span> pontos >= <span class="k-number">80</span>:
         print(<span class="k-string">"Nota B"</span>)
-    <span class="k-keyword">if</span> score >= <span class="k-number">70</span>:
+    <span class="k-keyword">if</span> pontos >= <span class="k-number">70</span>:
         print(<span class="k-string">"Nota C"</span>)</code></pre>
                     </div>
                     <div class="output-panel"><div class="out-label">Output</div><div class="output-content"></div></div>
@@ -669,14 +704,14 @@ print(<span class="k-string">"Vida cheia!"</span>)
                 <div id="code-com-elif" class="code-content code-tab-content" style="padding: 0; display: none;">
                     <div style="padding: 1.5rem; position: relative;">
                         <button class="play-sim-btn" id="btn-play-com" data-sim="2@400; 4; 6; 7 > Nota B" style="position: absolute; right: 15px; top: 15px;">▶ Executar</button>
-                        <pre><code><span class="k-keyword">func</span> <span class="k-func">check_score</span>():
-    <span class="k-keyword">var</span> <span class="k-var">score</span> = <span class="k-number">85</span>
+                        <pre><code><span class="k-keyword">func</span> <span class="k-func">ver_nota</span>():
+    <span class="k-keyword">var</span> <span class="k-var">pontos</span> = <span class="k-number">85</span>
 
-    <span class="k-keyword">if</span> score >= <span class="k-number">90</span>:
+    <span class="k-keyword">if</span> pontos >= <span class="k-number">90</span>:
         print(<span class="k-string">"Nota A"</span>)
-    <span class="k-keyword">elif</span> score >= <span class="k-number">80</span>:
+    <span class="k-keyword">elif</span> pontos >= <span class="k-number">80</span>:
         print(<span class="k-string">"Nota B"</span>)
-    <span class="k-keyword">elif</span> score >= <span class="k-number">70</span>:
+    <span class="k-keyword">elif</span> pontos >= <span class="k-number">70</span>:
         print(<span class="k-string">"Nota C"</span>)
     <span class="k-keyword">else</span>:
         print(<span class="k-string">"Reprovado"</span>)</code></pre>
@@ -690,12 +725,62 @@ print(<span class="k-string">"Vida cheia!"</span>)
             </div>
         </section>
 
-        <!-- 14: Condicionais na Prática -->
+        <!-- 20: Checkpoint 2 -->
+        <section class="slide checkpoint-slide" id="slide-checkpoint-2">
+            <div class="eyebrow"><span class="num">20</span> · Mãos no código</div>
+            <h1 class="slide-title">CHECKPOINT 2 — CONSERTE OS BUGS</h1>
+            <p class="slide-sub">Este script tem <strong>três</strong> erros. Todos já apareceram nos slides anteriores.</p>
+            <div class="grid-2 align-start">
+                <div>
+                <div class="code-window mt-0">
+                    <div class="code-header"><span class="file-name">Buggy.gd</span><div class="window-dots"><span class="dot dot-blue">●</span><span class="dot dot-yellow">●</span><span class="dot dot-red">●</span></div></div>
+                    <pre class="code-content"><code><span class="k-keyword">func</span> <span class="k-func">_ready</span>() -> <span class="k-type">void</span>:
+    <span class="k-keyword">var</span> <span class="k-var">vida_total</span> : <span class="k-type">int</span> = <span class="k-number">7</span>
+    <span class="k-keyword">var</span> <span class="k-var">metade</span> = vida_total / <span class="k-number">2</span>
+    print(metade)            <span class="k-comment"># queríamos 3.5</span>
+
+    <span class="k-keyword">if</span> vida_total = <span class="k-number">7</span>:
+        print(<span class="k-string">"Vida cheia!"</span>)
+    mostrar_vida()
+
+<span class="k-keyword">func</span> <span class="k-func">mostrar_vida</span>() -> <span class="k-type">void</span>:
+    print(vida_total)</code></pre>
+                </div>
+                <div class="timer-box" data-minutes="15">
+                    <span class="timer-label">Tempo do checkpoint</span>
+                    <span class="timer-display">15:00</span>
+                    <button type="button" class="timer-btn">▶ Iniciar</button>
+                </div>
+                </div>
+                <div>
+                    <div class="checkpoint">
+                        <h3>Sua missão</h3>
+                        <ol class="step-list">
+                            <li>Copie o código e rode. Leia o erro <em>antes</em> de mexer.</li>
+                            <li>Conserte um erro de cada vez, rodando a cada correção.</li>
+                            <li>No fim o Output mostra <code>3.5</code>, <code>Vida cheia!</code> e <code>7</code>.</li>
+                        </ol>
+                    </div>
+                    <details class="hint">
+                        <summary>💡 Dica — o que procurar</summary>
+                        <p><strong>Linha 2 e 3:</strong> <code>vida_total</code> é <code>int</code>, então a divisão descarta o decimal. Duas correções servem: trocar o tipo para <code>float</code>, ou dividir por <code>2.0</code>.<br>
+                           <strong>Linha 6:</strong> um <code>=</code> guarda um valor, dois <code>==</code> comparam.<br>
+                           <strong>Linha 11:</strong> <code>vida_total</code> nasceu dentro de <code>_ready()</code> — quem está fora não enxerga. Lembra do <em>"Identifier not found"</em>?</p>
+                    </details>
+                    <div class="callout callout-tip mb-0">
+                        <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-bug"></use></svg>
+                        <div><strong>Por que exercício de bug?</strong> Programar é 20% escrever e 80% descobrir por que não funcionou. Ler o erro e saber por onde começar é a habilidade que mais vai te servir.</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 21: Condicionais na pratica -->
         <section class="slide" id="slide-cond-practice">
-            <div class="eyebrow"><span class="num">14</span> · Prática</div>
+            <div class="eyebrow"><span class="num">21</span> · Prática</div>
             <h1 class="slide-title">CONDICIONAIS NA PRÁTICA</h1>
             <p class="slide-sub">Lendo botões e chamando ações</p>
-            <p class="lede">Use vários <code>if</code> soltos, nunca <code>elif</code>: assim o Godot testa todas as direções e o jogador pode apertar W e D juntos para andar na diagonal.</p>
+            <p class="lede">Vários <code>if</code> soltos, nunca <code>elif</code>: assim todas as direções são testadas e o jogador pode apertar W e D juntos para ir na diagonal.</p>
 
             <div class="grid-2">
             <div>
@@ -728,18 +813,18 @@ print(<span class="k-string">"Vida cheia!"</span>)
             <div class="grid-2">
                 <div class="callout callout-note">
                     <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-gamepad"></use></svg>
-                    <div><strong>Dois nomes novos aqui</strong> <code>Input</code> é um recurso pronto do Godot para checar teclado, mouse e controle. <code>"move_up"</code> não é uma tecla fixa — é um <strong>nome de ação</strong> configurado em <em>Project Settings → Input Map</em>.</div>
+                    <div><strong>Dois nomes novos</strong> <code>Input</code> checa teclado e controle. <code>"move_up"</code> não é uma tecla: é um <strong>nome de ação</strong> criado em <em>Project Settings → Input Map</em>.</div>
                 </div>
                 <div class="callout callout-tip">
                     <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-clock"></use></svg>
-                    <div><strong>E o "delta"?</strong> É o tempo desde o último frame. Não se preocupe agora — ele volta a fundo no módulo de Física para Jogos.</div>
+                    <div><strong>E o <code>_process</code> e o <code>delta</code>?</strong> <code>_process</code> é outra função que a engine chama sozinha — só que a cada quadro, sem parar. O <code>delta</code> volta a fundo na aula de Física.</div>
                 </div>
             </div>
         </section>
 
-        <!-- 15: Repetição: FOR -->
+        <!-- 22: Repeticao: for -->
         <section class="slide" id="slide-for">
-            <div class="eyebrow"><span class="num">15</span> · Fundamentos</div>
+            <div class="eyebrow"><span class="num">22</span> · Fundamentos</div>
             <h1 class="slide-title">REPETIÇÃO: FOR</h1>
             <p class="slide-sub">Repetindo uma ação um número exato de vezes</p>
             <p class="lede">A forma mais comum de usar o <code>for</code> no Godot é para repetir uma ação um número exato de vezes, usando a função <code>range()</code>.</p>
@@ -758,9 +843,9 @@ print(<span class="k-string">"Vida cheia!"</span>)
             <p style="font-size:0.85rem;color:var(--text-muted)"><code>range(5)</code> gera os números de <code>0</code> até <code>4</code> — sempre um a menos que o número informado, porque a contagem começa em zero.</p>
         </section>
 
-        <!-- 16: Repetição: WHILE -->
+        <!-- 23: Repeticao: while -->
         <section class="slide" id="slide-while">
-            <div class="eyebrow"><span class="num">16</span> · Fundamentos</div>
+            <div class="eyebrow"><span class="num">23</span> · Fundamentos</div>
             <h1 class="slide-title">REPETIÇÃO: WHILE</h1>
             <p class="slide-sub">O loop condicional (Enquanto...)</p>
             <p class="lede">Repete um bloco de código <strong>enquanto</strong> uma condição for verdadeira. Imagine o while como um <code>if</code> que se repete sem parar até a condição falhar!</p>
@@ -776,11 +861,11 @@ print(<span class="k-string">"Vida cheia!"</span>)
                 </div>
                 <div class="code-header"><span class="file-name">WhileLoop.gd</span><button class="play-sim-btn" id="btn-play-while" data-sim="2@800#health-val=3; 4; 5 > Ainda estou vivo!; 6#health-val=2; 4; 5 > Ainda estou vivo!; 6#health-val=1; 4; 5 > Ainda estou vivo!; 6#health-val=0; 4">▶ Executar</button><div class="window-dots"><span class="dot dot-blue">●</span><span class="dot dot-yellow">●</span><span class="dot dot-red">●</span></div></div>
                 <pre class="code-content"><code><span class="k-keyword">func</span> <span class="k-func">_ready</span>() -> <span class="k-type">void</span>:
-    <span class="k-keyword">var</span> <span class="k-var">health</span> = <span class="k-number">3</span>
+    <span class="k-keyword">var</span> <span class="k-var">vida</span> = <span class="k-number">3</span>
 
-    <span class="k-keyword">while</span> health > <span class="k-number">0</span>:
+    <span class="k-keyword">while</span> vida > <span class="k-number">0</span>:
         print(<span class="k-string">"Ainda estou vivo!"</span>)
-        health -= <span class="k-number">1</span></code></pre>
+        vida -= <span class="k-number">1</span></code></pre>
                 <div class="output-panel"><div class="out-label">Output</div><div class="output-content"></div></div>
             </div>
             <div class="callout callout-note">
@@ -789,9 +874,9 @@ print(<span class="k-string">"Vida cheia!"</span>)
             </div>
         </section>
 
-        <!-- Array -->
+        <!-- 24: Array -->
         <section class="slide" id="slide-array">
-            <div class="eyebrow"><span class="num">19</span> · Fundamentos</div>
+            <div class="eyebrow"><span class="num">24</span> · Fundamentos</div>
             <h1 class="slide-title">GUARDANDO VÁRIAS COISAS: ARRAY</h1>
             <p class="slide-sub">Quando uma caixinha não basta</p>
             <div class="grid-2 align-start">
@@ -805,16 +890,16 @@ print(<span class="k-string">"Vida cheia!"</span>)
                 <div class="code-window">
                     <div class="code-header"><span class="file-name">Array.gd</span><div class="window-dots"><span class="dot dot-blue">●</span><span class="dot dot-yellow">●</span><span class="dot dot-red">●</span></div></div>
                     <pre class="code-content"><code><span class="k-keyword">func</span> <span class="k-func">_ready</span>() -> <span class="k-type">void</span>:
-    <span class="k-keyword">var</span> <span class="k-var">backpack</span> = [<span class="k-string">"poção"</span>, <span class="k-string">"espada"</span>]
+    <span class="k-keyword">var</span> <span class="k-var">mochila</span> = [<span class="k-string">"poção"</span>, <span class="k-string">"espada"</span>]
 
-    print(backpack[<span class="k-number">0</span>])      <span class="k-comment"># poção</span>
-    print(backpack.size()) <span class="k-comment"># 2 (quantos itens)</span>
+    print(mochila[<span class="k-number">0</span>])      <span class="k-comment"># poção</span>
+    print(mochila.size()) <span class="k-comment"># 2 (quantos itens)</span>
 
-    backpack.<span class="k-func">append</span>(<span class="k-string">"chave"</span>) <span class="k-comment"># adiciona no fim</span>
-    backpack.<span class="k-func">erase</span>(<span class="k-string">"espada"</span>) <span class="k-comment"># remove pelo valor</span>
+    mochila.<span class="k-func">append</span>(<span class="k-string">"chave"</span>) <span class="k-comment"># adiciona no fim</span>
+    mochila.<span class="k-func">erase</span>(<span class="k-string">"espada"</span>) <span class="k-comment"># remove pelo valor</span>
 
     <span class="k-comment"># o for percorre a lista inteira</span>
-    <span class="k-keyword">for</span> item <span class="k-keyword">in</span> backpack:
+    <span class="k-keyword">for</span> item <span class="k-keyword">in</span> mochila:
         print(item)</code></pre>
                 </div>
             </div>
@@ -824,14 +909,14 @@ print(<span class="k-string">"Vida cheia!"</span>)
             </div>
         </section>
 
-        <!-- Dictionary -->
+        <!-- 25: Dictionary -->
         <section class="slide" id="slide-dictionary">
-            <div class="eyebrow"><span class="num">20</span> · Fundamentos</div>
+            <div class="eyebrow"><span class="num">25</span> · Fundamentos</div>
             <h1 class="slide-title">GUARDANDO PARES: DICTIONARY</h1>
             <p class="slide-sub">Quando a posição não importa, mas o nome sim</p>
             <div class="grid-2 align-start">
                 <div>
-                    <p class="lede">No Array você busca pela <strong>posição</strong> (<code>backpack[0]</code>). Mas nem sempre a ordem faz sentido: se você quer saber o dano da espada, não interessa se ela é a primeira ou a terceira da lista.</p>
+                    <p class="lede">No Array você busca pela <strong>posição</strong> (<code>mochila[0]</code>). Mas nem sempre a ordem faz sentido: se você quer saber o dano da espada, não interessa se ela é a primeira ou a terceira da lista.</p>
                     <p class="lede">O <strong>Dictionary</strong> guarda pares de <strong>chave → valor</strong>. Você busca pelo nome, não pela posição.</p>
                     <div class="callout callout-note">
                         <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-shapes"></use></svg>
@@ -841,76 +926,80 @@ print(<span class="k-string">"Vida cheia!"</span>)
                 <div class="code-window">
                     <div class="code-header"><span class="file-name">Dictionary.gd</span><div class="window-dots"><span class="dot dot-blue">●</span><span class="dot dot-yellow">●</span><span class="dot dot-red">●</span></div></div>
                     <pre class="code-content"><code><span class="k-keyword">func</span> <span class="k-func">_ready</span>() -> <span class="k-type">void</span>:
-    <span class="k-keyword">var</span> <span class="k-var">sword</span> = {
-        <span class="k-string">"name"</span>: <span class="k-string">"Espada de Ferro"</span>,
-        <span class="k-string">"damage"</span>: <span class="k-number">12</span>,
-        <span class="k-string">"price"</span>: <span class="k-number">150</span>
+    <span class="k-keyword">var</span> <span class="k-var">espada</span> = {
+        <span class="k-string">"nome"</span>: <span class="k-string">"Espada de Ferro"</span>,
+        <span class="k-string">"dano"</span>: <span class="k-number">12</span>,
+        <span class="k-string">"preco"</span>: <span class="k-number">150</span>
     }
 
-    print(sword[<span class="k-string">"name"</span>])   <span class="k-comment"># Espada de Ferro</span>
-    sword[<span class="k-string">"damage"</span>] = <span class="k-number">15</span>  <span class="k-comment"># muda o valor</span>
+    print(espada[<span class="k-string">"nome"</span>])   <span class="k-comment"># Espada de Ferro</span>
+    espada[<span class="k-string">"dano"</span>] = <span class="k-number">15</span>  <span class="k-comment"># muda o valor</span>
 
     <span class="k-comment"># um Array de Dictionaries = um inventário</span>
-    <span class="k-keyword">var</span> <span class="k-var">inventory</span> = [sword, potion]</code></pre>
+    <span class="k-keyword">var</span> <span class="k-var">pocao</span> = {<span class="k-string">"nome"</span>: <span class="k-string">"Poção"</span>, <span class="k-string">"cura"</span>: <span class="k-number">20</span>}
+    <span class="k-keyword">var</span> <span class="k-var">inventario</span> = [espada, pocao]</code></pre>
                 </div>
             </div>
         </section>
 
-        <!-- Desafio -->
+        <!-- 26: Desafio -->
         <section class="slide" id="slide-challenge">
-            <div class="eyebrow"><span class="num">17</span> · Desafio</div>
+            <div class="eyebrow"><span class="num">26</span> · Desafio</div>
             <h1 class="slide-title">DESAFIO!</h1>
             <p class="slide-sub">Juntando todo o conhecimento</p>
             <div class="grid-2 align-start">
                 <div>
                     <div class="card">
-                        <h3>👾 ⚔️ Crie uma função <code>battle()</code> que simule uma luta!</h3>
+                        <h3>👾 Crie uma função <code>batalha()</code></h3>
                         <ul>
-                            <li>Crie variáveis para a vida do monstro (ex: 30) e seu dano de ataque (ex: 10).</li>
-                            <li>Use um <strong>while</strong> que continue enquanto a vida do monstro for maior que zero.</li>
-                            <li>Dentro do laço, subtraia o seu dano da vida do monstro (use <code>-=</code>).</li>
-                            <li>Ainda no laço, use um <strong>if/else</strong>: se a vida chegar a 0, imprima "Monstro Derrotado"; senão, a vida restante.</li>
+                            <li>Crie variáveis para a vida do monstro (ex: 30) e seu dano (ex: 10).</li>
+                            <li>Use um <strong>while</strong> que rode enquanto a vida for maior que zero.</li>
+                            <li>Dentro do laço, subtraia o dano da vida (use <code>-=</code>).</li>
+                            <li>Ainda no laço, um <strong>if/else</strong>: vida em 0 imprime "Monstro Derrotado"; senão, a vida restante.</li>
                         </ul>
                     </div>
                     <div class="callout callout-note">
                         <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-circle-info"></use></svg>
-                        <div><strong>Só pra deixar claro</strong> Aqui só a vida do <em>monstro</em> diminui — o seu personagem não recebe dano. É uma simplificação para praticar <code>while</code> + <code>if/else</code> juntos.</div>
+                        <div><strong>Só pra deixar claro</strong> Aqui só a vida do <em>monstro</em> cai — é uma simplificação para praticar <code>while</code> + <code>if/else</code>.</div>
                     </div>
                     <div class="callout callout-tip">
                         <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-graduation-cap"></use></svg>
-                        <div><strong>Hora de codar!</strong> Abra o Godot e chame <code>battle()</code> dentro do <code>_ready()</code>.</div>
+                        <div><strong>Hora de codar!</strong> Chame <code>batalha()</code> dentro do <code>_ready()</code> — declarar não basta.</div>
                     </div>
                 </div>
                 <div>
                     <div class="code-window">
                         <div class="code-header"><span class="file-name">Challenge.gd — esqueleto</span><div class="window-dots"><span class="dot dot-blue">●</span><span class="dot dot-yellow">●</span><span class="dot dot-red">●</span></div></div>
-                        <pre class="code-content"><code><span class="k-keyword">func</span> <span class="k-func">battle</span>() -> <span class="k-type">void</span>:
-    <span class="k-keyword">var</span> <span class="k-var">monster_health</span> : <span class="k-type">int</span> = <span class="k-number">30</span>
-    <span class="k-keyword">var</span> <span class="k-var">attack_damage</span> : <span class="k-type">int</span> = <span class="k-number">10</span>
-
+                        <pre class="code-content"><code><span class="k-keyword">func</span> <span class="k-func">batalha</span>() -> <span class="k-type">void</span>:
+    <span class="k-keyword">var</span> <span class="k-var">vida_do_monstro</span> : <span class="k-type">int</span> = <span class="k-number">30</span>
+    <span class="k-keyword">var</span> <span class="k-var">dano_do_ataque</span> : <span class="k-type">int</span> = <span class="k-number">10</span>
     <span class="k-comment"># seu código aqui...</span></code></pre>
                     </div>
 
-                    <p style="font-size:0.8rem;color:var(--text-muted);margin-bottom:6px;">Travou? Abra uma dica de cada vez.</p>
                     <details class="hint">
                         <summary>💡 Dica 1 — por onde começar</summary>
-                        <p>Comece pelo <code>while monster_health > 0:</code> — é a condição que mantém a luta acontecendo.</p>
+                        <p>Comece pelo <code>while vida_do_monstro > 0:</code> — é a condição que mantém a luta acontecendo.</p>
                     </details>
                     <details class="hint">
                         <summary>💡 Dica 2 — dentro do laço</summary>
-                        <p>Primeiro subtraia o dano (<code>monster_health -= attack_damage</code>), depois faça o <code>if/else</code> checando se <code>monster_health <= 0</code>.</p>
+                        <p>Primeiro subtraia o dano (<code>vida_do_monstro -= dano_do_ataque</code>), depois faça o <code>if/else</code> checando se <code>vida_do_monstro <= 0</code>.</p>
                     </details>
                     <details class="hint">
                         <summary>💡 Dica 3 — cuidado com a ordem</summary>
-                        <p>Se você checar a vida <em>antes</em> de subtrair o dano, sua mensagem final vai aparecer uma repetição atrasada. Subtraia primeiro, depois cheque.</p>
+                        <p>Subtraia o dano <em>primeiro</em>, depois cheque a vida. Ao contrário, a mensagem final sai uma repetição atrasada.</p>
                     </details>
+                    <div class="timer-box" data-minutes="15">
+                        <span class="timer-label">Tempo do desafio</span>
+                        <span class="timer-display">15:00</span>
+                        <button type="button" class="timer-btn">▶ Iniciar</button>
+                    </div>
                 </div>
             </div>
         </section>
 
-        <!-- Recapitulação e ponte -->
+        <!-- 27: Recapitulacao -->
         <section class="slide" id="slide-recap">
-            <div class="eyebrow"><span class="num">22</span> · Fechamento</div>
+            <div class="eyebrow"><span class="num">27</span> · Fechamento</div>
             <h1 class="slide-title">O QUE VOCÊ APRENDEU HOJE</h1>
             <p class="slide-sub">Guarde estes seis nomes — eles voltam em <strong>todas</strong> as aulas daqui pra frente</p>
             <div class="op-grid">
@@ -924,7 +1013,7 @@ print(<span class="k-string">"Vida cheia!"</span>)
             <div class="grid-2">
                 <div class="callout callout-warn">
                     <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-bug"></use></svg>
-                    <div><strong>As três pegadinhas que mais vão te pegar</strong> indentação errada; um <code>=</code> onde deveriam ser dois <code>==</code>; e variável criada dentro de uma função que outra função não enxerga (<em>escopo</em>). Quando algo não funcionar, comece checando essas três.</div>
+                    <div><strong>As quatro pegadinhas que mais vão te pegar</strong> indentação errada; um <code>=</code> onde deveriam ser dois <code>==</code>; variável criada dentro de uma função que outra não enxerga (<em>escopo</em>); e a divisão de <code>int</code> por <code>int</code> que come o decimal <strong>sem dar erro nenhum</strong>. Quando algo não funcionar, comece por essas quatro.</div>
                 </div>
                 <div class="callout callout-tip">
                     <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-arrow-right-to-bracket"></use></svg>
@@ -943,7 +1032,7 @@ print(<span class="k-string">"Vida cheia!"</span>)
     <footer class="presentation-controls">
         <button id="prev-btn" class="nav-btn">❮ Anterior</button>
         <div class="slide-indicator">
-            Slide <span id="current-slide-num">1</span> / <span id="total-slides-num">26</span>
+            Slide <span id="current-slide-num">1</span> / <span id="total-slides-num">27</span>
         </div>
         <button id="next-btn" class="nav-btn">Próximo ❯</button>
         <button id="fullscreen-btn" class="nav-btn secondary">Fullscreen ⛶</button>

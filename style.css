@@ -266,6 +266,7 @@ body:has(.deck) {
         line-height: 1.38;
         padding: clamp(0.5rem, 1.1vh, 0.9rem) 1.25rem;
     }
+
 }
 
 /* Wrap behavior is scoped to the actual code text (a <pre> either wearing
@@ -1244,6 +1245,23 @@ body.index-page {
     font-size: clamp(0.88rem, 0.95vw, 0.95rem);
     line-height: 1.55;
     border: 1px solid transparent;
+}
+
+/* Num projetor 768p — e pior ainda em 720p — o callout é o elemento que mais se
+   repete por slide: três numa coluna custam mais de 300px só de respiro.
+   Apertar entrelinha, miolo e margem devolve ~20px por callout, o suficiente
+   para vários slides que transbordavam por uma única linha, sem mexer no texto
+   de deck nenhum. Acima de 820px de altura nada muda.
+
+   Esta media query precisa vir DEPOIS da regra base acima: as duas têm a mesma
+   especificidade, então quem ganha é a que aparece por último no arquivo. Posta
+   junto às outras regras de projetor lá em cima, ela era simplesmente ignorada. */
+@media (max-height: 820px) {
+    .callout {
+        line-height: 1.46;
+        padding: clamp(0.45rem, 1vh, 0.8rem) 15px;
+        margin: var(--space-3) 0;
+    }
 }
 /* Ícones de interface em SVG (sprite local injetado por ui-icons.js).
    Dimensionados em em e pintados com currentColor para se comportarem

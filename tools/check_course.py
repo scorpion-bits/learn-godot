@@ -72,8 +72,15 @@ CARD_RE = re.compile(
     r'\s*<h3 class="course-title">([\s\S]*?)</h3>'
 )
 
+# So contam os cards que estao dentro de uma .course-grid. O index tambem tem
+# a secao "Materiais para baixar", cujos cards nao sao modulos — sem este
+# recorte eles entrariam na conta e a comparacao com o manifesto acusaria uma
+# divergencia que nao existe.
+GRID_RE = re.compile(r'<div class="course-grid">([\s\S]*?)</section>')
+grids = ''.join(GRID_RE.findall(index_html))
+
 cards = []
-for tag, href, cls, label, title in CARD_RE.findall(index_html):
+for tag, href, cls, label, title in CARD_RE.findall(grids):
     cards.append({
         'tag': tag,
         'href': href or None,

@@ -1742,6 +1742,17 @@ body.index-page {
 .pdf-open:hover { background: rgba(236, 72, 153, 0.22); color: #fff; }
 .pdf-open:focus-visible { outline: 2px solid var(--text-accent); outline-offset: 3px; }
 
+/* Arquivos da aula para o aluno baixar. Os links reaproveitam .pdf-open; este
+   grupo existe só para eles ficarem juntos, já que .pdf-actions é
+   space-between e espalharia cada link para um canto. */
+.file-downloads { display: flex; gap: 10px; flex-wrap: wrap; }
+.file-meta {
+    font-weight: 400;
+    font-size: 0.78rem;
+    opacity: 0.7;
+    margin-left: 2px;
+}
+
 /* Slide de objetivos / recapitulação */
 .goal-list { display: flex; flex-direction: column; gap: var(--space-3); }
 .goal-item {

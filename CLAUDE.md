@@ -99,6 +99,45 @@ Decisões que valem para o resto do curso:
 - Os decks **também são material de estudo em casa** — o aluno volta neles
   sozinho. Por isso os simuladores `▶ Executar` importam tanto quanto o texto.
 
+### Módulo 3-4 — revisado em 12/08/2026
+
+O Milan leu o deck e achou duas coisas: um slide que parecia ser "de outra
+aula" no meio, e o incômodo de o `VisualComponent` ser código exclusivo do
+player. As duas tinham a mesma raiz.
+
+- **A regra do Módulo 2 vale aqui também** — e estava quebrada. O
+  `MovementComponent` usava `delta`, `body.velocity`, `move_and_slide()` e
+  `@export` com a explicação dos quatro vindo *depois*. "Funções nativas &
+  delta" e "A física no código" foram movidos para **antes** dele; o `@export`
+  ganhou uma menção curta no slide onde aparece pela primeira vez, e o
+  aprofundamento seguiu em "As escolhas". Ordem nova do miolo: *Input Map* →
+  *Vector2* → *InputComponent* → *funções nativas e delta* → *a física no
+  código* → *MovementComponent* → *as escolhas* → *juntando no Player*.
+- **O slide "de outra aula" era sintoma disso.** Fora de lugar ele parecia
+  avulso — e ainda contradizia o slide anterior, que prometia o `delta` só
+  para o Módulo 6. No lugar certo virou preparação. Ele agora começa pelo
+  `_ready` (ponte com o Módulo 2) e os `print` citam o projeto.
+- **"Ajustando a colisão" vinha antes do Sprite2D existir.** O slide dizia
+  "agora que temos uma imagem como referência visual" três slides antes de a
+  imagem entrar na cena — e contradizia o **checkpoint da própria aula**, cujo
+  passo 5 manda voltar ao `CollisionShape2D` depois dos Hframes. Movido para
+  depois de "O número de cada quadro"; a ordem dos slides agora é a mesma dos
+  passos do checkpoint. "A caixa de colisão" ganhou um aviso de que o tamanho
+  fica para depois, para o aluno não tentar dimensionar a caixa com a tela
+  vazia.
+- **O deck prometia reuso que não ia acontecer.** "O inimigo depois recebe a
+  *mesma* peça" era dito das três, sobre a única que não recebe. Trocado pela
+  regra verdadeira, apresentada em "Sistema de Componentes" e aplicada em
+  "A árvore completa": **números e física viajam, comando e arte não.**
+- **O `!` de `if(!body)` é o `not` do Módulo 2** — dito num aparte, porque o
+  Módulo 2 só ensina `not` e a forma curta aparece aqui sem aviso. O `!body`
+  é preservado por bater com o deck do Thales.
+- Densidade: **zero overflow em 1366×768**. Em 720p sobrou só o
+  `checkpoint-1`, com 6px — os sete passos são de uma linha cada, então o
+  único jeito de ganhar os 6px seria fundir ou cortar um passo, o que piora um
+  slide de mão na massa. Antes desta revisão eram 5 slides estourando em 720p,
+  o `checkpoint-1` entre eles, com 28px.
+
 ### Tópicos oficiais que os decks ainda não cobrem
 
 Confrontando o programa com os decks (01/08/2026):
@@ -191,12 +230,22 @@ Player Básico"), num único encontro. Não é erro; não desfaça.
 - **Contrato dos componentes**, compartilhado com o deck do Módulo 6:
   - `InputComponent` — `class_name`, expõe `var direction : Vector2` e `update_direction()`
   - `MovementComponent` — `class_name`, `@export var max_speed : float`, `move(direction, delta)`
-  - `VisualComponent` — `class_name`, lê `input_component.direction`
+  - `VisualComponent` — `class_name`, lê `input_component.direction`.
+    **É do player por decisão, não por acidente:** ele pergunta se há
+    *comando*, e monstro não tem teclado. Não troque essa leitura por
+    `body.velocity` "para deixar genérico" — com o knockback do Módulo 6 a
+    `velocity` fica diferente de zero enquanto o personagem é empurrado, e ele
+    tocaria `running` no ar. O nome continua `*Component` porque o sufixo é
+    sobre *uma responsabilidade por Node*, não sobre reuso entre criaturas.
   - Mudar qualquer uma dessas assinaturas quebra a continuidade com o Módulo 6.
-- **Spritesheet do curso** (`assets/player.png`): 288×128, grade 8×4, quadros
-  de 36×32. Linha 0 = baixo, 1 = esquerda, 2 = direita, 3 = cima; quadro 0 de
-  cada linha é o parado. Frames 0–7 baixo, 8–15 esquerda, 16–23 direita,
-  24–31 cima. Animações: `running_<dir>` e `idle_<dir>`.
+- **Spritesheet do curso** (`assets/player.png`): 288×128, grade **9×4**,
+  quadros de **32×32**, 36 no total (`Hframes` = 9, `Vframes` = 4). Linha 0 =
+  baixo, 1 = esquerda, 2 = direita, 3 = cima; o **quadro 0 de cada linha é o
+  parado**, e a corrida usa os oito seguintes: 1–8 baixo, 10–17 esquerda,
+  19–26 direita, 28–35 cima. Animações: `running_<dir>` e `idle_<dir>`.
+  ⚠️ Corrigido em 13/08/2026 — este registro dizia "8×4, quadros de 36×32,
+  frames 0–7/8–15/16–23/24–31", que é a divisão errada contra a qual a
+  armadilha logo abaixo avisa, e não batia nem com o arquivo nem com o deck.
 
 ## Arquitetura
 
@@ -349,8 +398,8 @@ plantava `Array` e `Dictionary` pensando no Inventário.
   ⚠️ **Correção de 06/08/2026:** o registro anterior dizia "zero em 1366×768
   **e 1280×720**". A parte do 1280×720 era **falsa**. Medido de novo, com
   carga real: 1366×768 está limpo nos seis, mas a **720p** ainda transbordam
-  `programming/03-04` (5 slides: goals, checkpoint-1, components,
-  inputcomponent, visualcomponent), `programming/06` (knockback-component,
+  `programming/03-04` (era 5 slides; desde 12/08/2026 só o `checkpoint-1`,
+  com 6px), `programming/06` (knockback-component,
   1px), `programming/10` (life) e `programming/11` (actions, enemy-turn, ui —
   26px cada). Os Módulos 2 e 9 estão limpos nas duas resoluções.
   O alvo real do projetor é 1366×768; 720p é margem de segurança.

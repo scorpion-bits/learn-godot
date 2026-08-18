@@ -11,7 +11,8 @@ Tambem confere:
   - se todo caminho declarado existe de fato no disco;
   - se os modulos bloqueados sao mesmo impossiveis de abrir;
   - se as contagens "N de M disponiveis" batem com os cards;
-  - se cada deck declara o proprio data-module e carrega o manifesto.
+  - se cada deck declara o proprio data-module e carrega o manifesto;
+  - se nenhuma pagina publica aponta para um link de EDICAO do Canva.
 
 Uso:  python tools/check_course.py
 Sai com codigo 1 se encontrar qualquer divergencia.
@@ -135,11 +136,11 @@ for area_id, shown, total in COUNT_RE.findall(index_html):
         note('area "%s": indice diz %s modulos, o real e %d' % (area_id, total, len(area['modules'])))
 
 # ---------- 4. cada pagina de aula se declara ------------------------------
-# Vale para 'deck' e para 'pdf': a pagina-involucro do PDF usa a mesma moldura
-# e a mesma navegacao entre modulos, entao depende igualmente do data-module
-# bater com o slug do manifesto. Deixar o 'pdf' de fora ja escondeu um
-# data-module desatualizado uma vez.
-for mod in [m for m in flat if m['state'] in ('deck', 'pdf')]:
+# Vale para todo estado que tem pagina: os involucros de PDF e de Canva usam a
+# mesma moldura e a mesma navegacao entre modulos, entao dependem igualmente do
+# data-module bater com o slug do manifesto. Deixar o 'pdf' de fora ja escondeu
+# um data-module desatualizado uma vez.
+for mod in [m for m in flat if m['state'] in ('deck', 'pdf', 'canva')]:
     rel = os.path.join(mod['path'], 'index.html')
     if not os.path.exists(os.path.join(ROOT, rel)):
         continue
@@ -148,6 +149,28 @@ for mod in [m for m in flat if m['state'] in ('deck', 'pdf')]:
         note('%s nao declara data-module="%s"' % (rel, mod['slug']))
     if 'assets/course.js' not in html:
         note('%s nao carrega assets/course.js — a navegacao entre modulos nao vai aparecer' % rel)
+
+# ---------- 5. nenhum link de edicao do Canva no ar ------------------------
+# Um link .../edit da a quem abrir o poder de alterar a aula, e o site e
+# publico. A forma correta de publicar e .../view (ou .../view?embed no
+# iframe). Os encurtados canva.link/... tambem redirecionam para /edit, entao
+# nao servem. Isto e uma checagem de seguranca, nao de estilo.
+CANVA_EDIT_RE = re.compile(r'https?://(?:www\.)?canva\.com/design/[^"\'\s]*?/edit')
+CANVA_SHORT_RE = re.compile(r'https?://canva\.link/[^"\'\s]+')
+
+for dirpath, dirnames, filenames in os.walk(ROOT):
+    if '.git' in dirpath.split(os.sep):
+        continue
+    for name in filenames:
+        if not name.endswith('.html'):
+            continue
+        rel = os.path.relpath(os.path.join(dirpath, name), ROOT).replace(os.sep, '/')
+        html = read(rel)
+        if CANVA_EDIT_RE.search(html):
+            note('%s aponta para um link de EDICAO do Canva - troque /edit por /view' % rel)
+        if CANVA_SHORT_RE.search(html):
+            note('%s usa um encurtado canva.link - ele redireciona para /edit; '
+                 'use a URL /view completa' % rel)
 
 # ---------- resultado ------------------------------------------------------
 if problems:

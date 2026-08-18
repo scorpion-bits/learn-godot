@@ -259,6 +259,7 @@ assets/icons-ui/        Sprite SVG de ícones de interface (offline)
 assets/icons/           951 ícones oficiais do Godot
 assets/player.png       Spritesheet do curso
 lessons/<area>/<mod>/   Aulas — programming, game-design, art, music
+lessons/**/downloads/   Arquivos que o aluno baixa (assets da aula, .aseprite)
 lessons/01|02|06|07/    Redirects da organização antiga (podem sumir um dia)
 lessons/programacao/    Redirects dos caminhos em português (idem)
 lessons/arte/02/        Redirect do caminho em português (idem)
@@ -267,6 +268,16 @@ tools/check_course.py   Verifica index.html contra assets/course.js
 
 **O site inteiro roda offline**, de pendrive, via `file://`. Nenhuma
 dependência de CDN. Não reintroduza Google Fonts nem Font Awesome via rede.
+**A única exceção é o `state: 'canva'`** — as páginas-invólucro dos
+**Módulos 1 e 5 de Programação** embutem apresentações remotas. Os arquivos da
+aula, ao lado delas em `downloads/`, continuam funcionando offline; a
+apresentação, não. Não use esse estado para mais nada sem necessidade.
+
+⚠️ **Nunca publique link de edição do Canva.** `…/edit` dá a quem abrir o
+poder de alterar a aula, e o site é público. A forma correta é `…/view`
+(e `…/view?embed` no iframe). Os encurtados `canva.link/…` **também**
+redirecionam para `/edit` — não servem. `python tools/check_course.py` varre
+todo HTML do repositório e falha se qualquer uma das duas formas aparecer.
 
 **Ícones de interface:** `<svg class="ui-icon"><use href="#i-nome"></use></svg>`.
 O sprite é injetado por `assets/icons-ui/ui-icons.js`, carregado logo após a

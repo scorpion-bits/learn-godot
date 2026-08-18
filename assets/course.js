@@ -17,9 +17,11 @@
    `python tools/check_course.py` compara os dois e aponta divergências.
 
    state:
-     'deck' — aula em HTML neste repositório
-     'pdf'  — apresentação entregue em PDF
-     'soon' — ainda não disponível; fica bloqueada no índice
+     'deck'  — aula em HTML neste repositório
+     'pdf'   — apresentação entregue em PDF
+     'canva' — apresentação hospedada no Canva, embutida numa página-invólucro
+               (é o único estado que depende de internet)
+     'soon'  — ainda não disponível; fica bloqueada no índice
    ========================================================================== */
 
 window.COURSE = {
@@ -28,10 +30,10 @@ window.COURSE = {
             id: 'programming',
             name: 'Programação',
             modules: [
-                { n: '1',    slug: 'programming/01',    title: 'Introdução ao Godot',                 state: 'soon' },
+                { n: '1',    slug: 'programming/01',    title: 'Introdução ao Godot',                 state: 'canva', path: 'lessons/programming/01/' },
                 { n: '2',    slug: 'programming/02',    title: 'Introdução à Programação',            state: 'deck', path: 'lessons/programming/02/' },
                 { n: '3 e 4', slug: 'programming/03-04', title: 'Criando um Player Básico',           state: 'deck', path: 'lessons/programming/03-04/' },
-                { n: '5',    slug: 'programming/05',    title: 'Colisores e Area2D',                  state: 'soon' },
+                { n: '5',    slug: 'programming/05',    title: 'Colisores e Area2D',                  state: 'canva', path: 'lessons/programming/05/' },
                 { n: '6',    slug: 'programming/06',    title: 'Física para Jogos',                   state: 'deck', path: 'lessons/programming/06/' },
                 { n: '7',    slug: 'programming/07',    title: 'Interface 1 — Menu e Pausa',          state: 'pdf',  path: 'lessons/programming/07/' },
                 { n: '8',    slug: 'programming/08',    title: 'Interface 2 — Diálogo e Save',        state: 'soon' },

@@ -143,8 +143,10 @@ player. As duas tinham a mesma raiz.
 
 Houve um atraso no cronograma e o Milan trocou o módulo inteiro. O deck de
 Inventário **foi excluído** a pedido dele (está no histórico do git). O novo
-tem 21 slides e foi escrito a partir da implementação real dele, que mandou
-por código e print do editor.
+tem 18 slides e foi escrito a partir da implementação real dele, que mandou
+por código e print do editor. **Sem checkpoints** — a turma constrói o
+sistema junto, ao vivo, em vez de praticar sozinha em blocos cronometrados
+(decisão do Milan em 28/08/2026, junto com a troca de assunto).
 
 As quatro peças, com as assinaturas que o deck ensina:
 - `DialogueData` — `extends Resource`, `class_name`, `@export` de `text`
@@ -183,6 +185,12 @@ Decisões e armadilhas registradas:
   conversa com a equipe** — não é decisão do Milan sozinho.
 - O deck **não usa `Dictionary`**. O Módulo 2 plantou `Array` e `Dictionary`
   pensando no inventário; o `Array[DialogueData]` aproveita metade da ponte.
+- **Sem checkpoint, os dois avisos de erro que só existiam lá dentro tinham
+  que achar um novo lugar.** O de nome de Node errado e o de
+  `set_input_as_handled()` faltando já estavam duplicados em callouts de
+  outros slides — não perderam nada. Só o aviso do `class_name` não
+  registrar antes de salvar o script era exclusivo do checkpoint 1; foi
+  realocado para o slide do `.tres`.
 - Densidade: **zero overflow em 1366×768 e em 1280×720**, os dois limpos.
 
 ### Tópicos oficiais que os decks ainda não cobrem

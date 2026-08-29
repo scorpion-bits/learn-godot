@@ -28,7 +28,7 @@
         </div>
         <div class="progress-wrap">
             <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
-            <span class="progress-text" id="progress-text">1 / 21</span>
+            <span class="progress-text" id="progress-text">1 / 18</span>
         </div>
     </div>
 
@@ -190,9 +190,13 @@
                         <li>Clique no arquivo: o <strong>Inspector</strong> mostra os três campos. Preencha.</li>
                         <li>Repita para cada fala. Uma fala, um arquivo.</li>
                     </ol>
-                    <div class="callout callout-note mb-0">
+                    <div class="callout callout-note">
                         <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-file-lines"></use></svg>
                         <div><strong>O que é um <code>.tres</code>?</strong> É o arquivo de Resource do Godot em formato de texto. Dá para abrir num editor de texto e ler — e, porque é texto, funciona bem quando várias pessoas mexem no mesmo projeto.</div>
+                    </div>
+                    <div class="callout callout-warn mb-0">
+                        <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-triangle-exclamation"></use></svg>
+                        <div><strong><code>DialogueData</code> não aparece em <em>New Resource</em>?</strong> O <code>class_name</code> só é registrado depois que o script é salvo. Salve o arquivo e tente de novo.</div>
                     </div>
                 </div>
                 <div>
@@ -237,45 +241,10 @@
             </div>
         </section>
 
-        <!-- Checkpoint 1 -->
-        <section class="slide checkpoint-slide" id="slide-checkpoint-1">
-            <div class="eyebrow"><span class="num">07</span> · Mãos no código</div>
-            <h1 class="slide-title">CHECKPOINT 1 — ESCREVA AS FALAS</h1>
-            <p class="slide-sub">Uma vez o script. Depois, só formulário.</p>
-            <div class="grid-2 align-start">
-                <div>
-                    <div class="checkpoint">
-                        <h3>Faça agora</h3>
-                        <ol class="step-list">
-                            <li>Crie <code>DialogueData.gd</code> com <code>extends Resource</code> e <code>class_name DialogueData</code>.</li>
-                            <li>Adicione os três <code>@export</code>: <em>text</em>, <em>duration</em> e <em>portrait</em>.</li>
-                            <li>Salve o script. Ele não precisa estar preso a Node nenhum.</li>
-                            <li>Crie <strong>três</strong> arquivos <code>.tres</code> — uma conversa curta de um personagem seu.</li>
-                            <li>Preencha os três no Inspector. Use <code>1.5</code> na duração por enquanto.</li>
-                        </ol>
-                    </div>
-                    <div class="callout callout-warn mb-0">
-                        <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-triangle-exclamation"></use></svg>
-                        <div><strong><code>DialogueData</code> não aparece em <em>New Resource</em>?</strong> O <code>class_name</code> só é registrado depois que o script é salvo. Salve e tente de novo.</div>
-                    </div>
-                </div>
-                <div>
-                    <div class="timer-box" data-minutes="15">
-                        <span class="timer-label">Tempo do checkpoint</span>
-                        <span class="timer-display">15:00</span>
-                        <button type="button" class="timer-btn">▶ Iniciar</button>
-                    </div>
-                    <div class="callout callout-tip mb-0">
-                        <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-trophy"></use></svg>
-                        <div><strong>Como saber que deu certo</strong> Ao clicar em cada <code>.tres</code>, o Inspector mostra os seus três campos preenchidos — e você não escreveu nenhuma linha de código a mais para a segunda e a terceira fala.</div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
+        
         <!-- Autoload -->
         <section class="slide" id="slide-autoload">
-            <div class="eyebrow"><span class="num">08</span> · Conceito</div>
+            <div class="eyebrow"><span class="num">07</span> · Conceito</div>
             <h1 class="slide-title">UM NODE QUE SEMPRE EXISTE</h1>
             <p class="slide-sub">O diálogo não pertence a nenhuma cena — então ele precisa morar fora de todas</p>
             <div class="grid-2 align-start">
@@ -319,7 +288,7 @@
 
         <!-- EventSystem -->
         <section class="slide" id="slide-eventsystem">
-            <div class="eyebrow"><span class="num">09</span> · Conceito</div>
+            <div class="eyebrow"><span class="num">08</span> · Conceito</div>
             <h1 class="slide-title">UM AVISO QUE O JOGO INTEIRO PODE OUVIR</h1>
             <p class="slide-sub">O EventSystem: o mesmo <code>signal</code> dos Módulos 5 e 6, só que num lugar público</p>
             <div class="grid-2 align-start">
@@ -347,7 +316,7 @@
 
         <!-- A cena da UI -->
         <section class="slide" id="slide-ui-tree">
-            <div class="eyebrow"><span class="num">10</span> · Prática</div>
+            <div class="eyebrow"><span class="num">09</span> · Prática</div>
             <h1 class="slide-title">A CENA DA CAIXA DE DIÁLOGO</h1>
             <p class="slide-sub">Quatro Nodes de interface, cada um com um trabalho</p>
             <div class="grid-2 align-start">
@@ -405,7 +374,7 @@
 
         <!-- Typewriter -->
         <section class="slide" id="slide-typewriter">
-            <div class="eyebrow"><span class="num">11</span> · Fundamentos</div>
+            <div class="eyebrow"><span class="num">10</span> · Fundamentos</div>
             <h1 class="slide-title">O TEXTO QUE APARECE LETRA POR LETRA</h1>
             <p class="slide-sub">Duas peças novas: <code>visible_ratio</code> e o <code>Tween</code></p>
             <div class="grid-2 align-start">
@@ -437,7 +406,7 @@ tween.<span class="k-func">tween_property</span>(txt,
 
         <!-- duration -->
         <section class="slide" id="slide-duration">
-            <div class="eyebrow"><span class="num">12</span> · Fundamentos</div>
+            <div class="eyebrow"><span class="num">11</span> · Fundamentos</div>
             <h1 class="slide-title">DURATION NÃO É TEMPO POR LETRA</h1>
             <p class="slide-sub">A pegadinha que faz frase curta parecer lenta e frase longa parecer apressada</p>
             <p class="lede"><code>tween_property</code> recebe o tempo <strong>total</strong> da animação. Com <code>duration = 1.5</code>, qualquer frase leva um segundo e meio para aparecer inteira — não importa se tem cinco palavras ou cinquenta.</p>
@@ -467,7 +436,7 @@ tween.<span class="k-func">tween_property</span>(txt,
 
         <!-- DialogueUI -->
         <section class="slide" id="slide-dialogueui">
-            <div class="eyebrow"><span class="num">13</span> · Prática</div>
+            <div class="eyebrow"><span class="num">12</span> · Prática</div>
             <h1 class="slide-title">O DIALOGUEUI COMPLETO</h1>
             <p class="slide-sub">A caixa só sabe mostrar uma fala. Quem escolhe qual é problema de outro.</p>
             <div class="grid-2 align-start">
@@ -527,45 +496,10 @@ tween.<span class="k-func">tween_property</span>(txt,
             </div>
         </section>
 
-        <!-- Checkpoint 2 -->
-        <section class="slide checkpoint-slide" id="slide-checkpoint-2">
-            <div class="eyebrow"><span class="num">14</span> · Mãos no código</div>
-            <h1 class="slide-title">CHECKPOINT 2 — A CAIXA FALA</h1>
-            <p class="slide-sub">Ainda sem NPC, ainda sem avançar. Só o texto surgindo na tela.</p>
-            <div class="grid-2 align-start">
-                <div>
-                    <div class="checkpoint">
-                        <h3>Faça agora</h3>
-                        <ol class="step-list">
-                            <li>Monte a cena <code>dialogue_ui</code> com os quatro Nodes da árvore.</li>
-                            <li>Anexe <code>DialogueUI.gd</code> à raiz e digite o script.</li>
-                            <li>Registre <code>EventSystem</code> e <code>DialogueSystem</code> no Autoload.</li>
-                            <li>Ponha a cena da UI dentro da cena principal do jogo.</li>
-                            <li>Para testar: chame <code>play_dialogue</code> com uma das suas falas.</li>
-                        </ol>
-                    </div>
-                    <div class="callout callout-warn mb-0">
-                        <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-triangle-exclamation"></use></svg>
-                        <div><strong>Erro em <code>$ColorRect/RichTextLabel</code>?</strong> Os nomes na árvore precisam ser exatamente esses. O Godot diferencia maiúscula de minúscula.</div>
-                    </div>
-                </div>
-                <div>
-                    <div class="timer-box" data-minutes="15">
-                        <span class="timer-label">Tempo do checkpoint</span>
-                        <span class="timer-display">15:00</span>
-                        <button type="button" class="timer-btn">▶ Iniciar</button>
-                    </div>
-                    <div class="callout callout-tip mb-0">
-                        <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-trophy"></use></svg>
-                        <div><strong>Como saber que deu certo</strong> O texto aparece letra por letra e para. O retrato some quando o campo do <code>.tres</code> está vazio.</div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
+        
         <!-- DialogueSystem: estado -->
         <section class="slide" id="slide-system-state">
-            <div class="eyebrow"><span class="num">15</span> · Prática</div>
+            <div class="eyebrow"><span class="num">13</span> · Prática</div>
             <h1 class="slide-title">O DIALOGUESYSTEM GUARDA A VEZ</h1>
             <p class="slide-sub">Uma lista de falas e um número: de quem é a vez de falar</p>
             <div class="grid-2 align-start">
@@ -606,7 +540,7 @@ tween.<span class="k-func">tween_property</span>(txt,
 
         <!-- _next_dialogue -->
         <section class="slide" id="slide-next">
-            <div class="eyebrow"><span class="num">16</span> · Fundamentos</div>
+            <div class="eyebrow"><span class="num">14</span> · Fundamentos</div>
             <h1 class="slide-title">AVANÇAR OU PULAR?</h1>
             <p class="slide-sub">O mesmo botão faz três coisas diferentes — depende do momento</p>
             <div class="grid-2 align-start">
@@ -648,7 +582,7 @@ tween.<span class="k-func">tween_property</span>(txt,
 
         <!-- input -->
         <section class="slide" id="slide-input">
-            <div class="eyebrow"><span class="num">17</span> · Fundamentos</div>
+            <div class="eyebrow"><span class="num">15</span> · Fundamentos</div>
             <h1 class="slide-title">A TECLA QUE O DIÁLOGO ENGOLE</h1>
             <p class="slide-sub">Ligar e desligar a escuta — e impedir que o mundo reaja junto</p>
             <div class="grid-2 align-start">
@@ -691,7 +625,7 @@ tween.<span class="k-func">tween_property</span>(txt,
 
         <!-- DialogueComponent -->
         <section class="slide" id="slide-component">
-            <div class="eyebrow"><span class="num">18</span> · Prática</div>
+            <div class="eyebrow"><span class="num">16</span> · Prática</div>
             <h1 class="slide-title">O DIALOGUECOMPONENT</h1>
             <p class="slide-sub">Cinco linhas — e é a única peça que você vai encostar de novo</p>
             <div class="grid-2 align-start">
@@ -724,7 +658,7 @@ tween.<span class="k-func">tween_property</span>(txt,
 
         <!-- NPC -->
         <section class="slide" id="slide-npc">
-            <div class="eyebrow"><span class="num">19</span> · Prática</div>
+            <div class="eyebrow"><span class="num">17</span> · Prática</div>
             <h1 class="slide-title">MONTANDO O NPC</h1>
             <p class="slide-sub">Quem aperta o botão é a peça do Módulo 5; quem fala é a de hoje</p>
             <div class="grid-2 align-start">
@@ -765,45 +699,10 @@ tween.<span class="k-func">tween_property</span>(txt,
             </div>
         </section>
 
-        <!-- Checkpoint 3 -->
-        <section class="slide checkpoint-slide" id="slide-checkpoint-3">
-            <div class="eyebrow"><span class="num">20</span> · Mãos no código</div>
-            <h1 class="slide-title">CHECKPOINT 3 — UM NPC QUE CONVERSA</h1>
-            <p class="slide-sub">Todas as peças na mesa. Agora elas se encontram.</p>
-            <div class="grid-2 align-start">
-                <div>
-                    <div class="checkpoint">
-                        <h3>Faça agora</h3>
-                        <ol class="step-list">
-                            <li>Complete o <code>dialogue_system.gd</code> com <code>_next_dialogue</code> e o bloco de input.</li>
-                            <li>Crie a ação <code>advance_dialogue</code> no Input Map.</li>
-                            <li>Crie <code>DialogueComponent.gd</code> e pendure um no seu NPC.</li>
-                            <li>Arraste seus três <code>.tres</code> para o array <em>Dialogues</em>, na ordem da conversa.</li>
-                            <li>Ligue o componente de interação ao <code>start()</code> e teste no jogo.</li>
-                        </ol>
-                    </div>
-                    <div class="callout callout-warn mb-0">
-                        <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-triangle-exclamation"></use></svg>
-                        <div><strong>A conversa reinicia sozinha?</strong> Falta o <code>set_input_as_handled()</code> — a tecla está avançando a fala <em>e</em> disparando a interação no mesmo quadro.</div>
-                    </div>
-                </div>
-                <div>
-                    <div class="timer-box" data-minutes="15">
-                        <span class="timer-label">Tempo do checkpoint</span>
-                        <span class="timer-display">15:00</span>
-                        <button type="button" class="timer-btn">▶ Iniciar</button>
-                    </div>
-                    <div class="callout callout-tip mb-0">
-                        <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-trophy"></use></svg>
-                        <div><strong>Terminou antes?</strong> Faça o jogador parar de andar durante a conversa: o <code>InputComponent</code> escuta <code>EventSystem.dialogue_started</code> e zera a <code>direction</code>. É o signal público pagando pela primeira vez.</div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
+        
         <!-- Recap -->
         <section class="slide" id="slide-recap">
-            <div class="eyebrow"><span class="num">21</span> · Fechamento</div>
+            <div class="eyebrow"><span class="num">18</span> · Fechamento</div>
             <h1 class="slide-title">O QUE VOCÊ CONSTRUIU HOJE</h1>
             <p class="slide-sub">Saiu de um mundo mudo e chegou num sistema que serve para todo personagem do jogo</p>
             <div class="grid-2 align-start">
@@ -848,7 +747,7 @@ tween.<span class="k-func">tween_property</span>(txt,
     <footer class="presentation-controls">
         <button id="prev-btn" class="nav-btn">❮ Anterior</button>
         <div class="slide-indicator">
-            Slide <span id="current-slide-num">1</span> / <span id="total-slides-num">21</span>
+            Slide <span id="current-slide-num">1</span> / <span id="total-slides-num">18</span>
         </div>
         <button id="next-btn" class="nav-btn">Próximo ❯</button>
         <button id="fullscreen-btn" class="nav-btn secondary">Fullscreen ⛶</button>

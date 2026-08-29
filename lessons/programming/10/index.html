@@ -82,7 +82,7 @@
             </div>
             <div class="callout callout-tip">
                 <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-diagram-project"></use></svg>
-                <div><strong>O mesmo molde do inventário</strong> Você vai reconhecer a receita: um componente isolado, um <code>signal</code> avisando que algo mudou, e uma interface que escuta sem conhecer os detalhes. É a terceira vez que ela aparece — e a partir de agora ela é sua ferramenta padrão.</div>
+                <div><strong>O mesmo molde do diálogo</strong> Você vai reconhecer a receita: um componente isolado, um <code>signal</code> avisando que algo mudou, e uma interface que escuta sem conhecer os detalhes. É a terceira vez que ela aparece — e a partir de agora ela é sua ferramenta padrão.</div>
             </div>
         </section>
 
@@ -217,7 +217,7 @@
                 <div>
                     <div class="callout callout-tip mt-0">
                         <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-tower-broadcast"></use></svg>
-                        <div><strong>Um signal que carrega informação</strong> No inventário, o <code>changed</code> não levava nada. Aqui, <code>life_changed(current, maximum)</code> entrega os dois números. Quem escuta não precisa ir buscar nada — recebe pronto.</div>
+                        <div><strong>Um signal que carrega informação</strong> No diálogo, o <code>dialogue_started</code> não levava nada. Aqui, <code>life_changed(current, maximum)</code> entrega os dois números. Quem escuta não precisa ir buscar nada — recebe pronto.</div>
                     </div>
                     <div class="callout callout-warn">
                         <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-shield-halved"></use></svg>
@@ -280,7 +280,7 @@
                                     <div class="godot-node child"><img src="../../../assets/icons/Sprite2D.svg" class="godot-icon" alt=""><span>Sprite2D</span></div>
                                     <div class="godot-node child"><img src="../../../assets/icons/Node.svg" class="godot-icon" alt=""><span>InputComponent</span></div>
                                     <div class="godot-node child"><img src="../../../assets/icons/Node.svg" class="godot-icon" alt=""><span>MovementComponent</span></div>
-                                    <div class="godot-node child"><img src="../../../assets/icons/Node.svg" class="godot-icon" alt=""><span>InventoryComponent</span></div>
+                                    <div class="godot-node child"><img src="../../../assets/icons/Node.svg" class="godot-icon" alt=""><span>VisualComponent</span></div>
                                     <div class="godot-node child selected"><img src="../../../assets/icons/Node.svg" class="godot-icon" alt=""><span>LifeComponent</span><img src="../../../assets/icons/Script.svg" class="godot-script-icon" alt=""></div>
                                     <div class="godot-node child selected"><img src="../../../assets/icons/Area2D.svg" class="godot-icon" alt=""><span>Hurtbox</span></div>
                                 </div>
@@ -495,7 +495,7 @@
                     </div>
                     <div class="callout callout-warn mb-0">
                         <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-lightbulb"></use></svg>
-                        <div><strong>Uma ponte para o inventário</strong> Como o inimigo tem <code>InventoryComponent</code> se você quiser, o <code>_on_died</code> é o lugar natural para ele largar os itens no chão — instanciando aquelas cenas de <code>WorldItem</code> do módulo passado.</div>
+                        <div><strong>Onde encaixar o resto</strong> O <code>_on_died</code> é o gancho natural para tudo que acontece <em>por causa</em> da morte: som, animação, pontos, um item caindo no chão. O componente avisa; a cena decide o que fazer com o aviso.</div>
                     </div>
                 </div>
             </div>
@@ -567,7 +567,7 @@
                     </div>
                     <div class="callout callout-tip mb-0">
                         <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-flask"></use></svg>
-                        <div><strong>Terminou antes?</strong> Faça o inimigo largar uma poção ao morrer, instanciando a cena <code>WorldItem</code> no <code>_on_died</code>. É o inventário e o dano se encontrando.</div>
+                        <div><strong>Terminou antes?</strong> Faça um NPC comentar a luta: dê a ele um <code>DialogueComponent</code> e dispare o <code>start()</code> quando o inimigo morrer. É o diálogo e o dano se encontrando.</div>
                     </div>
                 </div>
             </div>
@@ -631,7 +631,7 @@
                     </div>
                     <div class="callout callout-note">
                         <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-tower-broadcast"></use></svg>
-                        <div><strong>Terceira vez que o padrão aparece</strong> Componente isolado + signal + quem escuta reage. Inventário, vida, e agora dano. Quando você precisar de algo novo — energia, fome, munição — já sabe o formato.</div>
+                        <div><strong>Terceira vez que o padrão aparece</strong> Componente isolado + signal + quem escuta reage. Diálogo, vida, e agora dano. Quando você precisar de algo novo — energia, fome, munição — já sabe o formato.</div>
                     </div>
                     <div class="callout callout-warn mb-0">
                         <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-bolt"></use></svg>

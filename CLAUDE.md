@@ -41,7 +41,8 @@ apresentação de Nodes novos — e não a quantidade.
 
 O PDF original diz que a Aula 10 faz "puzzles com inventário". **Não faz** —
 em 01/08/2026 o Milan definiu que o puzzle é de empurrar caixas e acontece no
-Módulo 5 de Game Design. O inventário não precisa de item-chave.
+Módulo 5 de Game Design. E desde 28/08/2026 não existe mais inventário nenhum
+no curso: o Módulo 9 virou Sistema de Diálogo.
 
 `Módulos-atualizado.md` (na raiz, também gitignored) é a versão revisada do
 programa. Só os módulos do Milan foram mexidos; o resto está reproduzido
@@ -138,16 +139,61 @@ player. As duas tinham a mesma raiz.
   slide de mão na massa. Antes desta revisão eram 5 slides estourando em 720p,
   o `checkpoint-1` entre eles, com 28px.
 
+### Módulo 9 — trocado por Sistema de Diálogo em 28/08/2026
+
+Houve um atraso no cronograma e o Milan trocou o módulo inteiro. O deck de
+Inventário **foi excluído** a pedido dele (está no histórico do git). O novo
+tem 21 slides e foi escrito a partir da implementação real dele, que mandou
+por código e print do editor.
+
+As quatro peças, com as assinaturas que o deck ensina:
+- `DialogueData` — `extends Resource`, `class_name`, `@export` de `text`
+  (`String`), `duration` (`float`) e `portrait` (`Texture2D`). Uma fala, um
+  arquivo `.tres`.
+- `DialogueUI` — `extends Control`, `class_name`. Árvore:
+  `DialogueUI` → `ColorRect` → `RichTextLabel`, e `Portrait` (`TextureRect`)
+  **irmão** do ColorRect. Chama `DialogueSystem.register_ui(self)` no `_ready`.
+- `DialogueSystem` — **Autoload**, sem `class_name`. Guarda `ui`,
+  `current_dialogues : Array[DialogueData]` e `dialogue_count`.
+- `DialogueComponent` — `extends Node`, `class_name`, `@export var dialogues`,
+  e um `start()` que chama `DialogueSystem.start_dialogue(dialogues)`.
+- `EventSystem` — segundo Autoload, barramento de signals. O deck mostra só
+  `dialogue_started` e `dialogue_finished`; **o arquivo real do Milan tem mais
+  coisa e nunca foi visto** — se for preciso citar outro signal, peça.
+
+Decisões e armadilhas registradas:
+- **A ação do Input Map foi renomeada.** O código do Milan usa
+  `is_action_pressed("F")`. O deck usa **`advance_dialogue`**, porque o
+  Módulo 3-4 ensina explicitamente a não batizar ação com o nome da tecla
+  ("em vez de 'se apertar D', a ação `move_right`"). Um deck do mesmo
+  professor não pode contradizer o outro. É uma string — reverter é trivial.
+- **`duration` é o tempo total da frase, não por letra.** `tween_property`
+  recebe a duração inteira, então frase curta parece arrastada e frase longa
+  voa. Isso virou um slide próprio; é a pegadinha central da aula.
+- **O `ui.show()` duplicado é de propósito no deck.** Aparece em
+  `start_dialogue` e em `_on_dialogue_started`. Em vez de esconder, o slide usa
+  a redundância para ensinar que **`emit()` é síncrono** — quem escuta roda na
+  hora, antes da linha seguinte.
+- **O gatilho é o componente de interação do Módulo 5 (Giovane)**, que chama
+  `DialogueComponent.start()`. O material dele está no Canva e **a assinatura
+  real nunca foi verificada** — o deck fala em termos de propósito, sem citar
+  campo nem método do componente dele. Confirmar antes da aula.
+- **Módulo 8 é "Interface 2 — Diálogo e Save"**, de outra pessoa, ainda em
+  produção. Há sobreposição direta de assunto com este módulo. **Pendente de
+  conversa com a equipe** — não é decisão do Milan sozinho.
+- O deck **não usa `Dictionary`**. O Módulo 2 plantou `Array` e `Dictionary`
+  pensando no inventário; o `Array[DialogueData]` aproveita metade da ponte.
+- Densidade: **zero overflow em 1366×768 e em 1280×720**, os dois limpos.
+
 ### Tópicos oficiais que os decks ainda não cobrem
 
 Confrontando o programa com os decks (01/08/2026):
 
-- **Módulo 9** — ✅ refeito em 01/08/2026, 16 → 20 slides. O inventário virou
-  **4 slots fixos** no espírito de um top-down de ação (decisão do Milan,
-  inspirada no Hyper Light Drifter): sem arrastar, sem empilhar, sem
-  organizar. *Equipamentos* **foi cortado** — no dia da aula não existe número
-  nenhum para equipar; ficou a sugestão de levar para o Módulo 12. Entraram
-  *itens dropados*, a `InventoryUI` como autoload e o `ItemEffect`.
+- **Módulo 9 deixou de ser Inventário.** Em 28/08/2026, por um atraso no
+  cronograma, o Milan trocou o módulo inteiro por **Sistema de Diálogo**, e
+  mandou excluir o de inventário. O deck de inventário (20 slides, 4 slots,
+  `ItemEffect`, `InventoryUI` autoload, itens dropados) **não existe mais** —
+  está só no histórico do git. Ver a seção "Módulo 9" abaixo.
 - **Módulo 10** — falta *Inimigos* (o deck só tem espinho e buraco).
   *Feedback de perigo* está fraco. **Efeitos negativos foram cortados** pelo
   Milan em 01/08/2026 — não reintroduza.
@@ -158,22 +204,17 @@ Confrontando o programa com os decks (01/08/2026):
 
 ### Armadilhas de encadeamento entre módulos
 
-- **O `LifeComponent` nasce no Módulo 10, não antes.** O Módulo 9 acontece
-  cinco dias antes (03/09 vs 08/09), então **no dia do Módulo 9 o personagem
-  não tem vida** — poção de cura não tem o que curar. O único número já
-  existente e visível na hora é o `max_speed` do `MovementComponent`
-  (Módulo 3-4). Por isso o primeiro consumível é poção de velocidade.
+- **O `LifeComponent` nasce no Módulo 10, não antes.** Nada anterior a ele
+  pode supor que o personagem tem vida.
 - **Godot não serializa `Callable`.** `@export var on_use : Callable` não
-  aparece no Inspector nem sobrevive no `.tres`. Para "o item chama a função
-  da sua escolha", o efeito precisa ser um `Resource` com um método
-  (`ItemEffect.apply(user)`).
-- **`damage` e `defense` não existem até os Módulos 10 e 11.** Equipamento com
-  stats no Módulo 9 seria interface sem consequência. Lá fica só a ideia de
-  "valor base + bônus".
-- **Módulo 5 (Giovane) vai ter um componente de interação** — `Area2D` que,
-  ao jogador entrar e apertar interagir, chama uma função escolhida na cena.
-  O deck ainda não existe; **não construa nada em cima dele sem a assinatura
-  real**, do mesmo jeito que o contrato dos componentes do player está fixado.
+  aparece no Inspector nem sobrevive no `.tres`. Sempre que a ideia for "o
+  dado escolhe a função", o caminho é um `Resource` com um método.
+- **O Módulo 5 (Giovane) tem o componente de interação** — `Area2D` que, ao
+  jogador entrar e apertar interagir, chama uma função escolhida na cena. O
+  Módulo 9 depende dele: é ele que chama `DialogueComponent.start()`. O
+  material do Módulo 5 está no **Canva** e não é legível daqui, então a
+  assinatura exata do componente **nunca foi verificada** — o deck do 9 fala
+  dele em termos genéricos de propósito. Confirmar com o Giovane.
 - **Os assets de batalha chegam depois das aulas de batalha** (Aula 13, 15/09,
   contra Aulas 11 e 12, em 08/09 e 10/09). Os assets são produzidos nas aulas
   de Arte; pedidos precisam entrar numa aula de arte *anterior* ao módulo que
@@ -383,9 +424,9 @@ Não há Node.js instalado nesta máquina — não escreva ferramentas em `node`
    orientado a dados via `data-sim` no HTML, e acessibilidade (`alt` em todas
    as imagens, abas como `<button>`, foco visível).
 
-**Etapa 6 concluída** — Módulos 9 (Inventário), 10 (Status e Perigos) e 11
-(Batalhas 1 — Turno) produzidos do zero, 16 slides cada. O Módulo 2 já
-plantava `Array` e `Dictionary` pensando no Inventário.
+**Etapa 6 concluída** — Módulos 9, 10 (Status e Perigos) e 11
+(Batalhas 1 — Turno) produzidos do zero, 16 slides cada. O Módulo 9 era
+Inventário; virou Sistema de Diálogo em 28/08/2026.
 
 **Etapa 7 concluída:**
 

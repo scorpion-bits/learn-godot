@@ -37,7 +37,7 @@ window.COURSE = {
                 { n: '6',    slug: 'programming/06',    title: 'Física para Jogos',                   state: 'deck', path: 'lessons/programming/06/' },
                 { n: '7',    slug: 'programming/07',    title: 'Interface 1 — Menu e Pausa',          state: 'pdf',  path: 'lessons/programming/07/' },
                 { n: '8',    slug: 'programming/08',    title: 'Interface 2 — Diálogo e Save',        state: 'soon' },
-                { n: '9',    slug: 'programming/09',    title: 'Inventário',                          state: 'deck', path: 'lessons/programming/09/' },
+                { n: '9',    slug: 'programming/09',    title: 'Sistema de Diálogo',                  state: 'deck', path: 'lessons/programming/09/' },
                 { n: '10',   slug: 'programming/10',    title: 'Status e Perigos',                    state: 'deck', path: 'lessons/programming/10/' },
                 { n: '11',   slug: 'programming/11',    title: 'Batalhas 1 — Turno',                  state: 'deck', path: 'lessons/programming/11/' },
                 { n: '12',   slug: 'programming/12',    title: 'Batalhas 2 — Tempo Real',             state: 'soon' }

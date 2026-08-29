@@ -1668,6 +1668,63 @@ body.index-page {
     color: var(--text-muted);
 }
 
+/* Simulação da caixa de diálogo no slide de objetivos. É só ilustração: o
+   retrato é um bloco de cor, porque a arte definitiva do NPC ainda não existe.
+   Ao receber o sprite, troque o background do .dialogue-mock-portrait. */
+.dialogue-mock {
+    display: flex;
+    align-items: flex-end;
+    gap: 10px;
+    background: rgba(0, 0, 0, 0.25);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-radius: 16px;
+    padding: var(--space-4);
+}
+.dialogue-mock-portrait {
+    flex: 0 0 auto;
+    width: 64px;
+    height: 64px;
+    border-radius: 6px;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    background: linear-gradient(160deg, #7c3f6b, #3b2a4d);
+    image-rendering: pixelated;
+}
+.dialogue-mock-box {
+    flex: 1 1 auto;
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    min-height: 64px;
+    padding: 12px 14px;
+    border-radius: 6px;
+    background: #0b0a14;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+}
+.dialogue-mock-text {
+    font-family: var(--font-code);
+    font-size: 0.9rem;
+    letter-spacing: 0.14em;
+    color: var(--text-muted);
+}
+/* O cursor pisca para sugerir o texto ainda sendo digitado. A máquina do
+   Milan pede menos movimento, então a animação some por lá — e o traço fica
+   parado, que continua lendo como cursor. */
+.dialogue-mock-caret {
+    width: 7px;
+    height: 1em;
+    background: var(--text-accent);
+    animation: dialogue-caret 1s steps(1) infinite;
+}
+@keyframes dialogue-caret { 50% { opacity: 0; } }
+@media (prefers-reduced-motion: reduce) {
+    .dialogue-mock-caret { animation: none; }
+}
+@media (max-height: 820px) {
+    .dialogue-mock { padding: var(--space-3); }
+    .dialogue-mock-portrait { width: 52px; height: 52px; }
+    .dialogue-mock-box { min-height: 52px; }
+}
+
 /* ==========================================================================
    Invólucro de PDF
    ==========================================================================

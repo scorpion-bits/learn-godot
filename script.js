@@ -183,8 +183,13 @@ document.addEventListener('DOMContentLoaded', () => {
         // E cada área tem a própria numeração: pular de Programação 9 para
         // Arte 2 mostrava só "Módulo 2", que parece um retrocesso. Quando o
         // vizinho é de outra área, o nome dela entra no rótulo.
+        //
+        // Um módulo com n === '—' é conteúdo fora do programa oficial (ver
+        // course.js): "Módulo —" ficaria estranho, então o rótulo vira só
+        // "Bônus".
         const here_area = list[here].areaId;
-        const label = mod => (mod.n.includes(' e ') ? 'Módulos ' : 'Módulo ') + mod.n +
+        const label = mod => mod.n === '—' ? 'Bônus' :
+                             (mod.n.includes(' e ') ? 'Módulos ' : 'Módulo ') + mod.n +
                              (mod.areaId !== here_area ? ' · ' + mod.area : '');
 
         [['prev', findOpen(-1), '‹'], ['next', findOpen(1), '›']].forEach(([dir, mod, chev]) => {

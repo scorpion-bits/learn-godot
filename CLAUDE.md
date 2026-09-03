@@ -177,9 +177,13 @@ Decisões e armadilhas registradas:
   a redundância para ensinar que **`emit()` é síncrono** — quem escuta roda na
   hora, antes da linha seguinte.
 - **O gatilho é o componente de interação do Módulo 5 (Giovane)**, que chama
-  `DialogueComponent.start()`. O material dele está no Canva e **a assinatura
-  real nunca foi verificada** — o deck fala em termos de propósito, sem citar
-  campo nem método do componente dele. Confirmar antes da aula.
+  `DialogueComponent.start()`. O material dele está no Canva, mas em
+  03/09/2026 um pedaço da assinatura foi confirmado de outra fonte: o código
+  da caixa de empurrar (ver "Bônus — Caixa de Empurrar" logo abaixo) usa
+  `ic.interaction = push`, então `InteractionComponent` tem um campo público
+  `interaction` (um `Callable`), atribuído **por código**, não pelo Inspector
+  — Godot não serializa `Callable`. O resto do componente (como ele detecta
+  a entrada do jogador, se tem outros campos) continua sem confirmação.
 - **Módulo 8 é "Interface 2 — Diálogo e Save"**, de outra pessoa, ainda em
   produção. Há sobreposição direta de assunto com este módulo. **Pendente de
   conversa com a equipe** — não é decisão do Milan sozinho.
@@ -191,6 +195,34 @@ Decisões e armadilhas registradas:
   outros slides — não perderam nada. Só o aviso do `class_name` não
   registrar antes de salvar o script era exclusivo do checkpoint 1; foi
   realocado para o slide do `.tres`.
+- Densidade: **zero overflow em 1366×768 e em 1280×720**, os dois limpos.
+
+### Bônus — Caixa de Empurrar (fora do programa, 03/09/2026)
+
+Uma página nova, **não um slide dentro de outro módulo** — o Milan pediu
+explicitamente que fosse um item próprio na lista de módulos, entre o
+Módulo 9 e o Módulo 10. Fica em `lessons/programming/09-bonus/`, com o
+código real do Milan (`Box.gd` + `ShakeComponent.gd`) baixável em
+`downloads/` ao lado da página.
+
+- **Não é conteúdo oficial do programa.** É algo a mais que sobrou tempo de
+  encaixar na mesma aula do Módulo 9. Por isso não tem número: no
+  `assets/course.js` o campo `n` é `'—'`, não um inteiro — assim ele não
+  empurra a numeração de Módulo 10, 11, 12. `script.js` tem um caso especial
+  para isso: a navegação entre módulos mostra "Bônus", não "Módulo —".
+- **Não é uma aula normal.** A turma monta a Scene e cola os scripts
+  prontos; o Milan explica ao vivo, o deck só dá suporte — por isso é um
+  único slide.
+- `ShakeComponent` segue o padrão de sempre — Node isolado, `@export
+  target`, reusável em qualquer coisa que precise tremer. O slide mostra só
+  `trigger_x()`; `trigger_y()` (espelho) e `trigger()` (diagonal, não usado
+  pela caixa) ficam só no arquivo baixável.
+- ⚠️ `@export var movement_duration` existe no `Box.gd` mas **não é usado**
+  — o `tween_property` final tem `0.5` fixo no código, não a variável. É
+  inofensivo hoje porque `0.5` é o valor padrão dela, mas se alguém mudar o
+  campo no Inspector esperando efeito, não vai ter nenhum. Preservado como
+  está porque é o código real que o Milan vai rodar na aula; não é problema
+  meu resolver sem avisar.
 - Densidade: **zero overflow em 1366×768 e em 1280×720**, os dois limpos.
 
 ### Tópicos oficiais que os decks ainda não cobrem

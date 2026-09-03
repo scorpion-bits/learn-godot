@@ -685,7 +685,7 @@ tween.<span class="k-func">tween_property</span>(txt,
                 <div>
                     <div class="callout callout-tip mt-0">
                         <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-diagram-project"></use></svg>
-                        <div><strong>A ligação</strong> No componente de interação, escolha como função de destino o <code>start()</code> do <code>DialogueComponent</code>. É exatamente o "chame a função da sua escolha" que o Giovane montou no Módulo 5.</div>
+                        <div><strong>A ligação é por código, não pelo Inspector</strong> Godot não guarda <code>Callable</code> num <code>.tres</code> nem no Inspector — você já viu isso. No <code>_ready()</code> de quem tiver as duas referências, uma linha como <code>ic.interaction = $DialogueComponent.start</code> resolve. É a mesma peça de sempre: o <code>InteractionComponent</code> guarda uma função e a chama quando o jogador interage.</div>
                     </div>
                     <div class="callout callout-note">
                         <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-lightbulb"></use></svg>
@@ -699,7 +699,6 @@ tween.<span class="k-func">tween_property</span>(txt,
             </div>
         </section>
 
-        
         <!-- Recap -->
         <section class="slide" id="slide-recap">
             <div class="eyebrow"><span class="num">18</span> · Fechamento</div>

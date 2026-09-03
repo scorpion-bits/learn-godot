@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bônus — Caixa de Empurrar</title>
+    <!-- Fonts -->
+    <link rel="stylesheet" href="../../../assets/fonts/fonts.css">
+    <link rel="stylesheet" href="../../../style.css">
+</head>
+<body data-module="programming/09-bonus">
+    <script src="../../../assets/icons-ui/ui-icons.js"></script>
+
+    <!-- Background Orbs & Wave Overlay -->
+    <div class="bg-gradient-container">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+        <div class="wave-bg"></div>
+    </div>
+
+    <!-- Topbar -->
+    <div class="topbar">
+        <div class="topbar-left">
+            <a href="../../../index.html" class="back-link"><svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-arrow-left"></use></svg> Índice</a>
+            <span class="lesson-tag">Bônus</span>
+            <span class="lesson-name">Caixa de Empurrar</span>
+        </div>
+        <div class="progress-wrap">
+            <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
+            <span class="progress-text" id="progress-text">1 / 1</span>
+        </div>
+    </div>
+
+    <!-- ==========================================================================
+         Fora do programa oficial. Não é um módulo do PDF de planejamento — é um
+         extra que o Milan quis encaixar entre o Sistema de Diálogo (Módulo 9) e
+         Status e Perigos (Módulo 10), quando sobra tempo na mesma aula. Por isso
+         o rótulo é "Bônus", não "Módulo N": não empurra a numeração dos módulos
+         seguintes.
+         ========================================================================== -->
+    <main class="deck">
+
+        <!-- Único slide -->
+        <section class="slide active" id="slide-box-puzzle">
+            <div class="eyebrow"><span class="num">01</span> · Bônus</div>
+            <h1 class="slide-title">A CAIXA QUE O JOGADOR EMPURRA</h1>
+            <p class="slide-sub">Código pronto — monte a estrutura, cole os scripts, e o professor explica o resto ao vivo</p>
+            <div class="grid-3 align-start">
+                <div>
+                    <div class="godot-editor-layout mt-0">
+                        <div class="godot-panel">
+                            <div class="godot-panel-header"><span>Scene — Box</span></div>
+                            <div class="godot-tree">
+                                <div class="godot-node selected"><img src="../../../assets/icons/CharacterBody2D.svg" class="godot-icon" alt=""><span>Box</span></div>
+                                <div class="godot-tree-children">
+                                    <div class="godot-node child"><img src="../../../assets/icons/Sprite2D.svg" class="godot-icon" alt=""><span>BoxSprite</span></div>
+                                    <div class="godot-node child"><img src="../../../assets/icons/Area2D.svg" class="godot-icon" alt=""><span>InteractionComponent</span><img src="../../../assets/icons/Script.svg" class="godot-script-icon" alt=""></div>
+                                    <div class="godot-node child"><img src="../../../assets/icons/CollisionShape2D.svg" class="godot-icon" alt=""><span>Collision</span></div>
+                                    <div class="godot-node child"><img src="../../../assets/icons/Node.svg" class="godot-icon" alt=""><span>ShakeComponent</span><img src="../../../assets/icons/Script.svg" class="godot-script-icon" alt=""></div>
+                                    <div class="godot-node child"><img src="../../../assets/icons/Area2D.svg" class="godot-icon" alt=""><span>AreaTop</span></div>
+                                    <div class="godot-node child"><img src="../../../assets/icons/Area2D.svg" class="godot-icon" alt=""><span>AreaBottom</span></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="callout callout-note mb-0">
+                        <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-compass"></use></svg>
+                        <div><strong>Quatro áreas, quatro lados</strong> <code>AreaLeft</code>/<code>AreaRight</code> seguem o mesmo molde. <code>push()</code> empurra para o lado <em>oposto</em> de onde está o jogador, se <code>has_overlapping_bodies()</code> disser que está livre.</div>
+                    </div>
+                </div>
+                <div>
+                    <div class="code-window mt-0">
+                        <div class="code-header"><span class="file-name">Box.gd</span><div class="window-dots"><span class="dot dot-blue">●</span><span class="dot dot-yellow">●</span><span class="dot dot-red">●</span></div></div>
+                        <pre class="code-content" style="max-height: 260px; overflow-y: auto;"><code><span class="k-keyword">extends</span> <span class="k-type">CharacterBody2D</span>
+
+<span class="k-annotation">@export</span> <span class="k-keyword">var</span> <span class="k-var">movement_duration</span> : <span class="k-type">float</span> = <span class="k-number">0.5</span>
+
+<span class="k-annotation">@onready</span> <span class="k-keyword">var</span> <span class="k-var">ic</span> : <span class="k-type">InteractionComponent</span> = <span class="k-var">$InteractionComponent</span>
+<span class="k-annotation">@onready</span> <span class="k-keyword">var</span> <span class="k-var">shake_component</span> : <span class="k-type">ShakeComponent</span> = <span class="k-var">$ShakeComponent</span>
+
+<span class="k-keyword">var</span> <span class="k-var">player_area</span> : <span class="k-type">String</span>
+
+<span class="k-annotation">@onready</span> <span class="k-keyword">var</span> <span class="k-var">area_left</span> : <span class="k-type">Area2D</span> = <span class="k-var">$AreaLeft</span>
+<span class="k-annotation">@onready</span> <span class="k-keyword">var</span> <span class="k-var">area_top</span> : <span class="k-type">Area2D</span> = <span class="k-var">$AreaTop</span>
+<span class="k-annotation">@onready</span> <span class="k-keyword">var</span> <span class="k-var">area_right</span> : <span class="k-type">Area2D</span> = <span class="k-var">$AreaRight</span>
+<span class="k-annotation">@onready</span> <span class="k-keyword">var</span> <span class="k-var">area_bottom</span> : <span class="k-type">Area2D</span> = <span class="k-var">$AreaBottom</span>
+
+<span class="k-keyword">var</span> <span class="k-var">player</span> : <span class="k-type">Player</span>
+<span class="k-keyword">var</span> <span class="k-var">tween</span> : <span class="k-type">Tween</span>
+
+<span class="k-keyword">func</span> <span class="k-func">_ready</span>():
+    player = <span class="k-func">get_tree</span>().<span class="k-func">get_first_node_in_group</span>(<span class="k-string">"Player"</span>)
+    ic.interaction = <span class="k-func">push</span>
+
+<span class="k-keyword">func</span> <span class="k-func">push</span>():
+    <span class="k-keyword">if</span> player <span class="k-keyword">in</span> area_top.<span class="k-func">get_overlapping_bodies</span>():
+        <span class="k-keyword">if</span> <span class="k-keyword">not</span> area_bottom.<span class="k-func">has_overlapping_bodies</span>():
+            <span class="k-func">move</span>(<span class="k-type">Vector2</span>.DOWN)
+        <span class="k-keyword">else</span>:
+            shake_component.<span class="k-func">trigger_x</span>()
+    <span class="k-keyword">elif</span> player <span class="k-keyword">in</span> area_bottom.<span class="k-func">get_overlapping_bodies</span>():
+        <span class="k-keyword">if</span> <span class="k-keyword">not</span> area_top.<span class="k-func">has_overlapping_bodies</span>():
+            <span class="k-func">move</span>(<span class="k-type">Vector2</span>.UP)
+        <span class="k-keyword">else</span>:
+            shake_component.<span class="k-func">trigger_x</span>()
+    <span class="k-keyword">elif</span> player <span class="k-keyword">in</span> area_left.<span class="k-func">get_overlapping_bodies</span>():
+        <span class="k-keyword">if</span> <span class="k-keyword">not</span> area_right.<span class="k-func">has_overlapping_bodies</span>():
+            <span class="k-func">move</span>(<span class="k-type">Vector2</span>.RIGHT)
+        <span class="k-keyword">else</span>:
+            shake_component.<span class="k-func">trigger_y</span>()
+    <span class="k-keyword">elif</span> player <span class="k-keyword">in</span> area_right.<span class="k-func">get_overlapping_bodies</span>():
+        <span class="k-keyword">if</span> <span class="k-keyword">not</span> area_left.<span class="k-func">has_overlapping_bodies</span>():
+            <span class="k-func">move</span>(<span class="k-type">Vector2</span>.LEFT)
+        <span class="k-keyword">else</span>:
+            shake_component.<span class="k-func">trigger_y</span>()
+
+<span class="k-keyword">func</span> <span class="k-func">move</span>(direction : <span class="k-type">Vector2</span>):
+    tween = <span class="k-func">create_tween</span>().<span class="k-func">set_trans</span>(<span class="k-type">Tween</span>.TRANS_SINE).<span class="k-func">set_ease</span>(<span class="k-type">Tween</span>.EASE_OUT)
+    tween.<span class="k-func">tween_property</span>(<span class="k-var">$"."</span>, <span class="k-string">"global_position"</span>,
+        global_position + direction * <span class="k-number">32</span>, <span class="k-number">0.5</span>)</code></pre>
+                    </div>
+                </div>
+                <div>
+                    <div class="godot-editor-layout mt-0">
+                        <div class="godot-inspector">
+                            <div class="godot-inspector-header"><span>Inspector — ShakeComponent</span></div>
+                            <div class="godot-inspector-body">
+                                <div class="godot-prop-group">
+                                    <div class="godot-prop-row">
+                                        <span class="godot-prop-label">Target</span>
+                                        <span class="godot-prop-input" style="color:#4ade80;">BoxSprite</span>
+                                    </div>
+                                    <div class="godot-prop-row">
+                                        <span class="godot-prop-label">Amplitude</span>
+                                        <span class="godot-prop-input" style="color:#facc15;">2.0</span>
+                                    </div>
+                                    <div class="godot-prop-row">
+                                        <span class="godot-prop-label">Frequency</span>
+                                        <span class="godot-prop-input" style="color:#facc15;">22.0</span>
+                                    </div>
+                                    <div class="godot-prop-row">
+                                        <span class="godot-prop-label">Duration</span>
+                                        <span class="godot-prop-input" style="color:#facc15;">0.5</span>
+                                    </div>
+                                    <div class="godot-prop-row">
+                                        <span class="godot-prop-label">Smoothing</span>
+                                        <span class="godot-prop-input">Trans Linear</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="callout callout-tip">
+                        <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-cube"></use></svg>
+                        <div><strong><code>Target</code> é o <code>BoxSprite</code>, não a <code>Box</code></strong> Só o sprite balança — física e colisão ficam paradas.</div>
+                    </div>
+                    <div class="callout callout-note mb-0">
+                        <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-file-lines"></use></svg>
+                        <div><strong>Baixe os dois scripts</strong> <a href="./downloads/Box.gd" download>Box.gd</a> e <a href="./downloads/ShakeComponent.gd" download>ShakeComponent.gd</a>. O script também tem <code>trigger_y()</code> e um <code>trigger()</code> diagonal, não usados aqui.</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Navigation & Controls Footer -->
+    <footer class="presentation-controls">
+        <button id="prev-btn" class="nav-btn">❮ Anterior</button>
+        <div class="slide-indicator">
+            Slide <span id="current-slide-num">1</span> / <span id="total-slides-num">1</span>
+        </div>
+        <button id="next-btn" class="nav-btn">Próximo ❯</button>
+        <button id="fullscreen-btn" class="nav-btn secondary">Fullscreen ⛶</button>
+    </footer>
+
+    <script src="../../../assets/course.js"></script>
+    <script src="../../../script.js"></script>
+</body>
+</html>

@@ -22,6 +22,11 @@
      'canva' — apresentação hospedada no Canva, embutida numa página-invólucro
                (é o único estado que depende de internet)
      'soon'  — ainda não disponível; fica bloqueada no índice
+
+   Um módulo pode ter "n" igual a '—' (em vez de um número). É para conteúdo
+   fora do programa oficial — um extra de aula que ainda assim precisa
+   aparecer na trilha, com navegação entre módulos funcionando. Não empurre
+   a numeração dos módulos vizinhos por causa dele.
    ========================================================================== */
 
 window.COURSE = {
@@ -38,6 +43,7 @@ window.COURSE = {
                 { n: '7',    slug: 'programming/07',    title: 'Interface 1 — Menu e Pausa',          state: 'pdf',  path: 'lessons/programming/07/' },
                 { n: '8',    slug: 'programming/08',    title: 'Interface 2 — Diálogo e Save',        state: 'soon' },
                 { n: '9',    slug: 'programming/09',    title: 'Sistema de Diálogo',                  state: 'deck', path: 'lessons/programming/09/' },
+                { n: '—',    slug: 'programming/09-bonus', title: 'Caixa de Empurrar',                 state: 'deck', path: 'lessons/programming/09-bonus/' },
                 { n: '10',   slug: 'programming/10',    title: 'Status e Perigos',                    state: 'deck', path: 'lessons/programming/10/' },
                 { n: '11',   slug: 'programming/11',    title: 'Batalhas 1 — Turno',                  state: 'deck', path: 'lessons/programming/11/' },
                 { n: '12',   slug: 'programming/12',    title: 'Batalhas 2 — Tempo Real',             state: 'soon' }

@@ -44,8 +44,7 @@ window.COURSE = {
                 { n: '8',    slug: 'programming/08',    title: 'Interface 2 — Diálogo e Save',        state: 'soon' },
                 { n: '9',    slug: 'programming/09',    title: 'Sistema de Diálogo',                  state: 'deck', path: 'lessons/programming/09/' },
                 { n: '—',    slug: 'programming/09-bonus', title: 'Caixa de Empurrar',                 state: 'deck', path: 'lessons/programming/09-bonus/' },
-                { n: '10',   slug: 'programming/10',    title: 'Status e Perigos',                    state: 'deck', path: 'lessons/programming/10/' },
-                { n: '11',   slug: 'programming/11',    title: 'Batalhas 1 — Turno',                  state: 'deck', path: 'lessons/programming/11/' },
+                { n: '10 e 11', slug: 'programming/10-11', title: 'Status e Perigos',                state: 'deck', path: 'lessons/programming/10-11/' },
                 { n: '12',   slug: 'programming/12',    title: 'Batalhas 2 — Tempo Real',             state: 'soon' }
             ]
         },

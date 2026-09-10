@@ -30,14 +30,23 @@ um módulo. Para os módulos do Milan:
 | Aula | Data | Conteúdo | Orçamento real do módulo |
 |---|---|---|---|
 | 4 | QUI 13/08 | Módulos 2 e 3 — programação | Módulo 2 divide o encontro |
-| 5 | TER 18/08 | Módulos 4, 5 e 6 — programação | três módulos num encontro |
+| 5 | TER 18/08 | Módulos 4 e 5 — programação | ⚠️ Módulo 6 planejado, não dado (ver abaixo) |
 | 10 | QUI 03/09 | Módulo 9 + **Módulo 6 de Game Design** | ~1h30 para o Módulo 9 |
-| 11 | TER 08/09 | **Módulos 10 e 11 juntos** | ~1h25 para cada um |
+| 11 | TER 08/09 → 10/09 | **Módulos 10 e 11, unificados numa página só** | uma aula, não duas espremidas |
 
-Consequência prática: **acrescentar slides a 10 e 11 estoura o encontro.**
-Somados, os dois decks já pedem ~197 min num encontro de 180. Melhorar esses
-módulos significa aumentar a qualidade *por slide* — mockups, ícones,
-apresentação de Nodes novos — e não a quantidade.
+⚠️ **Módulo 6 (Física para Jogos) nunca foi ministrado.** Confirmado pelo
+Milan em 10/09/2026: "nem chegamos a ter essa aula de física". O deck
+(`lessons/programming/06/`) continua publicado — é material do Thales e do
+Giovane, não é decisão do Milan tirá-lo do ar — mas a turma **não viu** o
+`KnockbackComponent`, o `external_force`, nem o fluxo Hitbox→Hurtbox→Signal
+daquele deck. Todo módulo posterior que dependia disso como coisa já vista
+precisou reconstruir o conceito do zero. O deck em si ainda promete conteúdo
+("`LifeComponent`... construído no Módulo 10") que também não existe mais —
+ver "Módulo 10 e 11" abaixo. **Pendente:** avisar o Thales.
+
+A antiga observação "acrescentar slides a 10 e 11 estoura o encontro" não
+vale mais — os dois viraram um deck só, pensado para uma aula, não dois
+decks de 16 slides cada espremidos no mesmo horário.
 
 O PDF original diz que a Aula 10 faz "puzzles com inventário". **Não faz** —
 em 01/08/2026 o Milan definiu que o puzzle é de empurrar caixas e acontece no
@@ -225,40 +234,76 @@ código real do Milan (`Box.gd` + `ShakeComponent.gd`) baixável em
   meu resolver sem avisar.
 - Densidade: **zero overflow em 1366×768 e em 1280×720**, os dois limpos.
 
-### Tópicos oficiais que os decks ainda não cobrem
+### Módulo 10 e 11 — unificados e revisados em 10/09/2026
 
-Confrontando o programa com os decks (01/08/2026):
+**Batalha por turno saiu do curso por completo.** O Milan confirmou em
+10/09/2026: "removemos completamente a batalha em turnos". O antigo
+Módulo 11 (`enum` de estados, `BattleManager`, ações do jogador, turno do
+inimigo, IA) **não existe mais** — está só no histórico do git, igual ao
+inventário do Módulo 9.
 
-- **Módulo 9 deixou de ser Inventário.** Em 28/08/2026, por um atraso no
-  cronograma, o Milan trocou o módulo inteiro por **Sistema de Diálogo**, e
-  mandou excluir o de inventário. O deck de inventário (20 slides, 4 slots,
-  `ItemEffect`, `InventoryUI` autoload, itens dropados) **não existe mais** —
-  está só no histórico do git. Ver a seção "Módulo 9" abaixo.
-- **Módulo 10** — falta *Inimigos* (o deck só tem espinho e buraco).
-  *Feedback de perigo* está fraco. **Efeitos negativos foram cortados** pelo
-  Milan em 01/08/2026 — não reintroduza.
-- **Módulo 11** — falta *Habilidades*. É o **único** dos seis decks com zero
-  ícone de Node, zero mockup do editor e zero card de apresentação de Node,
-  e ainda assim é o que apresenta mais coisa nova (`enum`, `await`, `Button`,
-  `get_tree().create_timer()`). É a maior lacuna de qualidade do repositório.
+No lugar, o Módulo 10 (Status e Perigos) **absorveu o número 11** e virou uma
+página só, `lessons/programming/10-11/`, com 19 slides — o mesmo tratamento
+que os Módulos 3 e 4 já tinham. `lessons/programming/10/` e
+`lessons/programming/11/` viraram redirects para lá, no mesmo padrão dos
+redirects de área antiga.
+
+O deck já cobria quase tudo que a aula real do Milan precisava (Hitbox,
+Hurtbox, vida, camadas, os três perigos) — não foi escrito do zero, foi
+adaptado linha a linha em cima do código real dele:
+
+- **`LifeComponent` virou `HealthComponent`.** Sem o Módulo 6 tendo
+  acontecido, não havia mais nenhuma promessa de nome pendurada — o Milan
+  escolheu `HealthComponent`, `current_health`/`max_health`, e o signal
+  `health_changed(max_health, current_health)` (nessa ordem — repare que é o
+  oposto do antigo `life_changed(current, maximum)`).
+- **`Hurtbox` deixou de ser um `Area2D` pelado.** Virou `HurtboxComponent`,
+  com `class_name` e um `signal hit(source)` que já filtra
+  `if area is HitboxComponent` — uma melhoria real sobre o desenho antigo
+  (cada ouvinte fazia o próprio type-check em cima do `area_entered` nativo).
+- **Nasceu o `KnockbackComponent`.** Decisão do Milan: a força mora em quem
+  bate (`HitboxComponent.knockback_force`), não em quem apanha — o oposto do
+  que o (agora morto) `KnockbackComponent` do Módulo 6 fazia. Ele se conecta
+  **sozinho** ao `HurtboxComponent` irmão, via dois `@export`, porque a
+  assinatura de `_on_hurtbox_hit(source)` bate exatamente com a do signal —
+  diferente do `HealthComponent`, que precisa do Player como tradutor porque
+  `take_damage(damage : int)` não bate com `hit(source)`.
+- **`MovementComponent` ganhou `external_force`.** Precisou ser reintroduzido
+  do zero (era conteúdo do Módulo 6, que não aconteceu): dois donos escrevendo
+  em `velocity` — o `MovementComponent` sobrescrevendo a cada quadro e um
+  knockback tentando somar por fora — apaga o empurrão no quadro seguinte.
+- **`HealthComponent` ganhou `died`** (decisão do Milan — o teste dele só
+  tinha `health_changed`). `damage` é `int` em toda a cadeia — `HitboxComponent`,
+  `HealthComponent.take_damage`, tudo — decisão do Milan pra não ter conversão
+  silenciosa de `float` pra `int` no meio do caminho.
+- **A barra de vida saiu do módulo.** Antes o deck montava um `ProgressBar`
+  escutando o componente direto. Agora o Player emite pro
+  `EventSystem.player_health_changed` (novo signal no Autoload do Módulo 9) e
+  para — a interface é aula da Ana Laura, separada.
+- **Módulo 12 ficou em aberto.** "Batalhas 2 — Tempo Real" continua no
+  manifesto como `soon`, sem confirmação se ele também some. Não mexi nele.
 
 ### Armadilhas de encadeamento entre módulos
 
-- **O `LifeComponent` nasce no Módulo 10, não antes.** Nada anterior a ele
-  pode supor que o personagem tem vida.
+- **O `HealthComponent` nasce no Módulo 10-11, não antes.** Nada anterior a
+  ele pode supor que o personagem tem vida.
 - **Godot não serializa `Callable`.** `@export var on_use : Callable` não
   aparece no Inspector nem sobrevive no `.tres`. Sempre que a ideia for "o
-  dado escolhe a função", o caminho é um `Resource` com um método.
+  dado escolhe a função", o caminho é um `Resource` com um método, ou um
+  `signal` — foi assim que o `KnockbackComponent` resolveu.
 - **O Módulo 5 (Giovane) tem o componente de interação** — `Area2D` que, ao
-  jogador entrar e apertar interagir, chama uma função escolhida na cena. O
-  Módulo 9 depende dele: é ele que chama `DialogueComponent.start()`. O
-  material do Módulo 5 está no **Canva** e não é legível daqui, então a
-  assinatura exata do componente **nunca foi verificada** — o deck do 9 fala
-  dele em termos genéricos de propósito. Confirmar com o Giovane.
-- **Os assets de batalha chegam depois das aulas de batalha** (Aula 13, 15/09,
-  contra Aulas 11 e 12, em 08/09 e 10/09). Os assets são produzidos nas aulas
-  de Arte; pedidos precisam entrar numa aula de arte *anterior* ao módulo que
-  vai usá-los.
+  jogador entrar e apertar interagir, chama uma função escolhida na cena. Os
+  Módulos 9 e o Bônus dependem dele. O material do Módulo 5 está no
+  **Canva** e não é legível daqui, mas em 03/09/2026 um pedaço da assinatura
+  foi confirmado por outra via: o código da caixa de empurrar do Milan mostra
+  um campo público `interaction` (`Callable`), atribuído por código. O resto
+  do componente (como ele detecta o jogador, se tem mais campos) continua sem
+  confirmação — perguntar ao Giovane antes de supor mais.
+- **Os assets de batalha, se ainda existirem, precisam de replanejamento.**
+  O calendário original previa Aula 13 (15/09, Arte) produzindo assets *para*
+  as Aulas 11 e 12 de batalha. A Aula 11 não tem mais batalha nenhuma; o
+  destino da Aula 12 está em aberto (ver acima). Não assuma que esse prazo
+  ainda faz sentido sem confirmar.
 
 ## Quem é o usuário e o que é dele
 
@@ -266,7 +311,8 @@ O usuário é o **Milan**. O curso é feito por uma equipe de seis pessoas, e a
 divisão de responsabilidade é levada a sério.
 
 **Módulos do Milan — pode editar livremente:**
-Programação **2, 3, 4, 9, 10 e 11**.
+Programação **2, 3, 4, 9, 10-11** (o antigo 11 foi absorvido — ver "Módulo 10
+e 11" abaixo).
 
 **De outros integrantes — NÃO alterar conteúdo, texto, ordem nem didática:**
 Programação 1, 5, 7, 8, 12 · Game Design 1–7 · Arte 1–2 · Música 1.
@@ -276,8 +322,16 @@ o Thales autorizou reestruturar o deck livremente, incluindo conteúdo, ordem e
 didática. `lessons/programming/06/` deixou de ser somente-forma. Continue
 tratando o material como dele: mudanças grandes merecem ser comunicadas, e o
 vocabulário que ele criou (`LifeComponent`, `KnockbackComponent`,
-`external_force`, o fluxo Hitbox→Hurtbox→Signal) deve ser preservado, porque é
-ele quem vai dar a aula.
+`external_force`, o fluxo Hitbox→Hurtbox→Signal) deveria ser preservado se a
+aula fosse acontecer.
+
+⚠️ **Mas ela não aconteceu.** Confirmado pelo Milan em 10/09/2026 — o encontro
+que cobriria Módulo 6 nunca chegou a dar a matéria de física. O deck continua
+publicado e a regra de propriedade acima continua valendo (não é alçada minha
+mexer nele), mas o vocabulário que ele prometia (`LifeComponent`, o
+`KnockbackComponent` com força do lado de quem apanha) **não é o que a turma
+aprendeu de verdade** — o Módulo 10-11 precisou reconstruir esses conceitos do
+zero, com nomes e decisões próprias. Ver "Módulo 10 e 11" para o que mudou.
 
 Quando uma aula do Milan divergir de uma aula de colega **sem essa permissão**,
 a adaptação acontece do lado do Milan — o deck do colega é referência fixa.
@@ -308,17 +362,33 @@ Player Básico"), num único encontro. Não é erro; não desfaça.
 - **Input Map:** ações próprias (`move_up`, `move_down`, `move_left`,
   `move_right`). **Nunca** reaproveitar as nativas `ui_*` — elas são a
   navegação de menu da engine e conflitam com o Módulo 7.
-- **Contrato dos componentes**, compartilhado com o deck do Módulo 6:
+- **Contrato dos componentes**, estabelecido nos Módulos 3-4 e 10-11 (o
+  Módulo 6 tinha o próprio, mas nunca foi ensinado — ver acima):
   - `InputComponent` — `class_name`, expõe `var direction : Vector2` e `update_direction()`
-  - `MovementComponent` — `class_name`, `@export var max_speed : float`, `move(direction, delta)`
+  - `MovementComponent` — `class_name`, `@export var max_speed : float`,
+    `move(direction, delta)`, e desde o Módulo 10-11 também
+    `var external_force : Vector2`, somado em `move()` e decaído por `lerp`
+    até zero a cada quadro.
   - `VisualComponent` — `class_name`, lê `input_component.direction`.
     **É do player por decisão, não por acidente:** ele pergunta se há
     *comando*, e monstro não tem teclado. Não troque essa leitura por
-    `body.velocity` "para deixar genérico" — com o knockback do Módulo 6 a
+    `body.velocity` "para deixar genérico" — com o knockback do Módulo 10-11 a
     `velocity` fica diferente de zero enquanto o personagem é empurrado, e ele
     tocaria `running` no ar. O nome continua `*Component` porque o sufixo é
     sobre *uma responsabilidade por Node*, não sobre reuso entre criaturas.
-  - Mudar qualquer uma dessas assinaturas quebra a continuidade com o Módulo 6.
+  - `HitboxComponent` — `class_name`, `extends Area2D`, `@export var damage :
+    int` e `@export var knockback_force : float`. Sem lógica — é um crachá.
+  - `HurtboxComponent` — `class_name`, `extends Area2D`, `signal hit(source)`,
+    filtra `if area is HitboxComponent` no próprio `_on_area_entered` (conectado
+    a si mesma, no editor) antes de emitir.
+  - `HealthComponent` — `class_name`, `@export var max_health : int`,
+    `var current_health : int` (não exportado — é estado, não configuração),
+    `signal health_changed(max_health, current_health)`, `signal died`.
+  - `KnockbackComponent` — `class_name`, `@export var movement_component :
+    MovementComponent` e `@export var hurtbox_component : HurtboxComponent`.
+    Conecta-se **sozinho** ao `hit` da Hurtbox irmã no próprio `_ready`.
+  - Mudar qualquer uma dessas assinaturas quebra a continuidade entre módulos
+    que já dependem delas.
 - **Spritesheet do curso** (`assets/player.png`): 288×128, grade **9×4**,
   quadros de **32×32**, 36 no total (`Hframes` = 9, `Vframes` = 4). Linha 0 =
   baixo, 1 = esquerda, 2 = direita, 3 = cima; o **quadro 0 de cada linha é o
@@ -466,7 +536,8 @@ Não há Node.js instalado nesta máquina — não escreva ferramentas em `node`
 
 **Etapa 6 concluída** — Módulos 9, 10 (Status e Perigos) e 11
 (Batalhas 1 — Turno) produzidos do zero, 16 slides cada. O Módulo 9 era
-Inventário; virou Sistema de Diálogo em 28/08/2026.
+Inventário; virou Sistema de Diálogo em 28/08/2026. O Módulo 11 era Batalhas
+por Turno; foi removido do curso e o 10 o absorveu em 10/09/2026 — ver abaixo.
 
 **Etapa 7 concluída:**
 
@@ -489,16 +560,35 @@ Inventário; virou Sistema de Diálogo em 28/08/2026.
 
   ⚠️ **Correção de 06/08/2026:** o registro anterior dizia "zero em 1366×768
   **e 1280×720**". A parte do 1280×720 era **falsa**. Medido de novo, com
-  carga real: 1366×768 está limpo nos seis, mas a **720p** ainda transbordam
-  `programming/03-04` (era 5 slides; desde 12/08/2026 só o `checkpoint-1`,
-  com 6px), `programming/06` (knockback-component,
-  1px), `programming/10` (life) e `programming/11` (actions, enemy-turn, ui —
-  26px cada). Os Módulos 2 e 9 estão limpos nas duas resoluções.
-  O alvo real do projetor é 1366×768; 720p é margem de segurança.
+  carga real: 1366×768 está limpo em todos os decks, mas a **720p** ainda
+  transborda `programming/03-04` (era 5 slides; desde 12/08/2026 só o
+  `checkpoint-1`, com 6px), `programming/06` (knockback-component, 1px) e
+  `programming/10-11` (só o slide `health`, 26px — herdado de antes da fusão
+  de 10/09/2026, não é regressão dela). Os Módulos 2 e 9 estão limpos nas
+  duas resoluções. O alvo real do projetor é 1366×768; 720p é margem de
+  segurança.
 - `.mt-0` / `.mb-0` eram usadas em 88 lugares e não existiam no CSS. Agora
   existem.
 
+**Etapa 8 concluída (10/09/2026)** — Módulos 10 e 11 unificados, ver a seção
+"Módulo 10 e 11" no topo do arquivo para o detalhe completo. Resumo: batalha
+por turno saiu do curso, o 10 virou `programming/10-11/` com 19 slides,
+`LifeComponent` virou `HealthComponent` com `died`, `Hurtbox` virou
+`HurtboxComponent` (filtra e emite `hit`), nasceu o `KnockbackComponent`
+(força do lado de quem bate, conecta-se sozinho), `MovementComponent` ganhou
+`external_force`, e a barra de vida saiu do módulo em favor de
+`EventSystem.player_health_changed`. Confirmado também que o Módulo 6 nunca
+foi dado ao vivo — ver a nota no cronograma e na seção de propriedade dos
+módulos.
+
 **Pendências registradas para a equipe** (não são do Milan resolver sozinho):
+- **Avisar o Thales que o Módulo 6 não foi dado.** O deck dele
+  (`lessons/programming/06/`) ainda promete `LifeComponent` e um fluxo que a
+  turma nunca viu — ele vai chegar numa aula (se acontecer) contradizendo o
+  que o Módulo 10-11 já ensinou com nomes diferentes.
+- **Confirmar o destino do Módulo 12** ("Batalhas 2 — Tempo Real"). Com a
+  batalha por turno cortada, não está claro se ele continua, muda de escopo,
+  ou também sai do curso.
 - Notion diz "Introdução ao LibreSprite"; o PDF entregue é "Pixel Art no
   Aseprite" — e o Aseprite é pago.
 - `assets/lessons/06/` manteve o nome antigo enquanto as aulas viraram
